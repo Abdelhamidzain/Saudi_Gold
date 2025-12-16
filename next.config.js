@@ -13,6 +13,9 @@ const nextConfig = {
   // إزالة source maps في الإنتاج
   productionBrowserSourceMaps: false,
   
+  // تعطيل x-powered-by header
+  poweredByHeader: false,
+  
   // تحسين الصور
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -24,7 +27,10 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
-  // Headers للتخزين المؤقت
+  // تحسين CSS
+  swcMinify: true,
+  
+  // Headers للتخزين المؤقت والأداء
   async headers() {
     return [
       {
@@ -43,6 +49,14 @@ const nextConfig = {
         source: '/:path*',
         headers: [
           { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+        ],
+      },
+      // تحسين CSS
+      {
+        source: '/_next/static/css/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],
       },
     ];

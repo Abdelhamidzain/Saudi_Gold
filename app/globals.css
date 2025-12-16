@@ -1,7 +1,14 @@
+/* 
+ * Note: Critical CSS for above-the-fold content is inlined in layout.js
+ * This file contains non-critical styles that load after initial render
+ */
+
 :root {
   --g: #F59E0B;
   --g2: #D4AF37;
   --bg: #0A0A0F;
+  --bg2: #111118;
+  --bg3: #1a1a24;
   --card: #1A1A24;
   --card2: #141419;
   --txt: #FFF;
@@ -11,6 +18,7 @@
   --red: #EF4444;
   --border: rgba(255, 255, 255, 0.08);
   --gold: linear-gradient(135deg, #D4AF37, #F5D061, #D4AF37);
+  --gold-gradient: linear-gradient(135deg, #F59E0B 0%, #D97706 50%, #B45309 100%);
 }
 
 * {
@@ -931,4 +939,57 @@ h1 {
   font-size: 1rem;
   color: var(--txt2);
   line-height: 1.6;
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Content visibility for below-fold sections */
+.section:nth-child(n+3) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+/* Reduce repaints */
+.price-card,
+.calc-card,
+.market-card,
+.faq-item {
+  will-change: transform;
+  contain: layout style;
+}
+
+/* GPU acceleration for animations */
+.live-dot,
+.price-card:hover,
+.nav-link:hover {
+  transform: translateZ(0);
+}
+
+/* Optimize font rendering */
+body {
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Reduce layout shifts */
+.main-price-box {
+  min-height: 180px;
+}
+
+.price-cards {
+  min-height: 200px;
+}
+
+/* Prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

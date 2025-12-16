@@ -10,8 +10,14 @@ import FAQ from './components/FAQ';
 import Disclaimer from './components/Disclaimer';
 import InternalLinks from './components/InternalLinks';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 export const revalidate = 60;
+
+// Loading fallback for below-fold content
+function LoadingSection() {
+  return <div style={{ minHeight: '200px', background: 'var(--bg2)', borderRadius: '12px' }} />;
+}
 
 // Homepage FAQ
 const homeFAQ = [
