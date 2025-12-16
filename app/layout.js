@@ -91,21 +91,6 @@ const orgSchema = {
   },
 };
 
-// FinancialService Schema - مناسب لموقع أسعار الذهب
-const financialServiceSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FinancialService',
-  name: 'سعودي قولد - أسعار الذهب',
-  url: SITE_URL,
-  description: 'خدمة متابعة أسعار الذهب والمعادن الثمينة في السعودية',
-  areaServed: 'SA',
-  serviceType: 'Gold Price Tracking',
-  provider: {
-    '@type': 'Organization',
-    name: 'سعودي قولد',
-  },
-};
-
 export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl">
@@ -116,7 +101,7 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="https://metalpriceapi.com" />
         {/* Critical CSS inline لتجنب render blocking - يشمل Hero و Above the fold */}
         <style dangerouslySetInnerHTML={{ __html: `
-          :root{--g:#F59E0B;--g2:#D97706;--bg:#0A0A0F;--bg2:#111118;--bg3:#1a1a24;--txt:#FFF;--txt2:#a0a0a0;--txt3:#666;--gold-gradient:linear-gradient(135deg,#F59E0B 0%,#D97706 50%,#B45309 100%);--green:#10B981;--red:#EF4444}
+          :root{--g:#F59E0B;--g2:#D97706;--bg:#0A0A0F;--bg2:#111118;--bg3:#1a1a24;--txt:#FFF;--txt2:#E0E0E8;--txt3:#B0B0B8;--gold-gradient:linear-gradient(135deg,#F59E0B 0%,#D97706 50%,#B45309 100%);--green:#10B981;--red:#EF4444}
           *{box-sizing:border-box;margin:0;padding:0}
           html{scroll-behavior:smooth}
           body{font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;direction:rtl;min-height:100vh}
@@ -135,7 +120,7 @@ export default function RootLayout({ children }) {
           .main-price-label{color:var(--txt2);font-size:0.95rem;margin-bottom:8px}
           .main-price-value{font-size:clamp(2.5rem,8vw,3.5rem);font-weight:800;background:var(--gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:flex;align-items:baseline;justify-content:center;gap:8px}
           .main-price-currency{font-size:1.2rem;-webkit-text-fill-color:var(--g)}
-          .last-update{color:var(--txt3);font-size:0.85rem;margin-top:12px}
+          .last-update{color:var(--txt2);font-size:0.85rem;margin-top:12px}
           .section{padding:50px 0}
           .section-title{font-size:1.5rem;font-weight:700;margin-bottom:30px;text-align:center}
           .price-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:30px 0}
@@ -144,7 +129,7 @@ export default function RootLayout({ children }) {
           .price-card-karat{font-size:2rem;font-weight:800;background:var(--gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
           .price-card-label{color:var(--txt2);font-size:0.85rem;margin:8px 0}
           .price-card-value{font-size:1.4rem;font-weight:700;color:var(--g)}
-          .price-card-unit{color:var(--txt3);font-size:0.8rem}
+          .price-card-unit{color:var(--txt2);font-size:0.8rem}
         `}} />
         <script
           type="application/ld+json"
@@ -153,10 +138,6 @@ export default function RootLayout({ children }) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(financialServiceSchema) }}
         />
       </head>
       <body>{children}</body>

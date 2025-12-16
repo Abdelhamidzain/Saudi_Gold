@@ -50,7 +50,7 @@ export default function Footer() {
         
         <div className="footer-bottom">
           <p className="footer-copyright">
-            © ٢٠٢٥ سعودي قولد - جميع الحقوق محفوظة
+            © 2025 سعودي قولد - جميع الحقوق محفوظة
           </p>
         </div>
       </div>

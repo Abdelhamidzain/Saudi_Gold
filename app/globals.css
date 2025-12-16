@@ -12,8 +12,8 @@
   --card: #1A1A24;
   --card2: #141419;
   --txt: #FFF;
-  --txt2: #C4C4D4;
-  --txt3: #9090A0;
+  --txt2: #E0E0E8; /* تفتيح للتباين */
+  --txt3: #B0B0B8; /* تفتيح للتباين */
   --green: #22C55E;
   --red: #EF4444;
   --border: rgba(255, 255, 255, 0.08);
@@ -369,7 +369,7 @@ h1 {
 
 .price-card-unit {
   font-size: 0.8rem;
-  color: var(--g);
+  color: var(--txt2); /* تغيير للون أفتح */
   margin-top: 4px;
 }
 
@@ -874,7 +874,7 @@ h1 {
 }
 
 .footer-copyright {
-  color: var(--txt3);
+  color: var(--txt2); /* تغيير للون أفتح */
   font-size: 0.85rem;
 }
 

@@ -1,22 +1,21 @@
-// الأرقام العربية
-const AR = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-
-export const toAr = n => String(n).replace(/[0-9]/g, d => AR[d]);
+// الأرقام - تبقى إنجليزية
+export const toAr = n => String(n);
 
 export const fmt = (n, d = 2) => {
-  if (typeof n !== 'number' || isNaN(n)) return '٠';
-  const p = n.toFixed(d).split('.');
-  p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, '٬');
-  return toAr(p.join('٫'));
+  if (typeof n !== 'number' || isNaN(n)) return '0';
+  return n.toLocaleString('en-US', {
+    minimumFractionDigits: d,
+    maximumFractionDigits: d,
+  });
 };
 
 // العيارات
 export const KARATS = {
-  24: { purity: 1, name: 'عيار ٢٤', nameEn: '24K', desc: 'ذهب خالص 99.9%' },
-  22: { purity: 0.9167, name: 'عيار ٢٢', nameEn: '22K', desc: 'نقاوة 91.6%' },
-  21: { purity: 0.875, name: 'عيار ٢١', nameEn: '21K', desc: 'الأكثر شيوعاً 87.5%' },
-  18: { purity: 0.75, name: 'عيار ١٨', nameEn: '18K', desc: 'للمجوهرات الفاخرة 75%' },
-  14: { purity: 0.5833, name: 'عيار ١٤', nameEn: '14K', desc: 'للمجوهرات المتينة 58.3%' },
+  24: { purity: 1, name: 'عيار 24', nameEn: '24K', desc: 'ذهب خالص 99.9%' },
+  22: { purity: 0.9167, name: 'عيار 22', nameEn: '22K', desc: 'نقاوة 91.6%' },
+  21: { purity: 0.875, name: 'عيار 21', nameEn: '21K', desc: 'الأكثر شيوعاً 87.5%' },
+  18: { purity: 0.75, name: 'عيار 18', nameEn: '18K', desc: 'للمجوهرات الفاخرة 75%' },
+  14: { purity: 0.5833, name: 'عيار 14', nameEn: '14K', desc: 'للمجوهرات المتينة 58.3%' },
 };
 
 export const MARKUP = 1.02;
@@ -67,7 +66,7 @@ export function calcZakat(weightGrams, karat, gram24Price) {
 
 // تنسيق الوقت بتوقيت الرياض
 export function formatRiyadhTime(date) {
-  return new Date(date).toLocaleString('ar-SA', {
+  return new Date(date).toLocaleString('en-US', {
     timeZone: 'Asia/Riyadh',
     hour: '2-digit',
     minute: '2-digit',
