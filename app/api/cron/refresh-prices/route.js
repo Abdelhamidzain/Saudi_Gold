@@ -1,6 +1,5 @@
-import { kv } from '@vercel/kv';
+import { neon } from '@neondatabase/serverless';
 
-export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
@@ -17,6 +16,18 @@ export async function GET(request) {
   }
 
   try {
+    const sql = neon(process.env.DATABASE_URL);
+
+    // إنشاء الجدول إذا لم يكن موجوداً
+    await sql`
+      CREATE TABLE IF NOT EXISTS gold_prices (
+        id SERIAL PRIMARY KEY,
+        rates JSONB NOT NULL,
+        updated_at TIMESTAMP DEFAULT NOW()
+      )
+    `;
+
+    // جلب الأسعار من API الخارجي
     const res = await fetch(
       `https://api.metalpriceapi.com/v1/latest?api_key=${apiKey}&base=XAU&currencies=SAR,USD`,
       { cache: 'no-store' }
@@ -25,16 +36,21 @@ export async function GET(request) {
     
     if (!data.success) throw new Error(data.error || 'API error');
 
-    const cacheData = {
-      success: true,
+    // حفظ في Neon (حذف القديم وإضافة الجديد)
+    await sql`DELETE FROM gold_prices`;
+    await sql`
+      INSERT INTO gold_prices (rates, updated_at) 
+      VALUES (${JSON.stringify(data.rates)}, NOW())
+    `;
+
+    return Response.json({ 
+      success: true, 
       rates: data.rates,
       updatedAt: new Date().toISOString()
-    };
+    });
 
-    await kv.set('gold_prices', cacheData, { ex: 7200 });
-
-    return Response.json({ success: true, ...cacheData });
   } catch (error) {
+    console.error('Cron error:', error);
     return Response.json({ success: false, error: error.message }, { status: 500 });
   }
 }

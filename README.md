@@ -1,88 +1,37 @@
-# 🪙 Saudi Gold - Next.js + Vercel
+# 🪙 Saudi Gold - Next.js + Neon
 
-موقع أسعار الذهب في السعودية مع تحديث تلقائي.
-
-## ⚠️ ملاحظة مهمة
-
-Vercel Hobby Plan = Cron مرة واحدة يومياً فقط!
-لذلك نستخدم **cron-job.org** (مجاني) للتحديث كل ساعة.
+موقع أسعار الذهب في السعودية مع قاعدة بيانات Neon.
 
 ## 🏗️ Architecture
 
 ```
-cron-job.org (كل ساعة - مجاني)
+cron-job.org (كل ساعة)
         ↓
 /api/cron/refresh-prices → metalpriceapi.com
         ↓
-    Vercel KV (cache)
+    Neon PostgreSQL
         ↓
-/api/prices → يقرأ من cache فقط ✅
+/api/prices → يقرأ من Neon ✅
         ↓
-    الزوار (غير محدود!)
+    الزوار
 ```
 
-## 📁 Files
+## 🚀 Quick Setup
 
-```
-saudi-gold-final/
-├── app/
-│   ├── api/
-│   │   ├── prices/route.js         
-│   │   └── cron/refresh-prices/route.js
-│   ├── globals.css
-│   ├── layout.js
-│   └── page.js                     
-├── scripts/
-│   └── seed-cache.js
-├── vercel.json
-├── package.json
-└── next.config.js
-```
+1. **GitHub**: ارفع الملفات
+2. **Neon**: أنشئ project وانسخ DATABASE_URL
+3. **Vercel**: Deploy + أضف Environment Variables
+4. **cron-job.org**: أنشئ cron كل ساعة
+5. **تعبئة**: زر `/api/cron/refresh-prices?secret=xxx`
 
-## 🚀 Setup
+## Environment Variables
 
-### 1. Create Vercel KV
-- Vercel Dashboard → Storage → Create → KV
-- Link to project
-
-### 2. Environment Variables
 ```
 METAL_API_KEY=484e10b2ec808863d1c692d2ea2eb921
-CRON_SECRET=your-random-secret-here
+CRON_SECRET=my-secret-123
+DATABASE_URL=postgresql://...neon.tech/neondb?sslmode=require
 ```
 
-### 3. Deploy
-```bash
-npm install
-vercel
-```
+## 📖 الدليل الكامل
 
-### 4. Setup External Cron (FREE)
-
-1. اذهب إلى https://cron-job.org
-2. سجّل حساب مجاني
-3. أضف Cron Job جديد:
-   - URL: `https://YOUR-SITE.vercel.app/api/cron/refresh-prices?secret=YOUR_SECRET`
-   - Schedule: Every 1 hour
-   - Method: GET
-
-### 5. Seed Cache (أول مرة)
-```bash
-CRON_SECRET=xxx node scripts/seed-cache.js https://your-site.vercel.app
-```
-
-## ✅ Features
-
-- ⚡ Ultra fast (cached API)
-- 🔄 Auto-update every hour
-- 📱 Mobile responsive
-- 🧮 Gold & Zakat calculators
-- 📊 Price chart
-
-## 💡 External Cron Options (Free)
-
-| Service | Free Tier |
-|---------|-----------|
-| cron-job.org | Unlimited |
-| Upstash QStash | 500/day |
-| EasyCron | 200/month |
+راجع ملف `SETUP-GUIDE.md`
