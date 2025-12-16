@@ -69,35 +69,46 @@ let previousGram24Price = 0;
 
 // Fetch prices from MetalpriceAPI
 async function fetchLivePrices() {
-  try {
-    const response = await fetch(
-      `${CONFIG.apiBaseUrl}/latest?api_key=${CONFIG.apiKey}&base=XAU&currencies=SAR,USD`
-    );
+  // Try PHP proxy first (avoids CORS), then direct API
+  const endpoints = [
+    '/api/prices.php',                                                              // PHP Proxy
+    `${CONFIG.apiBaseUrl}/latest?api_key=${CONFIG.apiKey}&base=XAU&currencies=SAR,USD`  // Direct API
+  ];
 
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.status}`);
+  for (const url of endpoints) {
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (!response.ok) continue;
+
+      const data = await response.json();
+
+      if (!data.success) continue;
+
+      // API returns: 1 XAU = X SAR (price per ounce)
+      const ounceSAR = data.rates.SAR;
+      const ounceUSD = data.rates.USD;
+
+      console.log('✅ Live prices fetched successfully');
+      console.log(`   Gold Price: ${ounceSAR.toFixed(2)} SAR/oz`);
+
+      return {
+        ounceSAR: ounceSAR,
+        ounceUSD: ounceUSD,
+        timestamp: data.timestamp
+      };
+
+    } catch (error) {
+      console.warn(`Failed to fetch from ${url}:`, error.message);
+      continue;
     }
-
-    const data = await response.json();
-
-    if (!data.success) {
-      throw new Error(data.error || 'API returned error');
-    }
-
-    // API returns: 1 XAU = X SAR (price per ounce)
-    const ounceSAR = data.rates.SAR;
-    const ounceUSD = data.rates.USD;
-
-    return {
-      ounceSAR: ounceSAR,
-      ounceUSD: ounceUSD,
-      timestamp: data.timestamp
-    };
-
-  } catch (error) {
-    console.error('Failed to fetch live prices:', error);
-    return null;
   }
+
+  console.error('❌ All API endpoints failed, using fallback prices');
+  return null;
 }
 
 async function calculatePrices() {
