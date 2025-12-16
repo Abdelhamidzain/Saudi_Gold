@@ -1,97 +1,56 @@
-# 🪙 Saudi Gold v2
-## سعر الذهب اليوم في السعودية
+# 🪙 Saudi Gold - Vercel Edition
 
----
+نسخة محسنة للعمل على Vercel
 
-## ✅ التحسينات في هذا الإصدار
-
-1. **أرقام عربية (٠١٢٣٤٥٦٧٨٩)** بدل الهندية
-2. **عيار 21 كسعر رئيسي** مع النص الصحيح
-3. **سرعة فائقة** - CSS critical inline, fonts deferred
-4. **الرسم البياني يعمل** مع أسبوع/شهر/سنة
-5. **لون ر.س واضح** (ذهبي)
-6. **الكلمات المفتاحية الصحيحة** في كل مكان
-7. **لوحة تحكم للمدونة** (PHP)
-
----
-
-## 📁 هيكل الملفات
+## 📁 الملفات
 
 ```
-saudi-gold-v2/
-├── index.html          # الصفحة الرئيسية
-├── blog.php            # صفحة المدونة
-├── css/
-│   └── style.css       # التصميم المحسن
-├── js/
-│   └── app.js          # JavaScript (أرقام عربية)
+saudi-gold-vercel/
+├── index.html      ← الصفحة الرئيسية
+├── blog.html       ← المدونة (ثابتة)
 ├── api/
-│   └── prices.php      # API Proxy
-├── admin/
-│   └── index.php       # لوحة تحكم المدونة
-├── .htaccess           # تحسينات السرعة
+│   └── prices.js   ← Serverless API
+├── vercel.json     ← إعدادات Vercel
 ├── robots.txt
 └── sitemap.xml
 ```
 
----
+## 🚀 طريقة الرفع
 
-## 🚀 طريقة التثبيت
+### Option 1: GitHub + Vercel
+1. ارفع الملفات على GitHub
+2. اربط الـ repo بـ Vercel
+3. Vercel سيعمل deploy تلقائي
 
-1. فك ضغط الملف
-2. ارفع كل الملفات إلى `public_html`
-3. افتح الموقع في المتصفح
+### Option 2: Vercel CLI
+```bash
+npm i -g vercel
+cd saudi-gold-vercel
+vercel
+```
 
----
+## ⚡ API
 
-## 🔐 لوحة التحكم
+الـ API يعمل على `/api/prices` (Vercel Serverless Function)
 
-- الرابط: `https://saudi-gold.com/admin/`
-- المستخدم: `admin`
-- كلمة المرور: `saudi-gold-2025`
+## 📝 المدونة
 
-⚠️ **مهم:** غيّر كلمة المرور في ملف `admin/index.php`
+المدونة حالياً **ثابتة** (HTML).
 
----
+لإضافة مقالات جديدة:
+1. عدّل ملف `blog.html`
+2. أضف المقال الجديد
 
-## 📊 الكلمات المفتاحية المستهدفة
+### للمستقبل: CMS
+إذا تريد CMS ديناميكي:
+- [Contentful](https://contentful.com) - مجاني
+- [Sanity](https://sanity.io) - مجاني
+- [Notion as CMS](https://notion.so) - مجاني
 
-| الكلمة | الموقع |
-|--------|--------|
-| سعر الذهب اليوم | العنوان، H1 |
-| سعر الذهب اليوم في السعودية | العنوان، الوصف |
-| سعر جرام الذهب عيار 21 | السعر الرئيسي |
-| سعر جرام الذهب عيار 24 | جدول الأسعار |
-| اسعار الذهب اليوم | H1، الوصف |
-| حاسبة زكاة الذهب | قسم الزكاة |
-| سعر الذهب في السعودية | الفوتر |
+## ✅ المميزات
 
----
-
-## ⚡ تحسينات السرعة
-
-- CSS Critical inline في `<head>`
-- Fonts loaded with `media="print"` trick
-- JavaScript deferred
-- Images lazy loaded
-- GZIP compression via .htaccess
-- Browser caching enabled
-
----
-
-## 🔧 API
-
-الموقع يستخدم MetalpriceAPI للأسعار الحية:
-- API Key: في ملف `js/app.js`
-- Proxy: `api/prices.php` (لتجنب CORS)
-
----
-
-## 💡 ملاحظات
-
-- **Strapi:** إذا أردت CMS متقدم، استخدم Strapi على سيرفر Node.js منفصل
-- **Headless CMS:** بديل آخر: Contentful أو Sanity (مجاني)
-
----
-
-صُنع بـ ❤️ للسوق السعودي
+- ⚡ فائق السرعة (Static HTML)
+- 🌐 يعمل على Vercel
+- 📱 متجاوب مع الموبايل
+- 🔄 API للأسعار الحية
+- 🎨 أرقام عربية (٠١٢٣٤٥٦٧٨٩)
