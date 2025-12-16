@@ -10,7 +10,47 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl">
       <head>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪙</text></svg>" />
+        <style>
+          {`
+            /* Critical CSS for above-the-fold content */
+            body {
+              margin: 0;
+              font-family: 'Inter', sans-serif;
+              background-color: #f9f9f9;
+            }
+            header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 1rem;
+              background-color: #ffffff;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            .hero {
+              text-align: center;
+              padding: 2rem 1rem;
+              background-color: #f3f4f6;
+            }
+            .price-box {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              padding: 1rem;
+              background-color: #ffffff;
+              border-radius: 8px;
+              box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+          `}
+        </style>
+        <link
+          rel="preload"
+          as="style"
+          href="/globals.css"
+          onLoad="this.rel='stylesheet'"
+        />
+        <noscript>
+          <link rel="stylesheet" href="/globals.css" />
+        </noscript>
       </head>
       <body>{children}</body>
     </html>
