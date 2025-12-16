@@ -95,6 +95,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl">
       <head>
+        <meta name="google-site-verification" content="YkX9VVCgo3jumvzx1iRJWOO-wJn2Ok-whCW1VQSUVWY" />
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪙</text></svg>" />
         {/* Preconnect لتحسين الأداء */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
