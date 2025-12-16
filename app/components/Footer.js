@@ -20,30 +20,30 @@ export default function Footer() {
             <span className="footer-title" role="heading" aria-level="2">أسعار الذهب</span>
             <ul className="footer-links">
               <li><Link href="/">سعر الذهب اليوم</Link></li>
-              <li><Link href="/عيار-21">سعر الذهب عيار 21</Link></li>
-              <li><Link href="/عيار-24">سعر الذهب عيار 24</Link></li>
-              <li><Link href="/عيار-22">سعر الذهب عيار 22</Link></li>
-              <li><Link href="/سبائك-الذهب">سبائك الذهب</Link></li>
-              <li><Link href="/اونصة-الذهب">سعر الأونصة</Link></li>
+              <li><Link href="/karat-21">سعر الذهب عيار 21</Link></li>
+              <li><Link href="/karat-24">سعر الذهب عيار 24</Link></li>
+              <li><Link href="/karat-22">سعر الذهب عيار 22</Link></li>
+              <li><Link href="/gold-bars">سبائك الذهب</Link></li>
+              <li><Link href="/ounce">سعر الأونصة</Link></li>
             </ul>
           </nav>
           
           <nav aria-label="أدوات">
             <span className="footer-title" role="heading" aria-level="2">أدوات</span>
             <ul className="footer-links">
-              <li><Link href="/حاسبة-الذهب">حاسبة الذهب</Link></li>
-              <li><Link href="/زكاة-الذهب">حاسبة الزكاة</Link></li>
-              <li><Link href="/تاريخ-اسعار-الذهب">الرسم البياني</Link></li>
-              <li><Link href="/بيع-وشراء-الذهب">بيع وشراء</Link></li>
+              <li><Link href="/calculator">حاسبة الذهب</Link></li>
+              <li><Link href="/zakat">حاسبة الزكاة</Link></li>
+              <li><Link href="/history">الرسم البياني</Link></li>
+              <li><Link href="/buy-sell">بيع وشراء</Link></li>
             </ul>
           </nav>
           
           <nav aria-label="معلومات">
             <span className="footer-title" role="heading" aria-level="2">معلومات</span>
             <ul className="footer-links">
-              <li><Link href="/مصنعية-الذهب">مصنعية الذهب</Link></li>
-              <li><Link href="/اسواق-الذهب">أسواق الذهب</Link></li>
-              <li><Link href="/سعر-الفضة">سعر الفضة</Link></li>
+              <li><Link href="/workmanship">مصنعية الذهب</Link></li>
+              <li><Link href="/markets">أسواق الذهب</Link></li>
+              <li><Link href="/silver">سعر الفضة</Link></li>
             </ul>
           </nav>
         </div>

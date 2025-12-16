@@ -4,13 +4,19 @@ import { toAr, fmt, KARATS } from '../lib/gold';
 export default function PriceCards({ prices, highlightKarat = 21 }) {
   // فقط العيارات التي لها صفحات
   const karatOrder = [24, 22, 21, 18];
+  const karatPaths = {
+    24: '/karat-24',
+    22: '/karat-22',
+    21: '/karat-21',
+    18: '/karat-18',
+  };
   
   return (
     <div className="price-cards">
       {karatOrder.map((k) => (
         <Link 
           key={k} 
-          href={`/عيار-${k}`}
+          href={karatPaths[k]}
           className={`price-card ${k === highlightKarat ? 'highlight' : ''}`}
           prefetch={false}
         >

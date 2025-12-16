@@ -5,11 +5,11 @@ import Link from 'next/link';
 
 const NAV_LINKS = [
   { href: '/', label: 'الأسعار' },
-  { href: '/عيار-21', label: 'عيار 21' },
-  { href: '/سبائك-الذهب', label: 'السبائك' },
-  { href: '/حاسبة-الذهب', label: 'الحاسبة' },
-  { href: '/زكاة-الذهب', label: 'الزكاة' },
-  { href: '/اسواق-الذهب', label: 'الأسواق' },
+  { href: '/karat-21', label: 'عيار 21' },
+  { href: '/gold-bars', label: 'السبائك' },
+  { href: '/calculator', label: 'الحاسبة' },
+  { href: '/zakat', label: 'الزكاة' },
+  { href: '/markets', label: 'الأسواق' },
 ];
 
 export default function Header() {

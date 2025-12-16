@@ -57,11 +57,11 @@ const homeFAQ = [
 
 // Internal Links
 const homeLinks = [
-  { href: '/عيار-21', label: 'سعر الذهب عيار 21', icon: '🥇' },
-  { href: '/عيار-24', label: 'سعر الذهب عيار 24', icon: '💎' },
-  { href: '/سبائك-الذهب', label: 'أسعار سبائك الذهب', icon: '🧱' },
-  { href: '/مصنعية-الذهب', label: 'مصنعية الذهب', icon: '🔧' },
-  { href: '/اسواق-الذهب', label: 'أسواق الذهب', icon: '🏪' },
+  { href: '/karat-21', label: 'سعر الذهب عيار 21', icon: '🥇' },
+  { href: '/karat-24', label: 'سعر الذهب عيار 24', icon: '💎' },
+  { href: '/gold-bars', label: 'أسعار سبائك الذهب', icon: '🧱' },
+  { href: '/workmanship', label: 'مصنعية الذهب', icon: '🔧' },
+  { href: '/markets', label: 'أسواق الذهب', icon: '🏪' },
 ];
 
 // WebPage Schema
@@ -91,10 +91,10 @@ function getPriceListSchema(prices) {
     description: 'قائمة أسعار جميع عيارات الذهب بالريال السعودي',
     numberOfItems: 4,
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: `سعر جرام الذهب عيار 24: ${prices[24]?.gram?.toFixed(2)} ريال`, url: `${SITE_URL}/عيار-24` },
-      { '@type': 'ListItem', position: 2, name: `سعر جرام الذهب عيار 22: ${prices[22]?.gram?.toFixed(2)} ريال`, url: `${SITE_URL}/عيار-22` },
-      { '@type': 'ListItem', position: 3, name: `سعر جرام الذهب عيار 21: ${prices[21]?.gram?.toFixed(2)} ريال`, url: `${SITE_URL}/عيار-21` },
-      { '@type': 'ListItem', position: 4, name: `سعر جرام الذهب عيار 18: ${prices[18]?.gram?.toFixed(2)} ريال`, url: `${SITE_URL}/عيار-18` },
+      { '@type': 'ListItem', position: 1, name: `سعر جرام الذهب عيار 24: ${prices[24]?.gram?.toFixed(2)} ريال`, url: `${SITE_URL}/karat-24` },
+      { '@type': 'ListItem', position: 2, name: `سعر جرام الذهب عيار 22: ${prices[22]?.gram?.toFixed(2)} ريال`, url: `${SITE_URL}/karat-22` },
+      { '@type': 'ListItem', position: 3, name: `سعر جرام الذهب عيار 21: ${prices[21]?.gram?.toFixed(2)} ريال`, url: `${SITE_URL}/karat-21` },
+      { '@type': 'ListItem', position: 4, name: `سعر جرام الذهب عيار 18: ${prices[18]?.gram?.toFixed(2)} ريال`, url: `${SITE_URL}/karat-18` },
     ],
   };
 }
@@ -197,7 +197,7 @@ export default async function Home() {
               ))}
             </div>
             <div className="text-center mt-8">
-              <Link href="/اسواق-الذهب" className="btn btn-outline">
+              <Link href="/markets" className="btn btn-outline">
                 عرض جميع الأسواق ←
               </Link>
             </div>
