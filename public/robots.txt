@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://saudi-gold.vercel.app/sitemap.xml
+Sitemap: https://saudi-gold.com/sitemap.xml
 
 # Disallow API routes
 Disallow: /api/

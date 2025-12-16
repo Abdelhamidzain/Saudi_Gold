@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+const SITE_URL = 'https://saudi-gold.com';
+
 export default function Breadcrumb({ items }) {
   const schema = {
     '@context': 'https://schema.org',
@@ -8,7 +10,7 @@ export default function Breadcrumb({ items }) {
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: item.href ? `https://saudi-gold.vercel.app${item.href}` : undefined,
+      item: item.href ? `${SITE_URL}${item.href}` : undefined,
     })),
   };
 

@@ -67,8 +67,37 @@ export default async function ZakatPage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'حاسبة زكاة الذهب',
-    url: 'https://saudi-gold.vercel.app/زكاة-الذهب',
+    url: 'https://saudi-gold.com/زكاة-الذهب',
     dateModified: updatedAt || new Date().toISOString(),
+  };
+
+  // SoftwareApplication Schema للحاسبة
+  const calculatorSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'حاسبة زكاة الذهب',
+    description: 'أداة إلكترونية لحساب زكاة الذهب المستحقة بناءً على الوزن والعيار والأسعار الحالية',
+    url: 'https://saudi-gold.com/زكاة-الذهب',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web Browser',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'SAR' },
+    featureList: ['حساب الزكاة لجميع العيارات', 'التحقق من بلوغ النصاب', 'أسعار محدثة لحظياً'],
+  };
+
+  // HowTo Schema لكيفية حساب الزكاة
+  const howToSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'كيفية حساب زكاة الذهب',
+    description: 'خطوات حساب زكاة الذهب الواجبة شرعاً',
+    totalTime: 'PT2M',
+    step: [
+      { '@type': 'HowToStep', position: 1, name: 'وزن الذهب', text: 'قم بوزن الذهب الذي تملكه بالجرامات' },
+      { '@type': 'HowToStep', position: 2, name: 'تحديد العيار', text: 'حدد عيار الذهب (21، 22، 24، 18)' },
+      { '@type': 'HowToStep', position: 3, name: 'حساب الذهب الخالص', text: 'احسب وزن الذهب الخالص بضرب الوزن في نسبة النقاوة' },
+      { '@type': 'HowToStep', position: 4, name: 'التحقق من النصاب', text: 'تأكد أن الذهب الخالص يبلغ 85 جرام أو أكثر' },
+      { '@type': 'HowToStep', position: 5, name: 'حساب الزكاة', text: 'اضرب القيمة في 2.5% للحصول على مبلغ الزكاة' },
+    ],
   };
 
   // حساب نصاب كل عيار
@@ -84,6 +113,14 @@ export default async function ZakatPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(calculatorSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
       
       <Header />

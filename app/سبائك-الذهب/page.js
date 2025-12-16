@@ -66,8 +66,41 @@ export default async function BarsPage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'أسعار سبائك الذهب في السعودية',
-    url: 'https://saudi-gold.vercel.app/سبائك-الذهب',
+    url: 'https://saudi-gold.com/سبائك-الذهب',
     dateModified: updatedAt || new Date().toISOString(),
+  };
+
+  // ItemList Schema للسبائك
+  const barsListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'أسعار سبائك الذهب في السعودية',
+    description: 'قائمة أسعار سبائك الذهب بجميع الأوزان',
+    numberOfItems: barPrices.length,
+    itemListElement: barPrices.map((bar, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: `سبيكة ذهب ${bar.weight >= 1000 ? (bar.weight / 1000) + ' كيلو' : bar.weight + ' جرام'}`,
+      description: `سعر سبيكة الذهب ${bar.weight} جرام: ${bar.finalPrice.toFixed(0)} ريال`,
+    })),
+  };
+
+  // Product Schema للسبيكة الأشهر (100 جرام)
+  const bar100Schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'سبيكة ذهب 100 جرام',
+    description: 'سبيكة ذهب خالص عيار 24 وزن 100 جرام - الأكثر شيوعاً للاستثمار',
+    brand: { '@type': 'Brand', name: 'PAMP' },
+    category: 'سبائك ذهب',
+    material: 'Gold 24K',
+    weight: { '@type': 'QuantitativeValue', value: '100', unitCode: 'GRM' },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'SAR',
+      price: (gram24 * 100 * 1.015).toFixed(2),
+      availability: 'https://schema.org/InStock',
+    },
   };
 
   // حساب أسعار السبائك مع هامش الربح
@@ -88,6 +121,14 @@ export default async function BarsPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(barsListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(bar100Schema) }}
       />
       
       <Header />

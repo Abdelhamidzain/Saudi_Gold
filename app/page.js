@@ -1,5 +1,6 @@
 import { getPrices, formatRiyadhTime } from './lib/getPrices';
 import { toAr, fmt, KARATS, GOLD_MARKETS } from './lib/gold';
+import { SITE_URL, getWebPageSchema, getItemListSchema, getServiceSchema } from './lib/schema';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import PriceCards from './components/PriceCards';
@@ -64,14 +65,31 @@ function getPageSchema(updatedAt) {
     '@type': 'WebPage',
     name: 'سعر الذهب اليوم في السعودية',
     description: 'سعر الذهب اليوم في السعودية محدث لحظياً بالريال السعودي',
-    url: 'https://saudi-gold.vercel.app/',
+    url: `${SITE_URL}/`,
     dateModified: updatedAt || new Date().toISOString(),
     inLanguage: 'ar',
     isPartOf: {
       '@type': 'WebSite',
       name: 'سعودي قولد',
-      url: 'https://saudi-gold.vercel.app/',
+      url: SITE_URL,
     },
+  };
+}
+
+// ItemList Schema لأسعار الذهب
+function getPriceListSchema(prices) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'أسعار الذهب اليوم في السعودية',
+    description: 'قائمة أسعار جميع عيارات الذهب بالريال السعودي',
+    numberOfItems: 4,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: `سعر جرام الذهب عيار 24: ${prices[24]?.gram?.toFixed(2)} ريال`, url: `${SITE_URL}/عيار-24` },
+      { '@type': 'ListItem', position: 2, name: `سعر جرام الذهب عيار 22: ${prices[22]?.gram?.toFixed(2)} ريال`, url: `${SITE_URL}/عيار-22` },
+      { '@type': 'ListItem', position: 3, name: `سعر جرام الذهب عيار 21: ${prices[21]?.gram?.toFixed(2)} ريال`, url: `${SITE_URL}/عيار-21` },
+      { '@type': 'ListItem', position: 4, name: `سعر جرام الذهب عيار 18: ${prices[18]?.gram?.toFixed(2)} ريال`, url: `${SITE_URL}/عيار-18` },
+    ],
   };
 }
 
@@ -84,6 +102,10 @@ export default async function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(getPageSchema(updatedAt)) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(getPriceListSchema(prices)) }}
       />
       
       <Header />

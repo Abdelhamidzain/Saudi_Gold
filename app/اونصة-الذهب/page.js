@@ -68,7 +68,7 @@ export default async function OuncePage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'سعر أونصة الذهب اليوم',
-    url: 'https://saudi-gold.vercel.app/اونصة-الذهب',
+    url: 'https://saudi-gold.com/اونصة-الذهب',
     dateModified: updatedAt || new Date().toISOString(),
   };
 

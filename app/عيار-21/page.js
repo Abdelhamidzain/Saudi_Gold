@@ -73,8 +73,27 @@ export default async function Karat21Page() {
     '@type': 'WebPage',
     name: 'سعر الذهب عيار 21 اليوم في السعودية',
     description: 'سعر جرام الذهب عيار 21 محدث لحظياً',
-    url: 'https://saudi-gold.vercel.app/عيار-21',
+    url: 'https://saudi-gold.com/عيار-21',
     dateModified: updatedAt || new Date().toISOString(),
+  };
+
+  // Product Schema لعيار 21
+  const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'ذهب عيار 21 في السعودية',
+    description: 'سعر جرام الذهب عيار 21 - الأكثر شيوعاً في السعودية بنقاوة 87.5%',
+    brand: { '@type': 'Brand', name: 'ذهب سعودي' },
+    category: 'مجوهرات ذهبية',
+    material: 'Gold 21K',
+    offers: {
+      '@type': 'Offer',
+      url: 'https://saudi-gold.com/عيار-21',
+      priceCurrency: 'SAR',
+      price: price21?.gram?.toFixed(2) || '0',
+      priceValidUntil: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+      availability: 'https://schema.org/InStock',
+    },
   };
 
   return (
@@ -82,6 +101,10 @@ export default async function Karat21Page() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
       
       <Header />

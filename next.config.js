@@ -13,6 +13,17 @@ const nextConfig = {
   // إزالة source maps في الإنتاج
   productionBrowserSourceMaps: false,
   
+  // تحسين الصور
+  images: {
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 31536000,
+  },
+  
+  // تحسين compiler
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  
   // Headers للتخزين المؤقت
   async headers() {
     return [
@@ -26,6 +37,12 @@ const nextConfig = {
         source: '/_next/static/:path*',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
         ],
       },
     ];

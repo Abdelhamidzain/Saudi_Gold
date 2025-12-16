@@ -67,7 +67,7 @@ export default async function Karat24Page() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'سعر الذهب عيار 24 اليوم في السعودية',
-    url: 'https://saudi-gold.vercel.app/عيار-24',
+    url: 'https://saudi-gold.com/عيار-24',
     dateModified: updatedAt || new Date().toISOString(),
   };
 

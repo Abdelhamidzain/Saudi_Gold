@@ -67,7 +67,7 @@ export default async function Karat22Page() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'سعر الذهب عيار 22 اليوم في السعودية',
-    url: 'https://saudi-gold.vercel.app/عيار-22',
+    url: 'https://saudi-gold.com/عيار-22',
     dateModified: updatedAt || new Date().toISOString(),
   };
 

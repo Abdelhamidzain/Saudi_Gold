@@ -73,7 +73,7 @@ export default async function BuySellPage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'بيع وشراء الذهب في السعودية',
-    url: 'https://saudi-gold.vercel.app/بيع-وشراء-الذهب',
+    url: 'https://saudi-gold.com/بيع-وشراء-الذهب',
     dateModified: updatedAt || new Date().toISOString(),
   };
 

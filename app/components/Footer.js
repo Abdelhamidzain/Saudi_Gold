@@ -16,8 +16,8 @@ export default function Footer() {
             </p>
           </div>
           
-          <nav>
-            <h4 className="footer-title">أسعار الذهب</h4>
+          <nav aria-label="أسعار الذهب">
+            <span className="footer-title" role="heading" aria-level="2">أسعار الذهب</span>
             <ul className="footer-links">
               <li><Link href="/">سعر الذهب اليوم</Link></li>
               <li><Link href="/عيار-21">سعر الذهب عيار 21</Link></li>
@@ -28,8 +28,8 @@ export default function Footer() {
             </ul>
           </nav>
           
-          <nav>
-            <h4 className="footer-title">أدوات</h4>
+          <nav aria-label="أدوات">
+            <span className="footer-title" role="heading" aria-level="2">أدوات</span>
             <ul className="footer-links">
               <li><Link href="/حاسبة-الذهب">حاسبة الذهب</Link></li>
               <li><Link href="/زكاة-الذهب">حاسبة الزكاة</Link></li>
@@ -38,8 +38,8 @@ export default function Footer() {
             </ul>
           </nav>
           
-          <nav>
-            <h4 className="footer-title">معلومات</h4>
+          <nav aria-label="معلومات">
+            <span className="footer-title" role="heading" aria-level="2">معلومات</span>
             <ul className="footer-links">
               <li><Link href="/مصنعية-الذهب">مصنعية الذهب</Link></li>
               <li><Link href="/اسواق-الذهب">أسواق الذهب</Link></li>

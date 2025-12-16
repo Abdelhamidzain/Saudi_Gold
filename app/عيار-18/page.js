@@ -67,7 +67,7 @@ export default async function Karat18Page() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'سعر الذهب عيار 18 اليوم في السعودية',
-    url: 'https://saudi-gold.vercel.app/عيار-18',
+    url: 'https://saudi-gold.com/عيار-18',
     dateModified: updatedAt || new Date().toISOString(),
   };
 

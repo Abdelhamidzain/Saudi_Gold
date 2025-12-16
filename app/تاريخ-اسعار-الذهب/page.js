@@ -79,7 +79,7 @@ export default async function HistoryPage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'تاريخ أسعار الذهب في السعودية',
-    url: 'https://saudi-gold.vercel.app/تاريخ-اسعار-الذهب',
+    url: 'https://saudi-gold.com/تاريخ-اسعار-الذهب',
     dateModified: updatedAt || new Date().toISOString(),
   };
 

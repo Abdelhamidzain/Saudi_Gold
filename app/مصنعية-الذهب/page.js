@@ -76,8 +76,33 @@ export default async function WorkmanshipPage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'مصنعية الذهب في السعودية',
-    url: 'https://saudi-gold.vercel.app/مصنعية-الذهب',
+    url: 'https://saudi-gold.com/مصنعية-الذهب',
     dateModified: updatedAt || new Date().toISOString(),
+  };
+
+  // HowTo Schema لحساب سعر الذهب مع المصنعية
+  const howToSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'كيفية حساب سعر قطعة ذهب مع المصنعية',
+    description: 'خطوات حساب السعر النهائي لقطعة ذهب في السعودية',
+    totalTime: 'PT3M',
+    step: [
+      { '@type': 'HowToStep', position: 1, name: 'معرفة سعر الجرام', text: 'تحقق من سعر جرام الذهب للعيار المطلوب' },
+      { '@type': 'HowToStep', position: 2, name: 'حساب سعر الذهب الخام', text: 'اضرب وزن القطعة في سعر الجرام' },
+      { '@type': 'HowToStep', position: 3, name: 'إضافة المصنعية', text: 'أضف تكلفة المصنعية (15-50 ريال/جرام)' },
+      { '@type': 'HowToStep', position: 4, name: 'حساب الضريبة', text: 'أضف 15% ضريبة القيمة المضافة' },
+      { '@type': 'HowToStep', position: 5, name: 'السعر النهائي', text: 'الناتج هو السعر النهائي للقطعة' },
+    ],
+  };
+
+  // Table Schema لجدول المصنعية
+  const tableSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Table',
+    name: 'جدول مصنعية الذهب في السعودية',
+    description: 'متوسط تكلفة المصنعية حسب نوع المشغولات الذهبية',
+    about: { '@type': 'Thing', name: 'مصنعية الذهب' },
   };
 
   return (
@@ -85,6 +110,14 @@ export default async function WorkmanshipPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(tableSchema) }}
       />
       
       <Header />

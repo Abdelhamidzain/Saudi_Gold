@@ -65,8 +65,32 @@ export default async function CalculatorPage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'حاسبة سعر الذهب',
-    url: 'https://saudi-gold.vercel.app/حاسبة-الذهب',
+    url: 'https://saudi-gold.com/حاسبة-الذهب',
     dateModified: updatedAt || new Date().toISOString(),
+  };
+
+  // SoftwareApplication Schema للحاسبة
+  const calculatorSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'حاسبة سعر الذهب بالريال السعودي',
+    description: 'أداة إلكترونية لحساب قيمة الذهب بالريال السعودي لجميع العيارات بناءً على الأسعار المحدثة',
+    url: 'https://saudi-gold.com/حاسبة-الذهب',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web Browser',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'SAR' },
+    featureList: ['حساب قيمة الذهب لجميع العيارات', 'أسعار محدثة لحظياً', 'دعم جميع الأوزان'],
+  };
+
+  // Service Schema
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'خدمة حساب سعر الذهب',
+    description: 'خدمة مجانية لحساب قيمة الذهب بالريال السعودي',
+    serviceType: 'Gold Calculator',
+    provider: { '@type': 'Organization', name: 'سعودي قولد' },
+    areaServed: { '@type': 'Country', name: 'المملكة العربية السعودية' },
   };
 
   return (
@@ -74,6 +98,14 @@ export default async function CalculatorPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(calculatorSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
       />
       
       <Header />

@@ -69,7 +69,7 @@ export default async function SilverPage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'سعر الفضة اليوم في السعودية',
-    url: 'https://saudi-gold.vercel.app/سعر-الفضة',
+    url: 'https://saudi-gold.com/سعر-الفضة',
     dateModified: updatedAt || new Date().toISOString(),
   };
 
