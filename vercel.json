@@ -1,4 +1,7 @@
 {
+  "buildCommand": "next build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
   "crons": [
     {
       "path": "/api/cron/refresh-prices?secret=0161348527",
