@@ -907,3 +907,16 @@ button {
   text-align: center;
   padding: 32px;
 }
+
+/* Zakat notes */
+.nisab-note {
+  font-size: 1rem;
+  color: var(--txt2);
+}
+
+.zakat-note {
+  margin-top: 12px;
+  font-size: 0.8rem;
+  color: var(--txt2);
+  text-align: center;
+}
