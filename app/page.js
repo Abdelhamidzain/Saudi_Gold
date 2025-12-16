@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 
 // الأرقام العربية
-const AR = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+const AR = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 const toAr = n => String(n).replace(/[0-9]/g, d => AR[d]);
 const fmt = (n, d = 2) => {
   if (typeof n !== 'number' || isNaN(n)) return '٠';
@@ -13,7 +13,7 @@ const fmt = (n, d = 2) => {
 };
 const fmtTime = date => {
   const d = new Date(date);
-  return toAr(`${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`);
+  return toAr(`${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`);
 };
 
 // العيارات
@@ -23,8 +23,8 @@ const OUNCE = 31.1035;
 const NISAB = 85;
 
 // أيام الأسبوع
-const DAYS = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-const MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const DAYS = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+const MONTHS = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
 
 export default function Home() {
   const [prices, setPrices] = useState(null);
@@ -32,16 +32,16 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [lastUpdate, setLastUpdate] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  
+
   // Chart
   const [chartPeriod, setChartPeriod] = useState('week');
   const [chartData, setChartData] = useState({ week: [], month: [], year: [] });
-  
+
   // Calculators
   const [calcWeight, setCalcWeight] = useState('');
   const [calcKarat, setCalcKarat] = useState(21);
   const [calcResult, setCalcResult] = useState(null);
-  
+
   const [zakatWeight, setZakatWeight] = useState('');
   const [zakatKarat, setZakatKarat] = useState(21);
   const [zakatResult, setZakatResult] = useState(null);
@@ -62,13 +62,13 @@ export default function Home() {
     try {
       const res = await fetch('/api/prices');
       const data = await res.json();
-      
+
       if (data.success && data.rates) {
         const gramPrices = calcGramPrices(data.rates);
         setPrices(gramPrices);
         setLastUpdate(data.updatedAt);
         setError(null);
-        
+
         // توليد بيانات الرسم البياني
         if (gramPrices) {
           const bp = gramPrices[21].gram;
@@ -120,13 +120,13 @@ export default function Home() {
   const handleCalcZakat = () => {
     const w = parseFloat(zakatWeight) || 0;
     if (w <= 0 || !prices) return;
-    
+
     const pure = w * KARATS[zakatKarat];
     if (pure < NISAB) {
       setZakatResult({ type: 'low', pure });
       return;
     }
-    
+
     const value = pure * prices[24].gram;
     setZakatResult({ type: 'zakat', zakat: value * 0.025, value, pure });
   };
@@ -147,7 +147,12 @@ export default function Home() {
               <span className="logo-icon">🪙</span>
               <span className="text-gold">سعودي قولد</span>
             </a>
-            <button className="menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
+            <button
+              className="menu-btn"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="فتح القائمة"
+              aria-expanded={menuOpen}
+            >
               <span></span>
             </button>
             <nav className={`nav ${menuOpen ? 'open' : ''}`}>
@@ -169,15 +174,29 @@ export default function Home() {
               <span className="live-dot"></span>
               <span>أسعار محدثة من البورصة</span>
             </div>
-            
+
             <h1>سعر <span className="text-gold">الذهب</span> اليوم في السعودية</h1>
             <p className="hero-subtitle">سعر جرام الذهب عيار ٢١ اليوم في السعودية محدث لحظياً بالريال السعودي</p>
 
             {loading ? (
-              <div className="main-price-box loading">
-                <div className="main-price-label">جاري التحميل...</div>
-                <div className="main-price-value">---</div>
-              </div>
+              <>
+                <div className="main-price-box loading">
+                  <div className="main-price-label">جاري التحميل...</div>
+                  <div className="main-price-value">---</div>
+                  <div className="last-update">&nbsp;</div>
+                </div>
+                {/* Skeleton price cards to reserve space */}
+                <div className="price-cards">
+                  {[24, 22, 21, 18, 14].map(k => (
+                    <div key={k} className={`price-card ${k === 21 ? 'highlight' : ''} loading`}>
+                      <div className="price-card-karat">{toAr(k)}</div>
+                      <div className="price-card-label">سعر جرام عيار {toAr(k)}</div>
+                      <div className="price-card-value">---</div>
+                      <div className="price-card-unit">ر.س / جرام</div>
+                    </div>
+                  ))}
+                </div>
+              </>
             ) : error ? (
               <div className="error">{error}</div>
             ) : prices && (
@@ -188,7 +207,7 @@ export default function Home() {
                     <span>{fmt(prices[21].gram)}</span>
                     <span className="main-price-currency">ر.س</span>
                   </div>
-                  {lastUpdate && <div className="last-update">آخر تحديث: {fmtTime(lastUpdate)}</div>}
+                  <div className="last-update">{lastUpdate ? `آخر تحديث: ${fmtTime(lastUpdate)}` : '\u00A0'}</div>
                 </div>
 
                 <div className="price-cards">
@@ -446,11 +465,11 @@ export default function Home() {
             <div className="info-section">
               <h2>ℹ️ عن أسعار الذهب في السعودية</h2>
               <p>
-                يُعد موقع <strong style={{ color: 'var(--g)' }}>سعودي قولد</strong> منصتك الموثوقة لمتابعة سعر الذهب اليوم في السعودية. 
+                يُعد موقع <strong style={{ color: 'var(--g)' }}>سعودي قولد</strong> منصتك الموثوقة لمتابعة سعر الذهب اليوم في السعودية.
                 نوفر لك سعر جرام الذهب عيار 21 وجميع العيارات الأخرى (24، 22، 18، 14) محدثة لحظياً بالريال السعودي.
               </p>
               <p>
-                يتأثر سعر الذهب بعدة عوامل منها: سعر الذهب العالمي، سعر صرف الدولار مقابل الريال، 
+                يتأثر سعر الذهب بعدة عوامل منها: سعر الذهب العالمي، سعر صرف الدولار مقابل الريال،
                 العرض والطلب المحلي، والأحداث الاقتصادية العالمية.
               </p>
             </div>
@@ -470,7 +489,7 @@ export default function Home() {
               <p>منصتك الموثوقة لمتابعة سعر الذهب اليوم في السعودية. سعر جرام الذهب عيار 21 وجميع العيارات محدثة لحظياً.</p>
             </div>
             <div>
-              <h4 className="footer-title">روابط سريعة</h4>
+              <h3 className="footer-title">روابط سريعة</h3>
               <ul className="footer-links">
                 <li><a href="#prices">أسعار الذهب اليوم</a></li>
                 <li><a href="#calc">حاسبة سعر الذهب</a></li>
@@ -479,7 +498,7 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h4 className="footer-title">العيارات</h4>
+              <h3 className="footer-title">العيارات</h3>
               <ul className="footer-links">
                 <li><a href="#prices">سعر جرام الذهب عيار 24</a></li>
                 <li><a href="#prices">سعر جرام الذهب عيار 22</a></li>
@@ -488,7 +507,7 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h4 className="footer-title">المدن</h4>
+              <h3 className="footer-title">المدن</h3>
               <ul className="footer-links">
                 <li><a href="#markets">سعر الذهب في الرياض</a></li>
                 <li><a href="#markets">سعر الذهب في جدة</a></li>
