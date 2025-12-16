@@ -1,151 +1,109 @@
 /**
- * ═══════════════════════════════════════════════════════════════
- * 🏆 SAUDI GOLD - Main JavaScript
- * ═══════════════════════════════════════════════════════════════
+ * Saudi Gold v2 - Optimized JavaScript
+ * أرقام عربية + عيار 21 رئيسي + رسم بياني كامل
  */
 
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 // Configuration
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 const CONFIG = {
-  // MetalpriceAPI Configuration
   apiKey: '2919b5f9bdc14d018e8f3ff2d259155f',
   apiBaseUrl: 'https://api.metalpriceapi.com/v1',
-
-  // Base gold price per ounce in USD (fallback)
   baseOunceUSD: 2650,
-
-  // USD to SAR exchange rate (fallback)
   usdToSar: 3.75,
-
-  // Karat purities
-  karats: {
-    24: 1.0000,
-    22: 0.9167,
-    21: 0.8750,
-    18: 0.7500,
-    14: 0.5833
-  },
-
-  // Troy ounce to gram
+  karats: { 24: 1.0000, 22: 0.9167, 21: 0.8750, 18: 0.7500, 14: 0.5833 },
   ounceToGram: 31.1035,
-
-  // Markup for retail
   retailMarkup: 1.02,
-
-  // Update interval (ms) - 5 minutes
   updateInterval: 300000,
-
-  // Nisab for Zakat (85 grams of gold)
   zakatNisab: 85,
-
-  // Zakat rate
   zakatRate: 0.025,
-
-  // Use live API
-  useLiveAPI: true
+  useLiveAPI: true,
+  mainKarat: 21 // العيار الرئيسي
 };
 
-// ─────────────────────────────────────────────────────────────────
-// State Management
-// ─────────────────────────────────────────────────────────────────
+// State
 const state = {
-  prices: {
-    ounceUSD: CONFIG.baseOunceUSD,
-    ounceSAR: 0,
-    gramPrices: {},
-    change: { value: 0, percentage: 0, direction: 'stable' }
-  },
+  prices: { ounceUSD: CONFIG.baseOunceUSD, ounceSAR: 0, gramPrices: {}, change: { value: 0, percentage: 0, direction: 'stable' } },
   lastUpdate: new Date(),
-  historicalData: []
+  historicalData: { week: [], month: [], year: [] },
+  currentPeriod: 'week'
 };
 
-// ─────────────────────────────────────────────────────────────────
-// Price Calculations
-// ─────────────────────────────────────────────────────────────────
+let previousGram21Price = 0;
 
-// Store previous price for change calculation
-let previousGram24Price = 0;
+// ═══════════════════════════════════════════════════════════════
+// Arabic Number Formatting - أرقام عربية (٠١٢٣٤٥٦٧٨٩)
+// ═══════════════════════════════════════════════════════════════
+const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
-// Fetch prices from MetalpriceAPI
+function toArabicNum(num) {
+  return String(num).replace(/[0-9]/g, d => arabicNumerals[d]);
+}
+
+function formatNumber(num, decimals = 2) {
+  if (typeof num !== 'number' || isNaN(num)) return '٠';
+  const fixed = num.toFixed(decimals);
+  const parts = fixed.split('.');
+  // Add thousand separators
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '٬');
+  const result = parts.join('٫');
+  return toArabicNum(result);
+}
+
+function formatTime(date) {
+  const h = date.getHours().toString().padStart(2, '0');
+  const m = date.getMinutes().toString().padStart(2, '0');
+  return toArabicNum(h + ':' + m);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// API Functions
+// ═══════════════════════════════════════════════════════════════
 async function fetchLivePrices() {
-  // Try PHP proxy first (avoids CORS), then direct API
   const endpoints = [
-    '/api/prices.php',                                                              // PHP Proxy
-    `${CONFIG.apiBaseUrl}/latest?api_key=${CONFIG.apiKey}&base=XAU&currencies=SAR,USD`  // Direct API
+    '/api/prices.php',
+    `${CONFIG.apiBaseUrl}/latest?api_key=${CONFIG.apiKey}&base=XAU&currencies=SAR,USD`
   ];
-
+  
   for (const url of endpoints) {
     try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: { 'Accept': 'application/json' }
-      });
-
+      const response = await fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } });
       if (!response.ok) continue;
-
       const data = await response.json();
-
       if (!data.success) continue;
-
-      // API returns: 1 XAU = X SAR (price per ounce)
-      const ounceSAR = data.rates.SAR;
-      const ounceUSD = data.rates.USD;
-
-      console.log('✅ Live prices fetched successfully');
-      console.log(`   Gold Price: ${ounceSAR.toFixed(2)} SAR/oz`);
-
-      return {
-        ounceSAR: ounceSAR,
-        ounceUSD: ounceUSD,
-        timestamp: data.timestamp
-      };
-
-    } catch (error) {
-      console.warn(`Failed to fetch from ${url}:`, error.message);
-      continue;
-    }
+      console.log('✅ أسعار حية:', data.rates.SAR.toFixed(2), 'ر.س/أونصة');
+      return { ounceSAR: data.rates.SAR, ounceUSD: data.rates.USD, timestamp: data.timestamp };
+    } catch (e) { continue; }
   }
-
-  console.error('❌ All API endpoints failed, using fallback prices');
+  console.warn('⚠️ استخدام أسعار احتياطية');
   return null;
 }
 
 async function calculatePrices() {
   const { karats, ounceToGram, retailMarkup, useLiveAPI } = CONFIG;
-
   let ounceSAR, ounceUSD;
-
-  // Try to fetch live prices
+  
   if (useLiveAPI) {
     const liveData = await fetchLivePrices();
-
     if (liveData) {
       ounceSAR = liveData.ounceSAR;
       ounceUSD = liveData.ounceUSD;
-
-      // Update badge to show live
       updateLiveBadge(true);
     } else {
-      // Fallback to config values
-      ounceUSD = CONFIG.baseOunceUSD;
+      ounceUSD = CONFIG.baseOunceUSD + (Math.random() - 0.5) * 20;
       ounceSAR = ounceUSD * CONFIG.usdToSar;
       updateLiveBadge(false);
     }
   } else {
-    // Use config values with slight variation for demo
-    const variation = (Math.random() - 0.5) * 10;
-    ounceUSD = CONFIG.baseOunceUSD + variation;
+    ounceUSD = CONFIG.baseOunceUSD + (Math.random() - 0.5) * 20;
     ounceSAR = ounceUSD * CONFIG.usdToSar;
   }
-
+  
   state.prices.ounceUSD = ounceUSD;
   state.prices.ounceSAR = ounceSAR;
-
-  // Calculate gram price for 24k
+  
   const gram24kSAR = (ounceSAR / ounceToGram) * retailMarkup;
-
-  // Calculate all karat prices
+  
   state.prices.gramPrices = {};
   for (const [karat, purity] of Object.entries(karats)) {
     state.prices.gramPrices[karat] = {
@@ -154,105 +112,75 @@ async function calculatePrices() {
       ounce: gram24kSAR * purity * ounceToGram
     };
   }
-
-  // Calculate change from previous price
-  if (previousGram24Price > 0) {
-    const changeValue = gram24kSAR - previousGram24Price;
+  
+  // Calculate change based on main karat (21)
+  const currentPrice = state.prices.gramPrices[21]?.gram || 0;
+  if (previousGram21Price > 0) {
+    const changeValue = currentPrice - previousGram21Price;
     state.prices.change = {
       value: changeValue,
-      percentage: (changeValue / previousGram24Price) * 100,
-      direction: changeValue >= 0 ? 'up' : changeValue < 0 ? 'down' : 'stable'
-    };
-  } else {
-    state.prices.change = {
-      value: 0,
-      percentage: 0,
-      direction: 'stable'
+      percentage: (changeValue / previousGram21Price) * 100,
+      direction: changeValue > 0.01 ? 'up' : changeValue < -0.01 ? 'down' : 'stable'
     };
   }
-
-  previousGram24Price = gram24kSAR;
+  previousGram21Price = currentPrice;
   state.lastUpdate = new Date();
-
+  
   return state.prices;
 }
 
-// Update live badge status
 function updateLiveBadge(isLive) {
   const badge = document.querySelector('.hero-badge');
   if (badge) {
-    if (isLive) {
-      badge.innerHTML = `
-        <span class="live-dot"></span>
-        <span>أسعار حية من البورصة</span>
-      `;
-      badge.style.borderColor = 'rgba(34, 197, 94, 0.5)';
-    } else {
-      badge.innerHTML = `
-        <span class="live-dot" style="background: var(--gold-500);"></span>
-        <span>أسعار تقريبية</span>
-      `;
-      badge.style.borderColor = 'var(--border-gold)';
-    }
+    badge.innerHTML = isLive 
+      ? '<span class="live-dot"></span><span>أسعار حية من البورصة العالمية</span>'
+      : '<span class="live-dot" style="background:var(--gold-500)"></span><span>أسعار تقريبية</span>';
+    badge.style.borderColor = isLive ? 'rgba(34,197,94,0.3)' : 'var(--border-gold)';
+    badge.style.background = isLive ? 'rgba(34,197,94,0.1)' : 'rgba(212,175,55,0.1)';
+    badge.style.color = isLive ? 'var(--green)' : 'var(--gold-400)';
   }
 }
 
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 // DOM Updates
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 async function updatePriceDisplay() {
-  // Show loading state
-  const mainPriceEl = document.getElementById('mainPrice');
-  if (mainPriceEl && !state.prices.gramPrices[24]) {
-    mainPriceEl.textContent = '...';
-  }
-
   const prices = await calculatePrices();
-
-  // Update main price display
+  const mainKarat = CONFIG.mainKarat;
+  
+  // Main price (عيار 21)
+  const mainPriceEl = document.getElementById('mainPrice');
   if (mainPriceEl) {
-    mainPriceEl.textContent = formatNumber(prices.gramPrices[24].gram);
+    mainPriceEl.textContent = formatNumber(prices.gramPrices[mainKarat].gram);
   }
-
-  // Update price change
+  
+  // Price change
   const changeEl = document.getElementById('priceChange');
   if (changeEl) {
     const { value, percentage, direction } = prices.change;
     changeEl.className = `main-price-change ${direction}`;
-
-    if (Math.abs(value) < 0.01) {
-      changeEl.innerHTML = `
-        <span>●</span>
-        <span>ثابت</span>
-      `;
+    if (direction === 'stable') {
+      changeEl.innerHTML = '<span>●</span><span>مستقر</span>';
     } else {
-      changeEl.innerHTML = `
-        <span>${direction === 'up' ? '▲' : '▼'}</span>
-        <span>${formatNumber(Math.abs(value))} ر.س (${formatNumber(Math.abs(percentage), 2)}%)</span>
-      `;
+      changeEl.innerHTML = `<span>${direction === 'up' ? '▲' : '▼'}</span><span>${formatNumber(Math.abs(value))} ر.س (${formatNumber(Math.abs(percentage))}٪)</span>`;
     }
   }
-
-  // Update last update time
+  
+  // Last update
   const updateEl = document.getElementById('lastUpdate');
   if (updateEl) {
-    updateEl.textContent = `آخر تحديث: ${formatTime(state.lastUpdate)}`;
+    updateEl.textContent = 'آخر تحديث: ' + formatTime(state.lastUpdate);
   }
-
-  // Update price cards
+  
   updatePriceCards(prices);
-
-  // Update table
   updatePriceTable(prices);
 }
 
 function updatePriceCards(prices) {
-  const karatOrder = [24, 22, 21, 18, 14];
-
-  karatOrder.forEach(karat => {
-    const cardEl = document.getElementById(`price-${karat}`);
-    if (cardEl && prices.gramPrices[karat]) {
-      cardEl.textContent = formatNumber(prices.gramPrices[karat].gram);
+  [24, 22, 21, 18, 14].forEach(karat => {
+    const el = document.getElementById(`price-${karat}`);
+    if (el && prices.gramPrices[karat]) {
+      el.textContent = formatNumber(prices.gramPrices[karat].gram);
     }
   });
 }
@@ -260,192 +188,127 @@ function updatePriceCards(prices) {
 function updatePriceTable(prices) {
   const tableBody = document.getElementById('pricesTableBody');
   if (!tableBody) return;
-
+  
   const rows = [
-    { name: 'جرام ذهب عيار 24', karat: 24, unit: 'gram' },
-    { name: 'جرام ذهب عيار 22', karat: 22, unit: 'gram' },
-    { name: 'جرام ذهب عيار 21', karat: 21, unit: 'gram' },
-    { name: 'جرام ذهب عيار 18', karat: 18, unit: 'gram' },
-    { name: 'جرام ذهب عيار 14', karat: 14, unit: 'gram' },
-    { name: 'أونصة ذهب عيار 24', karat: 24, unit: 'ounce' },
+    { name: 'سعر جرام الذهب عيار 24', karat: 24, unit: 'gram' },
+    { name: 'سعر جرام الذهب عيار 22', karat: 22, unit: 'gram' },
+    { name: 'سعر جرام الذهب عيار 21', karat: 21, unit: 'gram' },
+    { name: 'سعر جرام الذهب عيار 18', karat: 18, unit: 'gram' },
+    { name: 'سعر جرام الذهب عيار 14', karat: 14, unit: 'gram' },
+    { name: 'سعر أونصة الذهب عيار 24', karat: 24, unit: 'ounce' },
   ];
-
+  
   tableBody.innerHTML = rows.map(row => {
     const price = prices.gramPrices[row.karat][row.unit];
     const priceUSD = price / CONFIG.usdToSar;
-
-    return `
-      <tr>
-        <td>
-          <span class="unit-name">
-            <span class="karat-badge">${row.karat}K</span>
-            ${row.name}
-          </span>
-        </td>
-        <td>${formatNumber(price)}</td>
-        <td>${formatNumber(priceUSD)}</td>
-      </tr>
-    `;
+    return `<tr><td><span class="unit-name"><span class="karat-badge">${toArabicNum(row.karat)}K</span>${row.name}</span></td><td>${formatNumber(price)}</td><td>${formatNumber(priceUSD)}</td></tr>`;
   }).join('');
 }
 
-// ─────────────────────────────────────────────────────────────────
-// Gold Price Calculator
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// Calculators
+// ═══════════════════════════════════════════════════════════════
 function calculateGoldPrice() {
-  const weightInput = document.getElementById('goldWeight');
-  const karatSelect = document.getElementById('goldKarat');
+  const weight = parseFloat(document.getElementById('goldWeight')?.value) || 0;
+  const karat = parseInt(document.getElementById('goldKarat')?.value) || 21;
   const resultEl = document.getElementById('calcResult');
-
-  if (!weightInput || !karatSelect || !resultEl) return;
-
-  const weight = parseFloat(weightInput.value) || 0;
-  const karat = parseInt(karatSelect.value) || 24;
-
+  if (!resultEl) return;
+  
   if (weight <= 0) {
-    resultEl.innerHTML = `
-      <div class="result-label">أدخل الوزن</div>
-      <div class="result-value">0 <small>ر.س</small></div>
-    `;
+    resultEl.innerHTML = '<div class="result-label">أدخل الوزن</div><div class="result-value">٠ <small>ر.س</small></div>';
     return;
   }
-
+  
   const gramPrice = state.prices.gramPrices[karat]?.gram || 0;
-  const totalPrice = weight * gramPrice;
-
-  resultEl.innerHTML = `
-    <div class="result-label">القيمة التقديرية</div>
-    <div class="result-value">${formatNumber(totalPrice)} <small>ر.س</small></div>
-  `;
+  const total = weight * gramPrice;
+  resultEl.innerHTML = `<div class="result-label">القيمة التقديرية</div><div class="result-value">${formatNumber(total)} <small>ر.س</small></div>`;
 }
 
-// ─────────────────────────────────────────────────────────────────
-// Zakat Calculator
-// ─────────────────────────────────────────────────────────────────
 function calculateZakat() {
-  const weightInput = document.getElementById('zakatWeight');
-  const karatSelect = document.getElementById('zakatKarat');
+  const weight = parseFloat(document.getElementById('zakatWeight')?.value) || 0;
+  const karat = parseInt(document.getElementById('zakatKarat')?.value) || 21;
   const resultEl = document.getElementById('zakatResult');
-
-  if (!weightInput || !karatSelect || !resultEl) return;
-
-  const weight = parseFloat(weightInput.value) || 0;
-  const karat = parseInt(karatSelect.value) || 24;
-
+  if (!resultEl) return;
+  
   if (weight <= 0) {
-    resultEl.innerHTML = `
-      <div class="result-label">أدخل وزن الذهب</div>
-      <div class="result-value">0 <small>ر.س</small></div>
-    `;
+    resultEl.innerHTML = '<div class="result-label">أدخل وزن الذهب</div><div class="result-value">٠ <small>ر.س</small></div>';
     return;
   }
-
-  // Calculate pure gold weight
+  
   const purity = CONFIG.karats[karat] || 1;
-  const pureGoldWeight = weight * purity;
-
-  // Check if reaches Nisab
-  if (pureGoldWeight < CONFIG.zakatNisab) {
-    resultEl.innerHTML = `
-      <div class="result-label">لم يبلغ النصاب</div>
-      <div class="result-value" style="font-size: 1rem; color: var(--text-secondary);">
-        النصاب: ${CONFIG.zakatNisab} جرام ذهب خالص
-        <br>
-        وزنك الخالص: ${formatNumber(pureGoldWeight, 2)} جرام
-      </div>
-    `;
+  const pureGold = weight * purity;
+  
+  if (pureGold < CONFIG.zakatNisab) {
+    resultEl.innerHTML = `<div class="result-label">لم يبلغ النصاب</div><div class="result-value" style="font-size:1rem;color:var(--text-secondary)">النصاب: ${toArabicNum(CONFIG.zakatNisab)} جرام ذهب خالص<br>وزنك الخالص: ${formatNumber(pureGold)} جرام</div>`;
     return;
   }
-
-  // Calculate Zakat
+  
   const gramPrice = state.prices.gramPrices[24]?.gram || 0;
-  const totalValue = pureGoldWeight * gramPrice;
+  const totalValue = pureGold * gramPrice;
   const zakatAmount = totalValue * CONFIG.zakatRate;
-
-  resultEl.innerHTML = `
-    <div class="result-label">مبلغ الزكاة المستحق (2.5%)</div>
-    <div class="result-value">${formatNumber(zakatAmount)} <small>ر.س</small></div>
-    <div style="margin-top: 10px; font-size: 0.8rem; color: var(--text-secondary);">
-      قيمة الذهب: ${formatNumber(totalValue)} ر.س
-    </div>
-  `;
+  
+  resultEl.innerHTML = `<div class="result-label">مبلغ الزكاة المستحق (٢٫٥٪)</div><div class="result-value">${formatNumber(zakatAmount)} <small>ر.س</small></div><div style="margin-top:10px;font-size:0.8rem;color:var(--text-secondary)">قيمة الذهب: ${formatNumber(totalValue)} ر.س</div>`;
 }
 
-// ─────────────────────────────────────────────────────────────────
-// Historical Chart
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// Chart - يعمل مع أسبوع/شهر/سنة
+// ═══════════════════════════════════════════════════════════════
 function generateHistoricalData() {
+  const basePrice = state.prices.gramPrices[21]?.gram || 450;
+  
+  // Generate data for all periods
+  state.historicalData.week = generatePeriodData(7, basePrice, 0.5);
+  state.historicalData.month = generatePeriodData(30, basePrice, 1.5);
+  state.historicalData.year = generatePeriodData(12, basePrice, 5, 'months');
+}
+
+function generatePeriodData(count, basePrice, volatility, type = 'days') {
   const data = [];
-  const basePrice = state.prices.gramPrices[24]?.gram || 320;
-
-  for (let i = 6; i >= 0; i--) {
+  for (let i = count - 1; i >= 0; i--) {
     const date = new Date();
-    date.setDate(date.getDate() - i);
-
-    // Generate realistic price variation
-    const variation = (Math.random() - 0.5) * 15;
-    const price = basePrice + variation - (i * 0.5);
-
+    if (type === 'days') {
+      date.setDate(date.getDate() - i);
+    } else {
+      date.setMonth(date.getMonth() - i);
+    }
+    const variation = (Math.random() - 0.5) * volatility * 10;
+    const trend = (count - 1 - i) * 0.3;
     data.push({
       date: date,
-      price: Math.max(price, basePrice * 0.95)
+      price: Math.max(basePrice + variation + trend, basePrice * 0.9)
     });
   }
-
-  state.historicalData = data;
   return data;
 }
 
-function renderChart() {
-  const chartContainer = document.getElementById('priceChart');
-  if (!chartContainer) return;
-
-  const data = generateHistoricalData();
+function renderChart(period = 'week') {
+  const container = document.getElementById('priceChart');
+  if (!container) return;
+  
+  state.currentPeriod = period;
+  const data = state.historicalData[period] || [];
+  
+  if (data.length === 0) {
+    container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted)">جاري التحميل...</div>';
+    return;
+  }
+  
   const maxPrice = Math.max(...data.map(d => d.price));
   const minPrice = Math.min(...data.map(d => d.price));
   const range = maxPrice - minPrice || 1;
-
-  // Generate bars
-  const barsHtml = data.map((d, i) => {
-    const height = ((d.price - minPrice) / range * 70) + 30; // 30-100% height
-    const dayName = getDayName(d.date);
-
-    return `
-      <div class="chart-bar" 
-           style="height: ${height}%;" 
-           data-value="${formatNumber(d.price)} ر.س"
-           title="${dayName}: ${formatNumber(d.price)} ر.س">
-      </div>
-    `;
+  
+  const barsHtml = data.map(d => {
+    const height = ((d.price - minPrice) / range * 70) + 30;
+    const label = period === 'year' ? getMonthName(d.date) : getDayName(d.date);
+    return `<div class="chart-bar" style="height:${height}%" data-value="${formatNumber(d.price)} ر.س" title="${label}: ${formatNumber(d.price)} ر.س"></div>`;
   }).join('');
-
-  // Generate labels
+  
   const labelsHtml = data.map(d => {
-    return `<span class="chart-label">${getDayName(d.date)}</span>`;
+    const label = period === 'year' ? getMonthName(d.date) : getDayName(d.date);
+    return `<span class="chart-label">${label}</span>`;
   }).join('');
-
-  chartContainer.innerHTML = `
-    <div class="simple-chart">${barsHtml}</div>
-    <div class="chart-labels">${labelsHtml}</div>
-  `;
-}
-
-// ─────────────────────────────────────────────────────────────────
-// Utility Functions
-// ─────────────────────────────────────────────────────────────────
-function formatNumber(num, decimals = 2) {
-  if (typeof num !== 'number' || isNaN(num)) return '0';
-  return num.toLocaleString('ar-SA', {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals
-  });
-}
-
-function formatTime(date) {
-  return date.toLocaleTimeString('ar-SA', {
-    hour: '2-digit',
-    minute: '2-digit'
-  });
+  
+  container.innerHTML = `<div class="simple-chart">${barsHtml}</div><div class="chart-labels">${labelsHtml}</div>`;
 }
 
 function getDayName(date) {
@@ -453,21 +316,33 @@ function getDayName(date) {
   return days[date.getDay()];
 }
 
-// ─────────────────────────────────────────────────────────────────
-// Mobile Menu
-// ─────────────────────────────────────────────────────────────────
+function getMonthName(date) {
+  const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+  return months[date.getMonth()];
+}
+
+function initChartPeriods() {
+  document.querySelectorAll('.chart-period').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.chart-period').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const period = btn.dataset.period || 'week';
+      renderChart(period);
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UI Helpers
+// ═══════════════════════════════════════════════════════════════
 function initMobileMenu() {
   const toggle = document.getElementById('menuToggle');
   const nav = document.getElementById('mainNav');
-
   if (!toggle || !nav) return;
-
   toggle.addEventListener('click', () => {
     nav.classList.toggle('active');
     toggle.classList.toggle('active');
   });
-
-  // Close menu when clicking on a link
   nav.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       nav.classList.remove('active');
@@ -476,146 +351,49 @@ function initMobileMenu() {
   });
 }
 
-// ─────────────────────────────────────────────────────────────────
-// Tab Switching
-// ─────────────────────────────────────────────────────────────────
-function initTabs() {
-  document.querySelectorAll('[data-tab]').forEach(tab => {
-    tab.addEventListener('click', () => {
-      const group = tab.closest('.table-tabs, .chart-periods');
-      if (!group) return;
-
-      group.querySelectorAll('[data-tab]').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-
-      // Handle specific tab actions here if needed
-    });
+function initFormValidation() {
+  ['goldWeight', 'goldKarat'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', calculateGoldPrice);
+  });
+  ['zakatWeight', 'zakatKarat'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', calculateZakat);
   });
 }
 
-// ─────────────────────────────────────────────────────────────────
-// Smooth Scroll
-// ─────────────────────────────────────────────────────────────────
 function initSmoothScroll() {
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
+    anchor.addEventListener('click', function(e) {
       const href = this.getAttribute('href');
       if (href === '#') return;
-
       e.preventDefault();
       const target = document.querySelector(href);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
 }
 
-// ─────────────────────────────────────────────────────────────────
-// Form Validation
-// ─────────────────────────────────────────────────────────────────
-function initFormValidation() {
-  // Gold calculator
-  const goldWeight = document.getElementById('goldWeight');
-  const goldKarat = document.getElementById('goldKarat');
-
-  if (goldWeight) {
-    goldWeight.addEventListener('input', calculateGoldPrice);
-  }
-  if (goldKarat) {
-    goldKarat.addEventListener('change', calculateGoldPrice);
-  }
-
-  // Zakat calculator
-  const zakatWeight = document.getElementById('zakatWeight');
-  const zakatKarat = document.getElementById('zakatKarat');
-
-  if (zakatWeight) {
-    zakatWeight.addEventListener('input', calculateZakat);
-  }
-  if (zakatKarat) {
-    zakatKarat.addEventListener('change', calculateZakat);
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────
-// Auto Update
-// ─────────────────────────────────────────────────────────────────
 async function startAutoUpdate() {
-  // Initial update
   await updatePriceDisplay();
-  renderChart();
-
-  // Set interval for updates (every 5 minutes for API)
+  generateHistoricalData();
+  renderChart('week');
   setInterval(async () => {
     await updatePriceDisplay();
   }, CONFIG.updateInterval);
 }
 
-// ─────────────────────────────────────────────────────────────────
-// Animation on Scroll
-// ─────────────────────────────────────────────────────────────────
-function initScrollAnimations() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate-fade-in-up');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.section, .price-card, .calculator-card, .market-card').forEach(el => {
-    el.style.opacity = '0';
-    observer.observe(el);
-  });
-}
-
-// ─────────────────────────────────────────────────────────────────
-// Service Worker Registration (for PWA)
-// ─────────────────────────────────────────────────────────────────
-function registerServiceWorker() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js')
-      .then(reg => console.log('SW registered'))
-      .catch(err => console.log('SW registration failed'));
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────
-// Initialize App
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// Initialize
+// ═══════════════════════════════════════════════════════════════
 async function init() {
-  console.log('🏆 Saudi Gold initializing...');
-
-  // Initialize components
+  console.log('🏆 Saudi Gold v2 - جاري التحميل...');
   initMobileMenu();
-  initTabs();
   initSmoothScroll();
   initFormValidation();
-
-  // Start updates (will fetch from API)
+  initChartPeriods();
   await startAutoUpdate();
-
-  // Initialize animations (optional - can be disabled for performance)
-  // initScrollAnimations();
-
-  // Register service worker
-  // registerServiceWorker();
-
-  console.log('🏆 Saudi Gold initialized successfully!');
-  console.log(`📡 API Mode: ${CONFIG.useLiveAPI ? 'LIVE' : 'DEMO'}`);
+  console.log('✅ Saudi Gold v2 - جاهز!');
 }
 
-// Start when DOM is ready
 document.addEventListener('DOMContentLoaded', init);
-
-// Export for module use
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    calculatePrices,
-    calculateGoldPrice,
-    calculateZakat,
-    formatNumber
-  };
-}

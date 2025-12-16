@@ -1,17 +1,9 @@
-# ═══════════════════════════════════════════════════════════════
-# Saudi Gold - Robots.txt
-# https://saudi-gold.com/robots.txt
-# ═══════════════════════════════════════════════════════════════
-
+# Saudi Gold v2 - robots.txt
 User-agent: *
 Allow: /
 
+# Disallow admin
+Disallow: /admin/
+
 # Sitemap
 Sitemap: https://saudi-gold.com/sitemap.xml
-
-# Crawl-delay (optional)
-Crawl-delay: 1
-
-# Block certain paths if needed
-# Disallow: /admin/
-# Disallow: /private/
