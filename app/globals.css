@@ -3,9 +3,9 @@
   --bg: #0A0A0F;
   --card: #1A1A24;
   --txt: #FFF;
-  --txt2: #A0A0B0;
-  --txt3: #9B9BA8;
-  /* Improved from #6B6B7B for WCAG AA contrast (4.5:1) */
+  --txt2: #C4C4D4;
+  --txt3: #B0B0C0;
+  /* Improved for WCAG AA contrast (4.5:1) */
   --green: #22C55E;
   --red: #EF4444;
   --border: rgba(255, 255, 255, 0.08);
@@ -594,7 +594,7 @@ button {
 
 .result-value small {
   font-size: 1rem;
-  opacity: 0.7;
+  color: #E5C35A;
 }
 
 /* Chart */
