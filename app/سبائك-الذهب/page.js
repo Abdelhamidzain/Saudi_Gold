@@ -62,6 +62,19 @@ export default async function BarsPage() {
   const formattedTime = formatRiyadhTime(updatedAt);
   const gram24 = prices[24]?.gram || 0;
 
+  // حساب أسعار السبائك مع هامش الربح (يجب أن يكون قبل الـ Schema)
+  const barPrices = BAR_WEIGHTS.map(weight => {
+    let premium = 0.05; // 5% للسبائك الصغيرة
+    if (weight >= 100) premium = 0.015;
+    else if (weight >= 50) premium = 0.02;
+    else if (weight >= 10) premium = 0.03;
+    
+    const basePrice = gram24 * weight;
+    const finalPrice = basePrice * (1 + premium);
+    
+    return { weight, basePrice, premium, finalPrice };
+  });
+
   const pageSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
@@ -102,19 +115,6 @@ export default async function BarsPage() {
       availability: 'https://schema.org/InStock',
     },
   };
-
-  // حساب أسعار السبائك مع هامش الربح
-  const barPrices = BAR_WEIGHTS.map(weight => {
-    let premium = 0.05; // 5% للسبائك الصغيرة
-    if (weight >= 100) premium = 0.015;
-    else if (weight >= 50) premium = 0.02;
-    else if (weight >= 10) premium = 0.03;
-    
-    const basePrice = gram24 * weight;
-    const finalPrice = basePrice * (1 + premium);
-    
-    return { weight, basePrice, premium, finalPrice };
-  });
 
   return (
     <>
