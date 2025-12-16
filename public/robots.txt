@@ -1,0 +1,12 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://saudi-gold.vercel.app/sitemap.xml
+
+# Disallow API routes
+Disallow: /api/
+
+# Disallow Next.js internals
+Disallow: /_next/

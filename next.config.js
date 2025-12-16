@@ -2,18 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   
-  // تحسينات الأداء التجريبية
+  // تحسينات الأداء
   experimental: {
-    // دمج CSS في HTML مباشرة - يوفر 100-300ms
-    inlineCss: true,
-    // تحسين استيراد المكتبات
-    optimizePackageImports: ['lucide-react', 'date-fns'],
-  },
-  
-  // تحسين الصور
-  images: {
-    formats: ['image/avif', 'image/webp'],
-    minimumCacheTTL: 31536000,
+    optimizePackageImports: ['lucide-react'],
   },
   
   // ضغط الملفات

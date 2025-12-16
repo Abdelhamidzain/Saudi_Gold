@@ -2,55 +2,53 @@ import { neon } from '@neondatabase/serverless';
 
 export const dynamic = 'force-dynamic';
 
+const METAL_API_KEY = process.env.METAL_API_KEY;
+const CRON_SECRET = process.env.CRON_SECRET || '0161348527';
+
 export async function GET(request) {
+  // التحقق من السر
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('secret');
   
-  if (secret !== process.env.CRON_SECRET) {
-    return Response.json({ success: false, error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const apiKey = process.env.METAL_API_KEY;
-  if (!apiKey) {
-    return Response.json({ success: false, error: 'API key missing' }, { status: 500 });
+  if (secret !== CRON_SECRET) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
-    const sql = neon(process.env.DATABASE_URL);
-
-    // إنشاء الجدول إذا لم يكن موجوداً
-    await sql`
-      CREATE TABLE IF NOT EXISTS gold_prices (
-        id SERIAL PRIMARY KEY,
-        rates JSONB NOT NULL,
-        updated_at TIMESTAMP DEFAULT NOW()
-      )
-    `;
-
-    // جلب الأسعار من API الخارجي
-    const res = await fetch(
-      `https://api.metalpriceapi.com/v1/latest?api_key=${apiKey}&base=XAU&currencies=SAR,USD`,
-      { cache: 'no-store' }
-    );
-    const data = await res.json();
+    // جلب الأسعار من API
+    const apiUrl = `https://api.metalpriceapi.com/v1/latest?api_key=${METAL_API_KEY}&base=XAU&currencies=SAR,USD`;
+    const response = await fetch(apiUrl, { cache: 'no-store' });
     
-    if (!data.success) throw new Error(data.error || 'API error');
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
 
-    // حفظ في Neon (حذف القديم وإضافة الجديد)
-    await sql`DELETE FROM gold_prices`;
+    const data = await response.json();
+    
+    if (!data.success || !data.rates) {
+      throw new Error('Invalid API response');
+    }
+
+    // حفظ في قاعدة البيانات
+    const sql = neon(process.env.DATABASE_URL);
+    
     await sql`
-      INSERT INTO gold_prices (rates, updated_at) 
+      INSERT INTO gold_prices (rates, updated_at)
       VALUES (${JSON.stringify(data.rates)}, NOW())
     `;
 
-    return Response.json({ 
-      success: true, 
+    return Response.json({
+      success: true,
+      message: 'Prices updated successfully',
       rates: data.rates,
-      updatedAt: new Date().toISOString()
+      timestamp: new Date().toISOString()
     });
 
   } catch (error) {
     console.error('Cron error:', error);
-    return Response.json({ success: false, error: error.message }, { status: 500 });
+    return Response.json({ 
+      success: false, 
+      error: error.message 
+    }, { status: 500 });
   }
 }

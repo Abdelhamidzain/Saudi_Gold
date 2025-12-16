@@ -23,14 +23,12 @@ export async function GET() {
 
     const data = rows[0];
     const updatedAt = new Date(data.updated_at).toISOString();
-    const age = Math.floor((Date.now() - new Date(data.updated_at).getTime()) / 1000);
 
     return Response.json(
       { 
         success: true, 
         rates: data.rates, 
         updatedAt,
-        age, 
         source: 'neon' 
       },
       { headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' } }
