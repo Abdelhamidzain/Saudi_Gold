@@ -1,9 +1,0 @@
-# Saudi Gold v2 - robots.txt
-User-agent: *
-Allow: /
-
-# Disallow admin
-Disallow: /admin/
-
-# Sitemap
-Sitemap: https://saudi-gold.com/sitemap.xml
