@@ -1,43 +1,28 @@
 import { neon } from '@neondatabase/serverless';
 
+export const dynamic = 'force-dynamic';  // ← أضف هذا السطر
 export const revalidate = 60;
 
-export async function GET() {
-  try {
-    const sql = neon(process.env.DATABASE_URL);
-    
-    // جلب آخر سعر من قاعدة البيانات
-    const rows = await sql`
-      SELECT rates, updated_at 
-      FROM gold_prices 
-      ORDER BY id DESC 
-      LIMIT 1
-    `;
+// ... باقي الكود كما هو
+```
 
-    if (rows.length === 0) {
-      return Response.json(
-        { success: false, error: 'الأسعار غير متوفرة حالياً' },
-        { status: 503, headers: { 'Retry-After': '60' } }
-      );
-    }
+**3. أنشئ مجلد `public/` فارغ** (أضف ملف فارغ اسمه `.gitkeep` داخله)
 
-    const data = rows[0];
-    const updatedAt = new Date(data.updated_at).toISOString();
-    const age = Math.floor((Date.now() - new Date(data.updated_at).getTime()) / 1000);
+**4. اضغط Commit**
 
-    return Response.json(
-      { 
-        success: true, 
-        rates: data.rates, 
-        updatedAt,
-        age, 
-        source: 'neon' 
-      },
-      { headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' } }
-    );
+**5. Vercel سيعمل Redeploy تلقائياً**
 
-  } catch (error) {
-    console.error('Prices API error:', error);
-    return Response.json({ success: false, error: error.message }, { status: 500 });
-  }
-}
+---
+
+### الطريقة 2: إعادة رفع الملفات الجديدة
+
+1. احذف الملفات القديمة من GitHub
+2. ارفع الملفات من الـ zip الجديد
+
+---
+
+## ⚠️ بعد نجاح الـ Deploy:
+
+**شغّل هذا الرابط لإنشاء الجدول وتعبئة البيانات:**
+```
+https://saudi-gold.vercel.app/api/cron/refresh-prices?secret=0161348527
