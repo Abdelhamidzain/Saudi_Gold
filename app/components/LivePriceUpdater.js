@@ -3,18 +3,17 @@
 import { useEffect, useState, useCallback } from 'react';
 
 const REFRESH_INTERVAL = 10 * 60 * 1000; // 10 دقائق
+const OUNCE = 31.1035;
+const MARKUP = 1.02;
+const KARATS = { 24: 1, 22: 0.9167, 21: 0.875, 18: 0.75, 14: 0.5833 };
 
 function formatPrice(n) {
   if (typeof n !== 'number' || isNaN(n)) return '0';
-  return n.toLocaleString('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-function formatTime(isoString) {
-  if (!isoString) return '';
-  return new Date(isoString).toLocaleString('ar-SA', {
+function formatTime() {
+  return new Date().toLocaleString('ar-SA', {
     timeZone: 'Asia/Riyadh',
     hour: '2-digit',
     minute: '2-digit',
@@ -24,150 +23,103 @@ function formatTime(isoString) {
 }
 
 export default function LivePriceUpdater() {
-  const [lastUpdate, setLastUpdate] = useState(null);
-  const [isUpdating, setIsUpdating] = useState(false);
   const [change, setChange] = useState(null);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const updatePrices = useCallback(async () => {
     try {
       setIsUpdating(true);
-      const res = await fetch('/api/live-gold');
-      const data = await res.json();
 
-      if (!data.success || !data.prices) return;
+      // جلب مباشرة من goldprice.org (بدون بروكسي!)
+      const res = await fetch('https://data-asg.goldprice.org/dbXRates/SAR');
+      const data = await res.json();
+      const item = data?.items?.[0];
+      if (!item?.xauPrice) return;
+
+      // حساب أسعار كل العيارات
+      const gram24 = (item.xauPrice / OUNCE) * MARKUP;
+      const prices = {};
+      for (const [k, purity] of Object.entries(KARATS)) {
+        prices[k] = {
+          gram: gram24 * purity,
+          ounce: gram24 * purity * OUNCE,
+          kilo: gram24 * purity * 1000,
+        };
+      }
+
+      // تحديث السعر الرئيسي (عيار 21)
+      const mainPrice = document.querySelector('.main-price-value span:first-child');
+      if (mainPrice) mainPrice.textContent = formatPrice(prices[21].gram);
 
       // تحديث كروت الأسعار
       const priceValues = document.querySelectorAll('.price-card-value');
       const karatOrder = [24, 22, 21, 18];
       priceValues.forEach((el, i) => {
-        if (karatOrder[i] && data.prices[karatOrder[i]]) {
-          el.textContent = formatPrice(data.prices[karatOrder[i]].gram);
+        if (karatOrder[i] && prices[karatOrder[i]]) {
+          el.textContent = formatPrice(prices[karatOrder[i]].gram);
         }
       });
 
-      // تحديث السعر الرئيسي (عيار 21)
-      const mainPrice = document.querySelector('.main-price-value span:first-child');
-      if (mainPrice && data.prices[21]) {
-        mainPrice.textContent = formatPrice(data.prices[21].gram);
-      }
-
       // تحديث وقت آخر تحديث
-      const updateTimeEls = document.querySelectorAll('.last-update');
-      const timeStr = formatTime(data.updatedAt);
-      updateTimeEls.forEach((el) => {
-        el.textContent = `آخر تحديث: ${timeStr}`;
+      const timeStr = formatTime();
+      document.querySelectorAll('.last-update').forEach((el) => {
+        el.textContent = '\u0622\u062E\u0631 \u062A\u062D\u062F\u064A\u062B: ' + timeStr;
       });
 
       // تحديث جدول الأسعار
-      const tableRows = document.querySelectorAll('.price-table tbody tr, .price-table tr:not(:first-child)');
-      tableRows.forEach((row) => {
+      document.querySelectorAll('.price-table tbody tr, .price-table tr:not(:first-child)').forEach((row) => {
         const cells = row.querySelectorAll('td');
         if (cells.length >= 4) {
-          // محاولة تحديد العيار من النص
-          const karatText = cells[0]?.textContent || '';
-          let karat = null;
-          if (karatText.includes('24')) karat = 24;
-          else if (karatText.includes('22')) karat = 22;
-          else if (karatText.includes('21')) karat = 21;
-          else if (karatText.includes('18')) karat = 18;
-          else if (karatText.includes('14')) karat = 14;
+          const text = cells[0]?.textContent || '';
+          let k = null;
+          if (text.includes('24')) k = 24;
+          else if (text.includes('22')) k = 22;
+          else if (text.includes('21')) k = 21;
+          else if (text.includes('18')) k = 18;
+          else if (text.includes('14')) k = 14;
 
-          if (karat && data.prices[karat]) {
-            if (cells[1]) cells[1].textContent = formatPrice(data.prices[karat].gram);
-            if (cells[2]) cells[2].textContent = formatPrice(data.prices[karat].ounce);
-            if (cells[3]) cells[3].textContent = formatPrice(data.prices[karat].kilo);
+          if (k && prices[k]) {
+            if (cells[1]) cells[1].textContent = formatPrice(prices[k].gram);
+            if (cells[2]) cells[2].textContent = formatPrice(prices[k].ounce);
+            if (cells[3]) cells[3].textContent = formatPrice(prices[k].kilo);
           }
         }
       });
 
-      // حفظ بيانات التغيير
-      setChange(data.change);
-      setLastUpdate(data.updatedAt);
+      setChange({ amount: item.chgXau, percent: item.pcXau });
 
-      // إرسال event للكالكيوليتور وباقي الكومبوننتات
-      window.dispatchEvent(
-        new CustomEvent('goldPriceUpdate', {
-          detail: { prices: data.prices, updatedAt: data.updatedAt },
-        })
-      );
+      // بث الأسعار لبقية الكومبوننتات
+      window.__goldPrices = prices;
+      window.dispatchEvent(new CustomEvent('goldPriceUpdate', { detail: { prices } }));
+
     } catch (err) {
-      console.error('Failed to update prices:', err);
+      console.error('Price update failed:', err);
     } finally {
       setIsUpdating(false);
     }
   }, []);
 
   useEffect(() => {
-    // تحديث فوري عند تحميل الصفحة
-    const initialDelay = setTimeout(updatePrices, 3000);
-
-    // تحديث كل 10 دقائق
+    const t1 = setTimeout(updatePrices, 2000);
     const interval = setInterval(updatePrices, REFRESH_INTERVAL);
-
-    return () => {
-      clearTimeout(initialDelay);
-      clearInterval(interval);
-    };
+    return () => { clearTimeout(t1); clearInterval(interval); };
   }, [updatePrices]);
 
-  // مؤشر التحديث المباشر
   return (
     <div className="live-indicator" aria-live="polite">
       <style>{`
-        .live-indicator {
-          position: fixed;
-          bottom: 16px;
-          left: 16px;
-          z-index: 1000;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          padding: 8px 14px;
-          background: var(--bg2, #1a1a2e);
-          border: 1px solid var(--gold, #D4AF37);
-          border-radius: 20px;
-          font-size: 0.75rem;
-          color: var(--text2, #ccc);
-          box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-          direction: rtl;
-          transition: opacity 0.3s;
-        }
-        .live-indicator:hover {
-          opacity: 1 !important;
-        }
-        .live-dot-indicator {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: #22c55e;
-          animation: livePulse 2s infinite;
-        }
-        .live-dot-indicator.updating {
-          background: #f59e0b;
-        }
-        @keyframes livePulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
-        }
-        .live-change {
-          font-weight: bold;
-          margin-right: 4px;
-        }
-        .live-change.up { color: #22c55e; }
-        .live-change.down { color: #ef4444; }
-        @media (max-width: 768px) {
-          .live-indicator {
-            bottom: 8px;
-            left: 8px;
-            font-size: 0.65rem;
-            padding: 6px 10px;
-          }
-        }
+        .live-indicator{position:fixed;bottom:16px;left:16px;z-index:1000;display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--bg2,#1a1a2e);border:1px solid var(--g,#D4AF37);border-radius:20px;font-size:.75rem;color:var(--txt2,#ccc);box-shadow:0 2px 12px rgba(0,0,0,.3);direction:rtl}
+        .live-dot-i{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:lp 2s infinite}
+        .live-dot-i.u{background:#f59e0b}
+        @keyframes lp{0%,100%{opacity:1}50%{opacity:.4}}
+        .lc{font-weight:bold;margin-right:4px}
+        .lc.up{color:#22c55e}.lc.dn{color:#ef4444}
+        @media(max-width:768px){.live-indicator{bottom:8px;left:8px;font-size:.65rem;padding:6px 10px}}
       `}</style>
-      <span className={`live-dot-indicator ${isUpdating ? 'updating' : ''}`}></span>
+      <span className={'live-dot-i' + (isUpdating ? ' u' : '')}></span>
       <span>أسعار مباشرة</span>
       {change && change.percent !== 0 && (
-        <span className={`live-change ${change.percent > 0 ? 'up' : 'down'}`}>
+        <span className={'lc ' + (change.percent > 0 ? 'up' : 'dn')}>
           {change.percent > 0 ? '▲' : '▼'} {Math.abs(change.percent).toFixed(2)}%
         </span>
       )}

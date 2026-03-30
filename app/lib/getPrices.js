@@ -1,72 +1,85 @@
 import { calcGramPrices, KARATS, OUNCE, MARKUP } from './gold';
 
 /**
- * جلب الأسعار مباشرة من goldprice.org (مجاني - بدون DB)
+ * جلب الأسعار - يحاول من goldprice.org أولاً ثم MetalPriceAPI ثم القيم الافتراضية
+ * الأسعار تتحدث في المتصفح خلال ثانيتين عبر LivePriceUpdater
  */
-async function fetchFromGoldPrice() {
-  const res = await fetch('https://data-asg.goldprice.org/dbXRates/SAR', {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Accept': 'application/json, text/plain, */*',
-      'Origin': 'https://goldprice.org',
-      'Referer': 'https://goldprice.org/',
-    },
-    next: { revalidate: 300 }, // cache 5 min
-  });
-
-  if (!res.ok) throw new Error(`goldprice.org returned ${res.status}`);
-
-  const data = await res.json();
-  const item = data?.items?.[0];
-
-  if (!item?.xauPrice) throw new Error('Invalid goldprice.org data');
-
-  return {
-    sarPerOunce: item.xauPrice,
-    change: item.chgXau,
-    changePercent: item.pcXau,
-    xagSAR: item.xagPrice,
-  };
-}
-
 export async function getPrices() {
+  // محاولة 1: goldprice.org (مجاني)
   try {
-    const { sarPerOunce, change, changePercent } = await fetchFromGoldPrice();
-    const prices = calcGramPrices(sarPerOunce);
+    const res = await fetch('https://data-asg.goldprice.org/dbXRates/SAR', {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+        'Accept': 'application/json',
+        'Origin': 'https://goldprice.org',
+        'Referer': 'https://goldprice.org/',
+      },
+      next: { revalidate: 300 },
+    });
 
-    return {
-      prices,
-      rates: { SAR: sarPerOunce },
-      updatedAt: new Date().toISOString(),
-      change: { amount: change, percent: changePercent },
-      source: 'goldprice.org',
-    };
-  } catch (error) {
-    console.error('Failed to fetch from goldprice.org:', error);
-
-    // قيم افتراضية في حالة الفشل
-    const defaultGram24 = 330;
-    const prices = {};
-    for (const [k, data] of Object.entries(KARATS)) {
-      prices[k] = {
-        gram: defaultGram24 * data.purity,
-        ounce: defaultGram24 * data.purity * OUNCE,
-        kilo: defaultGram24 * data.purity * 1000,
-      };
+    if (res.ok) {
+      const data = await res.json();
+      const item = data?.items?.[0];
+      if (item?.xauPrice) {
+        const prices = calcGramPrices(item.xauPrice);
+        return {
+          prices,
+          rates: { SAR: item.xauPrice },
+          updatedAt: new Date().toISOString(),
+          source: 'goldprice.org',
+        };
+      }
     }
+  } catch (e) {
+    console.warn('goldprice.org failed:', e.message);
+  }
 
-    return {
-      prices,
-      rates: { SAR: defaultGram24 * OUNCE / MARKUP },
-      updatedAt: null,
-      source: 'fallback',
+  // محاولة 2: MetalPriceAPI (لو عندنا key)
+  try {
+    const apiKey = process.env.METAL_API_KEY;
+    if (apiKey) {
+      const res = await fetch(
+        `https://api.metalpriceapi.com/v1/latest?api_key=${apiKey}&base=XAU&currencies=SAR`,
+        { next: { revalidate: 600 } }
+      );
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.rates?.SAR) {
+          const prices = calcGramPrices(data.rates.SAR);
+          return {
+            prices,
+            rates: data.rates,
+            updatedAt: new Date().toISOString(),
+            source: 'metalpriceapi',
+          };
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('MetalPriceAPI failed:', e.message);
+  }
+
+  // محاولة 3: قيم افتراضية (المتصفح يحدّثها خلال ثانيتين)
+  const defaultGram24 = 350;
+  const prices = {};
+  for (const [k, data] of Object.entries(KARATS)) {
+    prices[k] = {
+      gram: defaultGram24 * data.purity,
+      ounce: defaultGram24 * data.purity * OUNCE,
+      kilo: defaultGram24 * data.purity * 1000,
     };
   }
+
+  return {
+    prices,
+    rates: { SAR: defaultGram24 * OUNCE / MARKUP },
+    updatedAt: null,
+    source: 'fallback',
+  };
 }
 
 export function formatRiyadhTime(isoString) {
   if (!isoString) return 'جاري التحديث...';
-
   return new Date(isoString).toLocaleString('ar-SA', {
     timeZone: 'Asia/Riyadh',
     hour: '2-digit',
