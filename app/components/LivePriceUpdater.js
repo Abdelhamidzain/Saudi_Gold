@@ -3,8 +3,6 @@
 import { useEffect, useState, useCallback } from 'react';
 
 const REFRESH_INTERVAL = 10 * 60 * 1000; // 10 دقائق
-const OUNCE = 31.1035;
-const MARKUP = 1.02;
 const KARATS = { 24: 1, 22: 0.9167, 21: 0.875, 18: 0.75, 14: 0.5833 };
 
 function formatPrice(n) {
@@ -30,22 +28,18 @@ export default function LivePriceUpdater() {
     try {
       setIsUpdating(true);
 
-      // جلب مباشرة من goldprice.org (بدون بروكسي!)
-      const res = await fetch('https://data-asg.goldprice.org/dbXRates/SAR');
-      if (!res.ok) return; // Silent fail on 403/error — prevents browser console errors
+      // جلب من API خاصتنا (بدون طلبات third-party في المتصفح)
+      const res = await fetch('/api/live-gold', { cache: 'no-store' });
+      if (!res.ok) return;
       const data = await res.json();
-      const item = data?.items?.[0];
-      if (!item?.xauPrice) return;
+      if (!data?.success || !data?.prices) return;
 
-      // حساب أسعار كل العيارات
-      const gram24 = (item.xauPrice / OUNCE) * MARKUP;
       const prices = {};
       for (const [k, purity] of Object.entries(KARATS)) {
-        prices[k] = {
-          gram: gram24 * purity,
-          ounce: gram24 * purity * OUNCE,
-          kilo: gram24 * purity * 1000,
-        };
+        const p = data.prices[k];
+        if (p) {
+          prices[k] = { gram: p.gram, ounce: p.ounce, kilo: p.kilo };
+        }
       }
 
       // تحديث السعر الرئيسي (عيار 21)
@@ -87,7 +81,7 @@ export default function LivePriceUpdater() {
         }
       });
 
-      setChange({ amount: item.chgXau, percent: item.pcXau });
+      setChange({ amount: data.change?.amount || 0, percent: data.change?.percent || 0 });
 
       // بث الأسعار لبقية الكومبوننتات
       window.__goldPrices = prices;
