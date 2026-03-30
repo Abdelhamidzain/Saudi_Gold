@@ -62,6 +62,9 @@ const homeLinks = [
   { href: '/gold-bars', label: 'أسعار سبائك الذهب', icon: '🧱' },
   { href: '/workmanship', label: 'مصنعية الذهب', icon: '🔧' },
   { href: '/markets', label: 'أسواق الذهب', icon: '🏪' },
+  { href: '/gold-price-riyadh', label: 'سعر الذهب في الرياض', icon: '🏙️' },
+  { href: '/gold-price-jeddah', label: 'سعر الذهب في جدة', icon: '🌊' },
+  { href: '/blog', label: 'دليل شراء الذهب', icon: '📖' },
 ];
 
 // WebPage Schema
@@ -221,6 +224,79 @@ export default async function Home() {
                 عيار 21 هو الأكثر شيوعاً في السعودية للمجوهرات، بينما عيار 24 
                 يُستخدم للسبائك والاستثمار.
               </p>
+            </div>
+          </div>
+        </section>
+
+        {/* City Prices Section */}
+        <section className="section">
+          <div className="container">
+            <h2 className="section-title">🏙️ أسعار الذهب حسب المدينة</h2>
+            <div className="price-cards">
+              <Link href="/gold-price-riyadh" className="price-card">
+                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🏙️</div>
+                <h3 className="price-card-label">سعر الذهب في الرياض</h3>
+                <div className="price-card-unit">عيار 21 · محدث لحظياً</div>
+              </Link>
+              <Link href="/gold-price-jeddah" className="price-card">
+                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🌊</div>
+                <h3 className="price-card-label">سعر الذهب في جدة</h3>
+                <div className="price-card-unit">عيار 21 · محدث لحظياً</div>
+              </Link>
+              <Link href="/gold-price-makkah" className="price-card">
+                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🕋</div>
+                <h3 className="price-card-label">سعر الذهب في مكة</h3>
+                <div className="price-card-unit">عيار 21 · محدث لحظياً</div>
+              </Link>
+              <Link href="/gold-price-dammam" className="price-card">
+                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🛢️</div>
+                <h3 className="price-card-label">سعر الذهب في الدمام</h3>
+                <div className="price-card-unit">عيار 21 · محدث لحظياً</div>
+              </Link>
+              <Link href="/gold-price-madinah" className="price-card">
+                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🌴</div>
+                <h3 className="price-card-label">سعر الذهب في المدينة</h3>
+                <div className="price-card-unit">عيار 21 · محدث لحظياً</div>
+              </Link>
+              <Link href="/gold-price-taif" className="price-card">
+                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🌹</div>
+                <h3 className="price-card-label">سعر الذهب في الطائف</h3>
+                <div className="price-card-unit">عيار 21 · محدث لحظياً</div>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Blog CTA Section */}
+        <section className="section">
+          <div className="container">
+            <h2 className="section-title">📖 مقالات ودليل شراء الذهب</h2>
+            <div className="price-cards">
+              <Link href="/blog/gold-buying-guide-saudi" className="price-card">
+                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>📖</div>
+                <h3 className="price-card-label">دليل شراء الذهب في السعودية</h3>
+                <div className="price-card-unit">دليل شامل للمبتدئين</div>
+              </Link>
+              <Link href="/blog/difference-gold-karats" className="price-card">
+                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>💎</div>
+                <h3 className="price-card-label">الفرق بين عيارات الذهب</h3>
+                <div className="price-card-unit">24 vs 21 vs 18</div>
+              </Link>
+              <Link href="/blog/gold-zakat-guide" className="price-card">
+                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🕌</div>
+                <h3 className="price-card-label">دليل زكاة الذهب</h3>
+                <div className="price-card-unit">حساب الزكاة مع أمثلة</div>
+              </Link>
+              <Link href="/blog/best-time-buy-gold" className="price-card">
+                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>⏰</div>
+                <h3 className="price-card-label">أفضل وقت لشراء الذهب</h3>
+                <div className="price-card-unit">نصائح الخبراء</div>
+              </Link>
+            </div>
+            <div style={{ textAlign: 'center', marginTop: '20px' }}>
+              <Link href="/blog" className="btn btn-outline">
+                عرض جميع المقالات ←
+              </Link>
             </div>
           </div>
         </section>

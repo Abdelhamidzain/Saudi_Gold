@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { href: '/calculator', label: 'الحاسبة' },
   { href: '/zakat', label: 'الزكاة' },
   { href: '/markets', label: 'الأسواق' },
+  { href: '/blog', label: 'المدونة' },
 ];
 
 export default function Header() {
