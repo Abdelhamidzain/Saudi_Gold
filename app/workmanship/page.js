@@ -12,6 +12,9 @@ export const revalidate = 60;
 export const metadata = {
   title: 'مصنعية الذهب في السعودية | كم تكلفة المصنعية؟',
   description: 'دليل شامل عن مصنعية الذهب في السعودية. تعرف على متوسط تكلفة المصنعية وكيف تحسب سعر المشغولات الذهبية.',
+  alternates: {
+    canonical: 'https://saudi-gold.com/workmanship',
+  },
   keywords: ['مصنعية الذهب', 'مصنعية الذهب في السعودية', 'كم مصنعية الذهب', 'تكلفة المصنعية'],
 };
 

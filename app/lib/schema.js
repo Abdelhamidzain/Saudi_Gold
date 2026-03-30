@@ -1,4 +1,4 @@
-// Schema helpers for SEO
+// Schema helpers for SEO - Fixed & Improved
 export const SITE_URL = 'https://saudi-gold.com';
 
 // WebPage Schema
@@ -16,64 +16,65 @@ export function getWebPageSchema({ title, description, url, dateModified }) {
       name: 'سعودي قولد',
       url: SITE_URL,
     },
-  };
-}
-
-// Product Schema للذهب
-export function getGoldProductSchema({ name, description, karat, price, url }) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name,
-    description,
-    brand: {
-      '@type': 'Brand',
-      name: 'ذهب سعودي',
-    },
-    category: `ذهب عيار ${karat}`,
-    material: 'Gold',
-    offers: {
-      '@type': 'Offer',
-      url: `${SITE_URL}${url}`,
-      priceCurrency: 'SAR',
-      price: price?.toFixed(2) || '0',
-      priceValidUntil: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-      availability: 'https://schema.org/InStock',
-      seller: {
-        '@type': 'Organization',
-        name: 'سعودي قولد',
-      },
+    publisher: {
+      '@type': 'Organization',
+      name: 'سعودي قولد',
+      url: SITE_URL,
     },
   };
 }
 
-// Service Schema للحاسبات
-export function getServiceSchema({ name, description, url, serviceType }) {
+// PriceSpecification Schema for gold prices (replaces misleading Product schema)
+export function getGoldPriceSchema({ name, description, karat, priceSAR, priceUSD, url }) {
   return {
     '@context': 'https://schema.org',
-    '@type': 'Service',
+    '@type': 'WebPage',
+    '@id': `${SITE_URL}${url}#webpage`,
     name,
     description,
     url: `${SITE_URL}${url}`,
-    serviceType,
+    mainEntity: {
+      '@type': 'ExchangeRateSpecification',
+      currency: 'XAU',
+      currentExchangeRate: {
+        '@type': 'UnitPriceSpecification',
+        price: priceSAR?.toFixed(2) || '0',
+        priceCurrency: 'SAR',
+        unitText: 'gram',
+        name: `سعر جرام الذهب عيار ${karat}`,
+      },
+    },
+    dateModified: new Date().toISOString(),
+    inLanguage: 'ar',
+  };
+}
+
+// Service Schema for calculators
+export function getServiceSchema({ name, description, url, serviceType }) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name,
+    description,
+    url: `${SITE_URL}${url}`,
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web Browser',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'SAR',
+    },
     provider: {
       '@type': 'Organization',
       name: 'سعودي قولد',
       url: SITE_URL,
     },
-    areaServed: {
-      '@type': 'Country',
-      name: 'المملكة العربية السعودية',
-    },
-    availableChannel: {
-      '@type': 'ServiceChannel',
-      serviceUrl: `${SITE_URL}${url}`,
-      serviceType: 'Online',
-    },
+    featureList: serviceType,
+    inLanguage: 'ar',
   };
 }
 
-// HowTo Schema لصفحات الإرشادات
+// HowTo Schema
 export function getHowToSchema({ name, description, steps, totalTime }) {
   return {
     '@context': 'https://schema.org',
@@ -81,6 +82,7 @@ export function getHowToSchema({ name, description, steps, totalTime }) {
     name,
     description,
     totalTime: totalTime || 'PT5M',
+    inLanguage: 'ar',
     step: steps.map((step, index) => ({
       '@type': 'HowToStep',
       position: index + 1,
@@ -90,7 +92,7 @@ export function getHowToSchema({ name, description, steps, totalTime }) {
   };
 }
 
-// ItemList Schema لقوائم الأسعار
+// ItemList Schema
 export function getItemListSchema({ name, items }) {
   return {
     '@context': 'https://schema.org',
@@ -106,9 +108,9 @@ export function getItemListSchema({ name, items }) {
   };
 }
 
-// LocalBusiness Schema لأسواق الذهب
-export function getLocalBusinessSchema({ name, city, area }) {
-  return {
+// LocalBusiness Schema for gold markets
+export function getLocalBusinessSchema({ name, city, area, lat, lng }) {
+  const schema = {
     '@context': 'https://schema.org',
     '@type': 'JewelryStore',
     name,
@@ -118,62 +120,84 @@ export function getLocalBusinessSchema({ name, city, area }) {
       addressRegion: area,
       addressCountry: 'SA',
     },
-    geo: {
-      '@type': 'GeoCoordinates',
-      addressCountry: 'SA',
-    },
     priceRange: '$$',
     currenciesAccepted: 'SAR',
   };
+  if (lat && lng) {
+    schema.geo = {
+      '@type': 'GeoCoordinates',
+      latitude: lat,
+      longitude: lng,
+    };
+  }
+  return schema;
 }
 
-// Table Schema للجداول
-export function getTableSchema({ name, description, columns, rows }) {
+// Article Schema for blog posts
+export function getArticleSchema({ title, description, url, datePublished, dateModified, image }) {
   return {
     '@context': 'https://schema.org',
-    '@type': 'Table',
-    name,
-    description,
-    about: {
-      '@type': 'Thing',
-      name: 'أسعار الذهب في السعودية',
-    },
-  };
-}
-
-// FinancialProduct Schema للسبائك
-export function getFinancialProductSchema({ name, description, price, weight }) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FinancialProduct',
-    name,
-    description,
-    provider: {
-      '@type': 'Organization',
-      name: 'سعودي قولد',
-    },
-    offers: {
-      '@type': 'Offer',
-      priceCurrency: 'SAR',
-      price: price?.toFixed(2) || '0',
-    },
-  };
-}
-
-// SoftwareApplication Schema للحاسبات
-export function getCalculatorSchema({ name, description, url }) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name,
+    '@type': 'Article',
+    headline: title,
     description,
     url: `${SITE_URL}${url}`,
-    applicationCategory: 'FinanceApplication',
-    operatingSystem: 'Web',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'SAR',
+    datePublished,
+    dateModified: dateModified || datePublished,
+    inLanguage: 'ar',
+    author: {
+      '@type': 'Organization',
+      name: 'سعودي قولد',
+      url: SITE_URL,
     },
+    publisher: {
+      '@type': 'Organization',
+      name: 'سعودي قولد',
+      url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/logo.png`,
+      },
+    },
+    image: image || `${SITE_URL}/og-image.png`,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${SITE_URL}${url}`,
+    },
+  };
+}
+
+// City page Schema
+export function getCityGoldSchema({ cityNameAr, cityNameEn, url }) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: `سعر الذهب اليوم في ${cityNameAr}`,
+    description: `سعر الذهب اليوم في ${cityNameAr} محدث لحظياً بالريال السعودي لجميع العيارات`,
+    url: `${SITE_URL}${url}`,
+    about: {
+      '@type': 'Thing',
+      name: `أسعار الذهب في ${cityNameAr}`,
+    },
+    dateModified: new Date().toISOString(),
+    inLanguage: 'ar',
+    isPartOf: {
+      '@type': 'WebSite',
+      name: 'سعودي قولد',
+      url: SITE_URL,
+    },
+  };
+}
+
+// BreadcrumbList Schema helper
+export function getBreadcrumbSchema(items) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.href ? `${SITE_URL}${item.href}` : undefined,
+    })),
   };
 }

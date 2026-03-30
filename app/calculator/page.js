@@ -12,6 +12,9 @@ export const revalidate = 60;
 export const metadata = {
   title: 'حاسبة سعر الذهب بالريال السعودي | احسب قيمة ذهبك',
   description: 'حاسبة سعر الذهب السعودية. احسب قيمة ذهبك بالريال السعودي لجميع العيارات (21، 22، 24، 18) بناءً على الأسعار المحدثة.',
+  alternates: {
+    canonical: 'https://saudi-gold.com/calculator',
+  },
   keywords: ['حاسبة الذهب', 'حساب سعر الذهب', 'حاسبة سعر الذهب', 'حساب قيمة الذهب'],
 };
 

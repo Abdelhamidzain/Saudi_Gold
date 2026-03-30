@@ -12,6 +12,9 @@ export const revalidate = 60;
 export const metadata = {
   title: 'سعر الفضة اليوم في السعودية | سعر جرام الفضة بالريال',
   description: 'سعر الفضة اليوم في السعودية محدث. سعر جرام الفضة والأونصة بالريال السعودي مع مقارنة بسعر الذهب.',
+  alternates: {
+    canonical: 'https://saudi-gold.com/silver',
+  },
   keywords: ['سعر الفضة', 'سعر الفضة اليوم', 'سعر جرام الفضة', 'فضة'],
 };
 

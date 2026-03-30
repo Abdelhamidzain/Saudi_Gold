@@ -12,6 +12,9 @@ export const revalidate = 60;
 export const metadata = {
   title: 'تاريخ أسعار الذهب في السعودية | الرسم البياني والتحليل',
   description: 'تاريخ أسعار الذهب في السعودية. تعرف على تطور أسعار الذهب عبر السنوات والعوامل المؤثرة في السعر.',
+  alternates: {
+    canonical: 'https://saudi-gold.com/history',
+  },
   keywords: ['تاريخ أسعار الذهب', 'رسم بياني الذهب', 'تطور سعر الذهب', 'أسعار الذهب التاريخية'],
 };
 

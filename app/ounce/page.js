@@ -12,6 +12,9 @@ export const revalidate = 60;
 export const metadata = {
   title: 'سعر أونصة الذهب اليوم في السعودية | سعر الأونصة بالريال',
   description: 'سعر أونصة الذهب اليوم في السعودية محدث لحظياً بالريال السعودي والدولار. الأونصة تساوي 31.1 جرام.',
+  alternates: {
+    canonical: 'https://saudi-gold.com/ounce',
+  },
   keywords: ['سعر أونصة الذهب', 'سعر الأونصة', 'أونصة الذهب', 'سعر اونصة الذهب اليوم'],
 };
 

@@ -8,9 +8,20 @@ export const metadata = {
     default: 'سعر الذهب اليوم في السعودية | أسعار جرام الذهب عيار 21 و 24 محدثة',
     template: '%s | سعودي قولد',
   },
-  description: 'سعر الذهب اليوم في السعودية محدث لحظياً بالريال السعودي. أسعار جرام الذهب عيار 21 و 22 و 24 و 18 مع حاسبة الذهب وحاسبة زكاة الذهب.',
-  keywords: ['سعر الذهب اليوم', 'اسعار الذهب', 'سعر جرام الذهب عيار 21', 'سعر الذهب في السعودية', 'حاسبة الذهب', 'زكاة الذهب'],
-  authors: [{ name: 'سعودي قولد' }],
+  description: 'سعر الذهب اليوم في السعودية محدث لحظياً بالريال السعودي. أسعار جرام الذهب عيار 21 و 22 و 24 و 18 مع حاسبة الذهب وحاسبة زكاة الذهب وأسعار السبائك.',
+  keywords: [
+    'سعر الذهب اليوم',
+    'اسعار الذهب في السعودية',
+    'سعر جرام الذهب عيار 21',
+    'سعر الذهب في السعودية',
+    'حاسبة الذهب',
+    'زكاة الذهب',
+    'سعر الذهب اليوم في السعودية',
+    'سعر الذهب عيار 24',
+    'سبائك الذهب',
+    'سعر الذهب الان',
+  ],
+  authors: [{ name: 'سعودي قولد', url: SITE_URL }],
   creator: 'سعودي قولد',
   publisher: 'سعودي قولد',
   formatDetection: {
@@ -18,18 +29,31 @@ export const metadata = {
     address: false,
     telephone: false,
   },
+  alternates: {
+    canonical: SITE_URL,
+  },
   openGraph: {
-    title: 'سعر الذهب اليوم في السعودية',
-    description: 'سعر جرام الذهب عيار 21 اليوم محدث لحظياً بالريال السعودي مع حاسبة الذهب وحاسبة الزكاة',
+    title: 'سعر الذهب اليوم في السعودية | محدث لحظياً',
+    description: 'سعر جرام الذهب عيار 21 اليوم محدث لحظياً بالريال السعودي مع حاسبة الذهب وحاسبة الزكاة وأسعار السبائك',
     url: SITE_URL,
     siteName: 'سعودي قولد',
     locale: 'ar_SA',
     type: 'website',
+    images: [
+      {
+        url: `${SITE_URL}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: 'سعر الذهب اليوم في السعودية - سعودي قولد',
+        type: 'image/png',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'سعر الذهب اليوم في السعودية',
     description: 'سعر جرام الذهب عيار 21 اليوم محدث لحظياً بالريال السعودي',
+    images: [`${SITE_URL}/og-image.png`],
   },
   robots: {
     index: true,
@@ -43,33 +67,37 @@ export const metadata = {
     },
   },
   verification: {
-    google: 'google-site-verification-code',
+    google: 'YkX9VVCgo3jumvzx1iRJWOO-wJn2Ok-whCW1VQSUVWY',
   },
+  manifest: '/manifest.json',
 };
 
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#0A0A0F',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F59E0B' },
+    { media: '(prefers-color-scheme: dark)', color: '#0A0A0F' },
+  ],
 };
 
-// WebSite Schema
+// WebSite Schema - Fixed: removed fake SearchAction
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'سعودي قولد',
-  alternateName: 'Saudi Gold',
+  alternateName: ['Saudi Gold', 'سعودي جولد', 'اسعار الذهب'],
   url: SITE_URL,
   description: 'سعر الذهب اليوم في السعودية محدث لحظياً بالريال السعودي - أسعار جميع العيارات مع حاسبة الذهب وحاسبة الزكاة',
   inLanguage: 'ar',
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: `${SITE_URL}/search?q={search_term_string}`,
-    'query-input': 'required name=search_term_string',
+  publisher: {
+    '@type': 'Organization',
+    name: 'سعودي قولد',
+    url: SITE_URL,
   },
 };
 
-// Organization Schema
+// Organization Schema - Fixed
 const orgSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
@@ -77,30 +105,50 @@ const orgSchema = {
   alternateName: 'Saudi Gold',
   url: SITE_URL,
   logo: `${SITE_URL}/logo.png`,
-  description: 'منصة سعودية لمتابعة أسعار الذهب والفضة في المملكة العربية السعودية',
+  description: 'منصة سعودية لمتابعة أسعار الذهب والفضة في المملكة العربية السعودية بشكل لحظي',
   foundingDate: '2024',
   areaServed: {
     '@type': 'Country',
     name: 'المملكة العربية السعودية',
+    alternateName: 'Saudi Arabia',
   },
-  sameAs: [],
-  contactPoint: {
-    '@type': 'ContactPoint',
-    contactType: 'customer service',
-    availableLanguage: ['Arabic', 'English'],
-  },
+  sameAs: [
+    // TODO: Replace with your actual social media URLs
+    // 'https://x.com/saudigold_com',
+    // 'https://www.instagram.com/saudigold_com',
+  ],
 };
+
+// GA4 Measurement ID - Replace G-XXXXXXXXXX with your actual GA4 ID
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || '';
 
 export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl">
       <head>
-        <meta name="google-site-verification" content="YkX9VVCgo3jumvzx1iRJWOO-wJn2Ok-whCW1VQSUVWY" />
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪙</text></svg>" />
-        {/* Preconnect لتحسين الأداء */}
+        {/* Google Analytics 4 */}
+        {GA_ID && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+            <script dangerouslySetInnerHTML={{ __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GA_ID}', { send_page_view: true });
+            `}} />
+          </>
+        )}
+
+        {/* Favicons */}
+        <link rel="icon" href="/favicon.ico" sizes="32x32" />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+        {/* Preconnect */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://metalpriceapi.com" />
-        {/* Critical CSS inline لتجنب render blocking - يشمل Hero و Above the fold */}
+
+        {/* Critical CSS */}
         <style dangerouslySetInnerHTML={{ __html: `
           :root{--g:#F59E0B;--g2:#D97706;--bg:#0A0A0F;--bg2:#111118;--bg3:#1a1a24;--txt:#FFF;--txt2:#E0E0E8;--txt3:#B0B0B8;--gold-gradient:linear-gradient(135deg,#F59E0B 0%,#D97706 50%,#B45309 100%);--green:#10B981;--red:#EF4444}
           *{box-sizing:border-box;margin:0;padding:0}
@@ -132,14 +180,10 @@ export default function RootLayout({ children }) {
           .price-card-value{font-size:1.4rem;font-weight:700;color:var(--g)}
           .price-card-unit{color:var(--txt2);font-size:0.8rem}
         `}} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
-        />
+
+        {/* Structured Data */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
       </head>
       <body>{children}</body>
     </html>

@@ -44,13 +44,25 @@ export default function Footer() {
               <li><Link href="/workmanship">مصنعية الذهب</Link></li>
               <li><Link href="/markets">أسواق الذهب</Link></li>
               <li><Link href="/silver">سعر الفضة</Link></li>
+              <li><Link href="/blog">المدونة</Link></li>
+            </ul>
+          </nav>
+          
+          <nav aria-label="أسعار الذهب حسب المدينة">
+            <span className="footer-title" role="heading" aria-level="2">أسعار حسب المدينة</span>
+            <ul className="footer-links">
+              <li><Link href="/gold-price-riyadh">سعر الذهب في الرياض</Link></li>
+              <li><Link href="/gold-price-jeddah">سعر الذهب في جدة</Link></li>
+              <li><Link href="/gold-price-makkah">سعر الذهب في مكة</Link></li>
+              <li><Link href="/gold-price-madinah">سعر الذهب في المدينة</Link></li>
+              <li><Link href="/gold-price-dammam">سعر الذهب في الدمام</Link></li>
             </ul>
           </nav>
         </div>
         
         <div className="footer-bottom">
           <p className="footer-copyright">
-            © 2025 سعودي قولد - جميع الحقوق محفوظة
+            © 2025-2026 سعودي قولد - جميع الحقوق محفوظة
           </p>
         </div>
       </div>

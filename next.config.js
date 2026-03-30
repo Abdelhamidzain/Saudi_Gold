@@ -2,41 +2,36 @@
 const nextConfig = {
   reactStrictMode: true,
   
-  // تحسينات الأداء
+  // Performance
   experimental: {
     optimizePackageImports: ['lucide-react'],
   },
   
-  // ضغط الملفات
   compress: true,
-  
-  // إزالة source maps في الإنتاج
   productionBrowserSourceMaps: false,
-  
-  // تعطيل x-powered-by header
   poweredByHeader: false,
   
-  // تحسين الصور
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 31536000,
   },
   
-  // تحسين compiler
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
-  // تحسين CSS
   swcMinify: true,
   
-  // Rewrites للروابط العربية
+  // Rewrites: Arabic URLs → English routes (single source of truth)
   async rewrites() {
     return [
+      // Karat pages
       { source: '/عيار-21', destination: '/karat-21' },
       { source: '/عيار-22', destination: '/karat-22' },
       { source: '/عيار-24', destination: '/karat-24' },
       { source: '/عيار-18', destination: '/karat-18' },
+      
+      // Tool & info pages
       { source: '/سبائك-الذهب', destination: '/gold-bars' },
       { source: '/حاسبة-الذهب', destination: '/calculator' },
       { source: '/زكاة-الذهب', destination: '/zakat' },
@@ -46,10 +41,30 @@ const nextConfig = {
       { source: '/سعر-الفضة', destination: '/silver' },
       { source: '/بيع-وشراء-الذهب', destination: '/buy-sell' },
       { source: '/تاريخ-اسعار-الذهب', destination: '/history' },
+      
+      // City pages - Arabic URLs
+      { source: '/سعر-الذهب-في-الرياض', destination: '/gold-price-riyadh' },
+      { source: '/سعر-الذهب-في-جدة', destination: '/gold-price-jeddah' },
+      { source: '/سعر-الذهب-في-مكة', destination: '/gold-price-makkah' },
+      { source: '/سعر-الذهب-في-المدينة', destination: '/gold-price-madinah' },
+      { source: '/سعر-الذهب-في-الدمام', destination: '/gold-price-dammam' },
+      { source: '/سعر-الذهب-في-الخبر', destination: '/gold-price-khobar' },
+      { source: '/سعر-الذهب-في-تبوك', destination: '/gold-price-tabuk' },
+      { source: '/سعر-الذهب-في-أبها', destination: '/gold-price-abha' },
+      { source: '/سعر-الذهب-في-الطائف', destination: '/gold-price-taif' },
+      { source: '/سعر-الذهب-في-حائل', destination: '/gold-price-hail' },
+      { source: '/سعر-الذهب-في-بريدة', destination: '/gold-price-buraidah' },
+      { source: '/سعر-الذهب-في-خميس-مشيط', destination: '/gold-price-khamis-mushait' },
+      { source: '/سعر-الذهب-في-نجران', destination: '/gold-price-najran' },
+      { source: '/سعر-الذهب-في-الجبيل', destination: '/gold-price-jubail' },
+      { source: '/سعر-الذهب-في-ينبع', destination: '/gold-price-yanbu' },
+      
+      // Blog Arabic
+      { source: '/مدونة', destination: '/blog' },
     ];
   },
   
-  // Headers للتخزين المؤقت والأداء
+  // Headers for caching & security
   async headers() {
     return [
       {
@@ -69,13 +84,8 @@ const nextConfig = {
         headers: [
           { key: 'X-DNS-Prefetch-Control', value: 'on' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
-        ],
-      },
-      // تحسين CSS
-      {
-        source: '/_next/static/css/:path*',
-        headers: [
-          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'Referrer-Policy', value: 'origin-when-cross-origin' },
         ],
       },
     ];

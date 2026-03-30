@@ -13,6 +13,9 @@ export const revalidate = 60;
 export const metadata = {
   title: 'حاسبة زكاة الذهب | احسب زكاة ذهبك بسهولة',
   description: 'حاسبة زكاة الذهب السعودية. أدخل وزن ذهبك لحساب الزكاة المستحقة. النصاب 85 جرام ذهب خالص والزكاة 2.5%.',
+  alternates: {
+    canonical: 'https://saudi-gold.com/zakat',
+  },
   keywords: ['زكاة الذهب', 'حاسبة زكاة الذهب', 'حساب زكاة الذهب', 'نصاب الذهب'],
 };
 
