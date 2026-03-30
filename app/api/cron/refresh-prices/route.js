@@ -1,17 +1,13 @@
-import { neon } from '@neondatabase/serverless';
-
 export const dynamic = 'force-dynamic';
 
 const CRON_SECRET = process.env.CRON_SECRET || '0161348527';
+const OUNCE = 31.1035;
+const MARKUP = 1.02;
 
-/**
- * جلب سعر الذهب من goldprice.org (مجاني - بدون API key)
- * يعطينا سعر الأونصة بالريال السعودي مباشرة
- */
 async function fetchGoldPrice() {
   const res = await fetch('https://data-asg.goldprice.org/dbXRates/SAR', {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
       'Accept': 'application/json, text/plain, */*',
       'Origin': 'https://goldprice.org',
       'Referer': 'https://goldprice.org/',
@@ -20,18 +16,21 @@ async function fetchGoldPrice() {
   });
 
   if (!res.ok) throw new Error(`goldprice.org returned ${res.status}`);
-
   const data = await res.json();
   const item = data?.items?.[0];
+  if (!item?.xauPrice) throw new Error('Invalid data');
 
-  if (!item?.xauPrice) throw new Error('Invalid data from goldprice.org');
+  const gram24 = (item.xauPrice / OUNCE) * MARKUP;
 
   return {
-    SAR: item.xauPrice,
-    USD: item.xauPrice / 3.75,
-    xagSAR: item.xagPrice,
+    xauSAR: item.xauPrice,
+    gram24: +gram24.toFixed(2),
+    gram22: +(gram24 * 0.9167).toFixed(2),
+    gram21: +(gram24 * 0.875).toFixed(2),
+    gram18: +(gram24 * 0.75).toFixed(2),
     change: item.chgXau,
     changePercent: item.pcXau,
+    xagSAR: item.xagPrice,
   };
 }
 
@@ -44,26 +43,29 @@ export async function GET(request) {
   }
 
   try {
-    const rates = await fetchGoldPrice();
+    const prices = await fetchGoldPrice();
 
-    const sql = neon(process.env.DATABASE_URL);
-
-    await sql`
-      INSERT INTO gold_prices (rates, updated_at)
-      VALUES (${JSON.stringify(rates)}, NOW())
-    `;
+    // محاولة حفظ في DB (اختياري - لو DB شغالة)
+    let dbSaved = false;
+    try {
+      if (process.env.DATABASE_URL) {
+        const { neon } = await import('@neondatabase/serverless');
+        const sql = neon(process.env.DATABASE_URL);
+        await sql`INSERT INTO gold_prices (rates, updated_at) VALUES (${JSON.stringify({ SAR: prices.xauSAR })}, NOW())`;
+        dbSaved = true;
+      }
+    } catch (dbErr) {
+      console.warn('DB save skipped:', dbErr.message);
+    }
 
     return Response.json({
       success: true,
-      message: 'Prices updated from goldprice.org (FREE)',
-      rates,
+      prices,
+      dbSaved,
       timestamp: new Date().toISOString(),
+      source: 'goldprice.org (free)',
     });
   } catch (error) {
-    console.error('Cron error:', error);
-    return Response.json({
-      success: false,
-      error: error.message,
-    }, { status: 500 });
+    return Response.json({ success: false, error: error.message }, { status: 500 });
   }
 }
