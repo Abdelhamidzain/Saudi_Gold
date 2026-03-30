@@ -22,7 +22,10 @@ export async function GET() {
     const item = data?.items?.[0];
     if (!item?.xauPrice) throw new Error('Invalid data');
 
-    const gram24 = (item.xauPrice / OUNCE) * MARKUP;
+    const sarPerOunce = item.xauPrice;
+    const usdPerOunce = sarPerOunce / 3.75;
+    const gram24 = (sarPerOunce / OUNCE) * MARKUP;
+
     const prices = {};
     for (const [k, purity] of Object.entries(KARATS)) {
       prices[k] = {
@@ -35,9 +38,15 @@ export async function GET() {
     return Response.json(
       {
         success: true,
-        rates: { SAR: item.xauPrice },
+        // البوت يقرأ rates.SAR و rates.USD
+        rates: {
+          SAR: sarPerOunce,
+          USD: +usdPerOunce.toFixed(2),
+        },
         prices,
-        change: { amount: item.chgXau, percent: item.pcXau },
+        // البوت يقرأ change_percent و change_value
+        change_percent: item.pcXau || 0,
+        change_value: item.chgXau || 0,
         updatedAt: new Date().toISOString(),
         source: 'goldprice.org',
       },
