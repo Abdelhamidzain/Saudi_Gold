@@ -17,7 +17,7 @@ const nextConfig = {
   },
   
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+    removeConsole: true,
   },
   
   swcMinify: true,

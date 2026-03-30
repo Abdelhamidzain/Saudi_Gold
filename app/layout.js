@@ -33,6 +33,10 @@ export const metadata = {
   },
   alternates: {
     canonical: SITE_URL,
+    languages: {
+      'ar-SA': SITE_URL,
+      'x-default': SITE_URL,
+    },
   },
   openGraph: {
     title: 'سعر الذهب اليوم في السعودية | محدث لحظياً',
@@ -115,9 +119,7 @@ const orgSchema = {
     alternateName: 'Saudi Arabia',
   },
   sameAs: [
-    // TODO: Replace with your actual social media URLs
-    // 'https://x.com/saudigold_com',
-    // 'https://www.instagram.com/saudigold_com',
+    'https://github.com/Abdelhamidzain/Saudi_Gold',
   ],
 };
 
@@ -148,6 +150,7 @@ export default function RootLayout({ children }) {
 
         {/* Preconnect */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://data-asg.goldprice.org" />
 
         {/* Critical CSS */}
@@ -188,7 +191,10 @@ export default function RootLayout({ children }) {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
       </head>
       <body>
-            {children}
+            <a href="#main-content" className="skip-link">تخطي إلى المحتوى الرئيسي</a>
+            <main id="main-content">
+              {children}
+            </main>
             <LivePriceUpdater />
           </body>
     </html>

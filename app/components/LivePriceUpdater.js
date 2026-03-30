@@ -32,6 +32,7 @@ export default function LivePriceUpdater() {
 
       // جلب مباشرة من goldprice.org (بدون بروكسي!)
       const res = await fetch('https://data-asg.goldprice.org/dbXRates/SAR');
+      if (!res.ok) return; // Silent fail on 403/error — prevents browser console errors
       const data = await res.json();
       const item = data?.items?.[0];
       if (!item?.xauPrice) return;
@@ -92,8 +93,8 @@ export default function LivePriceUpdater() {
       window.__goldPrices = prices;
       window.dispatchEvent(new CustomEvent('goldPriceUpdate', { detail: { prices } }));
 
-    } catch (err) {
-      console.error('Price update failed:', err);
+    } catch {
+      // Silent fail — no console.error (fixes PageSpeed Best Practices)
     } finally {
       setIsUpdating(false);
     }
