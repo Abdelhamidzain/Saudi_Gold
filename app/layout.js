@@ -1,5 +1,7 @@
 import './globals.css';
 
+import LivePriceUpdater from './components/LivePriceUpdater';
+
 const SITE_URL = 'https://saudi-gold.com';
 
 export const metadata = {
@@ -146,7 +148,7 @@ export default function RootLayout({ children }) {
 
         {/* Preconnect */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://metalpriceapi.com" />
+        <link rel="dns-prefetch" href="https://data-asg.goldprice.org" />
 
         {/* Critical CSS */}
         <style dangerouslySetInnerHTML={{ __html: `
@@ -185,7 +187,10 @@ export default function RootLayout({ children }) {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
       </head>
-      <body>{children}</body>
+      <body>
+            {children}
+            <LivePriceUpdater />
+          </body>
     </html>
   );
 }
