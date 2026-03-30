@@ -6,7 +6,7 @@
   "crons": [
     {
       "path": "/api/cron/refresh-prices?secret=0161348527",
-      "schedule": "0 * * * *"
+      "schedule": "0 6 * * *"
     }
   ]
 }
