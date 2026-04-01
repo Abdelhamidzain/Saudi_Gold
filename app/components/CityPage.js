@@ -14,19 +14,9 @@ export default async function CityPage({ citySlug }) {
   const city = SAUDI_CITIES.find(c => c.slug === citySlug);
   if (!city) return <div>المدينة غير موجودة</div>;
 
-  const data = await getPrices();
-  const sarPerOunce = data?.sarPerOunce || 0;
-  const usdPerOunce = data?.usdPerOunce || 0;
-  const gram24SAR = sarPerOunce > 0 ? (sarPerOunce / 31.1035) * 1.02 : 0;
-
-  const prices = {};
-  for (const [k, info] of Object.entries(KARATS)) {
-    prices[k] = {
-      gram: gram24SAR * info.purity,
-      ounce: gram24SAR * info.purity * 31.1035,
-      kilo: gram24SAR * info.purity * 1000,
-    };
-  }
+  const { prices, rates, updatedAt } = await getPrices();
+  const sarPerOunce = rates?.SAR || 0;
+  const usdPerOunce = sarPerOunce > 0 ? sarPerOunce / 3.75 : 0;
 
   const citySchema = getCityGoldSchema({
     cityNameAr: city.nameAr,
@@ -96,7 +86,7 @@ export default async function CityPage({ citySlug }) {
               <span>{fmt(prices[21]?.gram)}</span>
               <span className="main-price-currency">ر.س</span>
             </div>
-            <div className="last-update">آخر تحديث: {formatRiyadhTime()}</div>
+            <div className="last-update">آخر تحديث: {formatRiyadhTime(updatedAt)}</div>
           </div>
         </section>
 
