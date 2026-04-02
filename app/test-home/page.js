@@ -226,18 +226,18 @@ export default async function TestHome() {
                   </thead>
                   <tbody>
                     {[
-                      { name: 'سبيكة ذهب 1 غرام', weight: 1 },
-                      { name: 'سبيكة 2.5 غرام', weight: 2.5 },
+                      { name: 'واحد غرام ذهب خالص', weight: 1 },
+                      { name: 'قالب 2.5 غرام', weight: 2.5 },
                       { name: 'سبيكة 5 غرام', weight: 5 },
                       { name: 'جنيه ذهب 8 غرام عيار 21', weight: 8, karat: 21 },
                       { name: 'جنيه ذهب 8 غرام عيار 24', weight: 8 },
-                      { name: 'سبيكة 10 غرام', weight: 10 },
-                      { name: 'سبيكة 20 غرام', weight: 20 },
+                      { name: 'لويحة 10 غرام', weight: 10 },
+                      { name: 'صفيحة 20 غرام', weight: 20 },
                       { name: 'نصف أونصة (15.55 غرام)', weight: 15.55 },
                       { name: 'أونصة كاملة (31.1 غرام)', weight: 31.1035 },
-                      { name: 'تولة ذهب (11.66 غرام)', weight: 11.664 },
-                      { name: 'سبيكة 50 غرام', weight: 50 },
-                      { name: 'سبيكة 100 غرام', weight: 100 },
+                      { name: 'تولة ذهبية (11.66 غرام)', weight: 11.664 },
+                      { name: 'خمسون غرام', weight: 50 },
+                      { name: 'مئة غرام', weight: 100 },
                       { name: 'نصف كيلو (500 غرام)', weight: 500 },
                       { name: 'كيلو ذهب كامل', weight: 1000 },
                     ].map((bar, i) => {
