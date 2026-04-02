@@ -219,27 +219,27 @@ export default async function TestHome() {
                 <table className="data-table">
                   <thead>
                     <tr>
-                      <th>الحجم</th>
-                      <th>السعر (ر.س)</th>
-                      <th>السعر ($)</th>
+                      <th>الوزن</th>
+                      <th>ريال سعودي</th>
+                      <th>دولار أمريكي</th>
                     </tr>
                   </thead>
                   <tbody>
                     {[
-                      { name: 'سبيكة ذهب 1 غرام', weight: 1 },
-                      { name: 'سبيكة 2.5 غرام', weight: 2.5 },
-                      { name: 'سبيكة 5 غرام', weight: 5 },
-                      { name: 'جنيه ذهب 8 غرام عيار 21', weight: 8, karat: 21 },
-                      { name: 'جنيه ذهب 8 غرام عيار 24', weight: 8 },
-                      { name: 'سبيكة 10 غرام', weight: 10 },
-                      { name: 'سبيكة 20 غرام', weight: 20 },
-                      { name: 'نصف أونصة (15.55 غرام)', weight: 15.55 },
-                      { name: 'أونصة كاملة (31.1 غرام)', weight: 31.1035 },
-                      { name: 'تولة ذهب (11.66 غرام)', weight: 11.664 },
-                      { name: 'سبيكة 50 غرام', weight: 50 },
-                      { name: 'سبيكة 100 غرام', weight: 100 },
-                      { name: 'نصف كيلو (500 غرام)', weight: 500 },
-                      { name: 'كيلو ذهب كامل', weight: 1000 },
+                      { name: '1 غرام', weight: 1 },
+                      { name: '2.5 غرام', weight: 2.5 },
+                      { name: '5 غرام', weight: 5 },
+                      { name: 'جنيه 8غ عيار 21', weight: 8, karat: 21 },
+                      { name: 'جنيه 8غ عيار 24', weight: 8 },
+                      { name: '10 غرام', weight: 10 },
+                      { name: '20 غرام', weight: 20 },
+                      { name: 'نصف أونصة', weight: 15.55 },
+                      { name: 'أونصة (31.1غ)', weight: 31.1035 },
+                      { name: 'تولة (11.66غ)', weight: 11.664 },
+                      { name: '50 غرام', weight: 50 },
+                      { name: '100 غرام', weight: 100 },
+                      { name: 'نصف كيلو', weight: 500 },
+                      { name: 'كيلو كامل', weight: 1000 },
                     ].map((bar, i) => {
                       const gramPrice = bar.karat === 21 ? prices[21]?.gram : prices[24]?.gram;
                       const priceRiyal = gramPrice * bar.weight * (bar.karat === 21 ? 1 : 1.02);
@@ -247,8 +247,8 @@ export default async function TestHome() {
                       return (
                         <tr key={i}>
                           <td>{bar.name}</td>
-                          <td>{fmt(priceRiyal)}</td>
-                          <td>{fmt(priceDollar)}</td>
+                          <td>{priceRiyal.toFixed(2)}</td>
+                          <td>{priceDollar.toFixed(2)}</td>
                         </tr>
                       );
                     })}
@@ -291,8 +291,8 @@ export default async function TestHome() {
                       return (
                         <tr key={i}>
                           <td>{row.name}</td>
-                          <td>{fmt(buyPrice)}</td>
-                          <td>{fmt(sellPrice)}</td>
+                          <td>{buyPrice.toFixed(2)}</td>
+                          <td>{sellPrice.toFixed(2)}</td>
                         </tr>
                       );
                     })}
@@ -331,15 +331,15 @@ export default async function TestHome() {
                       return variations.map((pct, i) => {
                         const d = new Date();
                         d.setDate(d.getDate() - i);
-                        const dateStr = d.toLocaleDateString('ar-SA-u-nu-latn', { year: 'numeric', month: '2-digit', day: '2-digit' });
+                        const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
                         const g24 = gram24 * (1 + pct);
                         return (
                           <tr key={i}>
                             <td>{dateStr}</td>
-                            <td>{fmt(g24)}</td>
-                            <td>{fmt(g24 * 22/24)}</td>
-                            <td>{fmt(g24 * 21/24)}</td>
-                            <td>{fmt(g24 * 18/24)}</td>
+                            <td>{(g24).toFixed(2)}</td>
+                            <td>{(g24 * 22/24).toFixed(2)}</td>
+                            <td>{(g24 * 21/24).toFixed(2)}</td>
+                            <td>{(g24 * 18/24).toFixed(2)}</td>
                           </tr>
                         );
                       });
@@ -347,9 +347,6 @@ export default async function TestHome() {
                   </tbody>
                 </table>
               </div>
-              <p style={{ color: 'var(--txt3)', fontSize: '0.8rem', marginTop: '8px', textAlign: 'center' }}>
-                متوسط الأسعار اليومية — للرسم البياني الكامل راجع <Link href="/history" className="text-gold">صفحة التاريخ</Link>
-              </p>
             </div>
           </div>
         </section>
