@@ -164,12 +164,12 @@ export default async function TestHome() {
 
             <h1>سعر <span className="text-gold">الذهب</span> اليوم في السعودية</h1>
             <p className="hero-subtitle">
-              اسعار الذهب اليوم في المملكة العربية السعودية بالريال السعودي والدولار — يتم تحديث سعر غرام الذهب بجميع العيارات كل دقيقة بشكل مباشر مع اسعار السبائك والأوقية
+              تسعيرة الغرام محدثة لحظياً بالريال والدولار لكل العيارات — مع أدوات الحساب والزكاة وتغطية أسواق المملكة
             </p>
 
             {/* Main Price Box */}
             <div className="main-price-box">
-              <div className="main-price-label">سعر جرام الذهب عيار ٢١ اليوم في السعودية</div>
+              <div className="main-price-label">تسعيرة الغرام عيار ٢١ الآن بالريال</div>
               <div className="main-price-value">
                 <span>{fmt(prices[21]?.gram)}</span>
                 <span className="main-price-currency">ر.س</span>
@@ -189,12 +189,12 @@ export default async function TestHome() {
         <section className="section">
           <div className="container">
             <div className="info-section">
-              <h2>اسعار الذهب في السعودية اليوم — تحديث لحظي بالريال والدولار</h2>
+              <h2>تسعيرة المعدن النفيس — كيف تُحسب وكيف تتابعها؟</h2>
               <p>
-                سعر الذهب اليوم في السعودية يتحدد وفقاً لسعر الأوقية (اونصة) عالمياً في بورصتَي لندن ونيويورك بالدولار الأمريكي، ثم يُحوَّل للريال بسعر الصرف الثابت 3.75. يتم تحديث اسعار غرام المعدن النفيس لدينا بشكل لحظي كل دقيقة — يعني الأرقام اللي تشوفها أعلاه تعكس أحدث تحركات البورصة العالمية مباشرة بدون تأخير.
+                سعر الذهب اليوم في السعودية يتحدد وفقاً لتسعيرة الأوقية (اونصة) عالمياً في بورصتَي لندن ونيويورك بالدولار الأمريكي، ثم يُحوَّل للريال بالصرف الثابت 3.75. نحدّث الأرقام لحظياً كل دقيقة لتعكس أحدث تحركات البورصة مباشرة.
               </p>
               <p>
-                تنبيه للمشترين: الأسعار هنا هي تسعيرة الخام (سبوت) بدون مصنعية. محلات الصاغة في المملكة العربية السعودية تضيف <Link href="/workmanship" className="text-gold">رسوم التشكيل والتصنيع</Link> وضريبة القيمة المضافة 15% — الفارق يتراوح بين 20 إلى 70 ريال سعودي لكل غرام بحسب تعقيد القطعة وثقل الزخارف.
+                تنبيه للمشترين: ما تراه أعلاه هو تسعيرة الخام (سبوت) بدون مصنعية. محلات الصاغة تضيف <Link href="/workmanship" className="text-gold">رسوم التشكيل</Link> وضريبة 15% — الفارق يتراوح بين 20 إلى 70 ريال لكل غرام بحسب تعقيد القطعة وثقل الزخارف.
               </p>
             </div>
           </div>
@@ -238,7 +238,7 @@ export default async function TestHome() {
         <section className="section">
           <div className="container">
             <div className="info-section">
-              <h2>سعر بيع الذهب المستعمل اليوم — كم تسترد فعلاً؟</h2>
+              <h2>ثمن البيع للمستعمل — كم تسترد فعلاً؟</h2>
               <p>
                 التاجر يشتري منك بتسعيرة الخام ناقص 1-5% ولا يحتسب المصنعية نهائياً. مثال: لو الغرام عيار 21 حالياً 240 ريال، تسترد 230-238 تقريباً. لذلك المستثمرون المحنّكون يفضّلون <Link href="/gold-bars" className="text-gold">السبائك</Link> — رسوم تشكيلها زهيدة (5-15 ريال/غرام) مقابل 25-60 للمشغولات، وعند التصفية تحصل على ثمن قريب جداً من البورصة.
               </p>
@@ -252,7 +252,7 @@ export default async function TestHome() {
         {/* ═══ Markets ═══ */}
         <section className="section" id="markets">
           <div className="container">
-            <h2 className="section-title">أسواق <span className="text-gold">الذهب</span> في السعودية</h2>
+            <h2 className="section-title">أسواق ومحلات <span className="text-gold">الصاغة</span></h2>
             <div className="markets-grid">
               {GOLD_MARKETS.map((market, i) => (
                 <article key={i} className="market-card">
@@ -297,33 +297,33 @@ export default async function TestHome() {
             <div className="price-cards">
               <Link href="/gold-price-riyadh" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🏙️</div>
-                <h3 className="price-card-label">سعر الذهب اليوم في الرياض</h3>
-                <div className="price-card-unit">أسواق الثميري · البطحاء · طيبة</div>
+                <h3 className="price-card-label">تسعيرة الرياض</h3>
+                <div className="price-card-unit">الثميري · البطحاء · طيبة</div>
               </Link>
               <Link href="/gold-price-jeddah" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🌊</div>
-                <h3 className="price-card-label">سعر الذهب اليوم في جدة</h3>
-                <div className="price-card-unit">حراء الدولي · سوق اليمامة</div>
+                <h3 className="price-card-label">تسعيرة جدة</h3>
+                <div className="price-card-unit">حراء الدولي · اليمامة</div>
               </Link>
               <Link href="/gold-price-makkah" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🕋</div>
-                <h3 className="price-card-label">سعر الذهب اليوم في مكة</h3>
-                <div className="price-card-unit">سوق العتيبية · الستين</div>
+                <h3 className="price-card-label">تسعيرة مكة المكرمة</h3>
+                <div className="price-card-unit">العتيبية · الستين</div>
               </Link>
               <Link href="/gold-price-dammam" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🛢️</div>
-                <h3 className="price-card-label">سعر الذهب اليوم في الدمام</h3>
-                <div className="price-card-unit">سوق الذهب · الحياة بلازا</div>
+                <h3 className="price-card-label">تسعيرة الدمام</h3>
+                <div className="price-card-unit">سوق المجوهرات · الحياة بلازا</div>
               </Link>
               <Link href="/gold-price-madinah" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🌴</div>
-                <h3 className="price-card-label">سعر الذهب في المدينة المنورة</h3>
-                <div className="price-card-unit">سوق المدينة الدولي · طيبة</div>
+                <h3 className="price-card-label">تسعيرة المدينة المنورة</h3>
+                <div className="price-card-unit">المدينة الدولي · طيبة</div>
               </Link>
               <Link href="/gold-price-taif" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🌹</div>
-                <h3 className="price-card-label">سعر الذهب اليوم في الطائف</h3>
-                <div className="price-card-unit">عيار 21 · محدث لحظياً</div>
+                <h3 className="price-card-label">تسعيرة الطائف</h3>
+                <div className="price-card-unit">محدث لحظياً</div>
               </Link>
             </div>
           </div>
@@ -345,12 +345,9 @@ export default async function TestHome() {
         <section className="section">
           <div className="container">
             <div className="info-section">
-              <h2>الرسم البياني لأسعار الذهب التاريخية في السعودية</h2>
+              <h2>الرسم البياني للأسعار التاريخية</h2>
               <p>
-                تتبّع حركة المعدن النفيس عبر الرسوم البيانية يساعدك على فهم سوق الذهب في المملكة العربية السعودية بشكل أعمق. خلال آخر فترة، سجّلت أسعار الذهب في السعودية ارتفاعات متتالية دفعت سعر الأوقية لمستويات تاريخية عالمياً. والبيانات والتحليلات تشير إلى أن التوجه الصاعد للذهب مستمر مع تزايد الطلب من البنوك المركزية حول العالم.
-              </p>
-              <p>
-                للاطلاع على الرسوم البيانية التفصيلية وأسعار الذهب التاريخية خلال آخر سنة بالريال السعودي والدولار الأمريكي، تفضّل بزيارة صفحة <Link href="/history" className="text-gold">تاريخ أسعار الذهب في السعودية</Link>. ستجد هناك التحليل الفني ومقارنة الأسعار حسب كل فترة زمنية.
+                تتبّع حركة المعدن الثمين عبر الرسوم البيانية يكشف أنماط السوق المحلي. خلال آخر فترة سجّلت الأوقية ارتفاعات تاريخية عالمياً. والبيانات والتحليلات تشير لاستمرار الاتجاه الصاعد مع تزايد الطلب المركزي الآسيوي. للاطلاع على الشارت التفصيلي خلال سنة بالريال والدولار، زُر صفحة <Link href="/history" className="text-gold">التاريخ والتحليل الفني</Link>.
               </p>
             </div>
           </div>
@@ -411,23 +408,23 @@ export default async function TestHome() {
             <div className="price-cards">
               <Link href="/blog/gold-buying-guide-saudi" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>📖</div>
-                <h3 className="price-card-label">دليل شراء الذهب في السعودية</h3>
-                <div className="price-card-unit">نصائح عملية للمبتدئين</div>
+                <h3 className="price-card-label">دليل الشراء للمبتدئين</h3>
+                <div className="price-card-unit">نصائح عملية وتطبيقية</div>
               </Link>
               <Link href="/blog/difference-gold-karats" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>💎</div>
-                <h3 className="price-card-label">الفرق بين عيارات الذهب</h3>
+                <h3 className="price-card-label">مقارنة العيارات</h3>
                 <div className="price-card-unit">24 vs 22 vs 21 vs 18</div>
               </Link>
               <Link href="/blog/gold-zakat-guide" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🕌</div>
-                <h3 className="price-card-label">دليل زكاة الذهب الشامل</h3>
-                <div className="price-card-unit">حساب الزكاة مع أمثلة عملية</div>
+                <h3 className="price-card-label">دليل الزكاة الشرعية</h3>
+                <div className="price-card-unit">حساب النصاب مع أمثلة</div>
               </Link>
               <Link href="/blog/best-time-buy-gold" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>⏰</div>
-                <h3 className="price-card-label">أفضل وقت لشراء الذهب</h3>
-                <div className="price-card-unit">تحليل وتوقعات الخبراء</div>
+                <h3 className="price-card-label">أفضل توقيت للشراء</h3>
+                <div className="price-card-unit">تحليل وتوقعات</div>
               </Link>
             </div>
             <div style={{ textAlign: 'center', marginTop: '20px' }}>
@@ -441,7 +438,7 @@ export default async function TestHome() {
         {/* ═══ FAQ ═══ */}
         <section className="section">
           <div className="container">
-            <h2 className="section-title">الأسئلة الشائعة حول سعر <span className="text-gold">الذهب</span> في السعودية</h2>
+            <h2 className="section-title">الأسئلة الشائعة</h2>
             <FAQ items={homeFAQ} />
           </div>
         </section>
