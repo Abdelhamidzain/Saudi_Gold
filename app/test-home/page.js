@@ -189,7 +189,7 @@ export default async function TestHome() {
         <section className="section">
           <div className="container">
             <div className="info-section">
-              <h2>تسعيرة المعدن النفيس — كيف تُحسب وكيف تتابعها؟</h2>
+              <h2>سعر الذهب في السعودية — كيف يُحسب وكيف تتابعه؟</h2>
               <p>
                 سعر الذهب اليوم في السعودية يتحدد وفقاً لتسعيرة الأوقية عالمياً في بورصتَي لندن ونيويورك بالدولار، ثم يُحوَّل للريال بالصرف الثابت 3.75. يهتم الزائر بمعرفة سعر جرام الذهب في السعودية اليوم لاتخاذ قرار الشراء أو البيع — لذلك نحدّث الأرقام كل دقيقة لتعكس أحدث تحركات البورصة.
               </p>
@@ -203,7 +203,7 @@ export default async function TestHome() {
         {/* ═══ Price Table ═══ */}
         <section className="section" id="table">
           <div className="container">
-            <h2 className="section-title">تسعيرة الغرام حسب العيار في المملكة</h2>
+            <h2 className="section-title">سعر جرام الذهب اليوم حسب العيار</h2>
             <PriceTable prices={prices} />
           </div>
         </section>
@@ -226,7 +226,7 @@ export default async function TestHome() {
         {/* ═══ Calculators ═══ */}
         <section className="section" id="calc">
           <div className="container">
-            <h2 className="section-title">أدوات الحساب والزكاة الشرعية</h2>
+            <h2 className="section-title">حاسبة الذهب وحاسبة زكاة الذهب</h2>
             <div className="calc-grid">
               <GoldCalculator prices={prices} />
               <ZakatCalculator prices={prices} />
@@ -238,7 +238,7 @@ export default async function TestHome() {
         <section className="section">
           <div className="container">
             <div className="info-section">
-              <h2>ثمن البيع للمستعمل — كم تسترد فعلاً؟</h2>
+              <h2>سعر بيع الذهب المستعمل — كم تسترد فعلاً؟</h2>
               <p>
                 مَن يتابع سعر الذهب اليوم عيار 21 في السعودية يسأل: كم آخذ لو بعت قطعتي القديمة؟ التاجر يشتري بتسعيرة الخام ناقص 1-5% ولا يحتسب رسوم التشكيل. لذلك المستثمرون المحنّكون يفضّلون <Link href="/gold-bars" className="text-gold">السبائك</Link> — عند التصفية تحصل على ثمن قريب جداً من البورصة. قارن عروض 3 تجّار واحسب القيمة العادلة عبر <Link href="/calculator" className="text-gold">الحاسبة</Link> قبل المفاوضة. تفاصيل أوفى في <Link href="/buy-sell" className="text-gold">صفحة البيع والشراء</Link>.
               </p>
@@ -287,7 +287,7 @@ export default async function TestHome() {
         {/* ═══ City Prices ═══ */}
         <section className="section">
           <div className="container">
-            <h2 className="section-title">التسعيرة حسب المدينة في المملكة</h2>
+            <h2 className="section-title">اسعار الذهب حسب المدينة</h2>
             <p style={{ textAlign: 'center', color: 'var(--txt2)', marginBottom: '24px', maxWidth: '700px', margin: '0 auto 24px' }}>
               ثمن الغرام الخام موحّد في كل المدن، لكن رسوم التشكيل تختلف. اطّلع على اسعار الذهب اليوم الرياض واسعار الذهب اليوم جدة وباقي المناطق
             </p>
