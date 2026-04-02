@@ -208,6 +208,104 @@ export default async function TestHome() {
           </div>
         </section>
 
+        {/* ═══ Gold Bars Table ═══ */}
+        <section className="section">
+          <div className="container">
+            <div className="table-section">
+              <div className="table-header">
+                <h2>أسعار سبائك الذهب في السعودية عيار 24</h2>
+              </div>
+              <div className="table-wrapper">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>الحجم</th>
+                      <th>السعر (ر.س)</th>
+                      <th>السعر ($)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { name: 'سبيكة ذهب 1 غرام', weight: 1 },
+                      { name: 'سبيكة 2.5 غرام', weight: 2.5 },
+                      { name: 'سبيكة 5 غرام', weight: 5 },
+                      { name: 'جنيه ذهب 8 غرام عيار 21', weight: 8, karat: 21 },
+                      { name: 'جنيه ذهب 8 غرام عيار 24', weight: 8 },
+                      { name: 'سبيكة 10 غرام', weight: 10 },
+                      { name: 'سبيكة 20 غرام', weight: 20 },
+                      { name: 'نصف أونصة (15.55 غرام)', weight: 15.55 },
+                      { name: 'أونصة كاملة (31.1 غرام)', weight: 31.1035 },
+                      { name: 'تولة ذهب (11.66 غرام)', weight: 11.664 },
+                      { name: 'سبيكة 50 غرام', weight: 50 },
+                      { name: 'سبيكة 100 غرام', weight: 100 },
+                      { name: 'نصف كيلو (500 غرام)', weight: 500 },
+                      { name: 'كيلو ذهب كامل', weight: 1000 },
+                    ].map((bar, i) => {
+                      const gramPrice = bar.karat === 21 ? prices[21]?.gram : prices[24]?.gram;
+                      const priceRiyal = gramPrice * bar.weight * (bar.karat === 21 ? 1 : 1.02);
+                      const priceDollar = priceRiyal / 3.75;
+                      return (
+                        <tr key={i}>
+                          <td>{bar.name}</td>
+                          <td>{fmt(priceRiyal)}</td>
+                          <td>{fmt(priceDollar)}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <p style={{ color: 'var(--txt3)', fontSize: '0.8rem', marginTop: '8px', textAlign: 'center' }}>
+                الأسعار تشمل هامش تجاري 2% — للتفاصيل راجع <Link href="/gold-bars" className="text-gold">صفحة السبائك</Link>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══ Buy/Sell Table ═══ */}
+        <section className="section">
+          <div className="container">
+            <div className="table-section">
+              <div className="table-header">
+                <h2>أسعار البيع والشراء في محلات الصاغة</h2>
+              </div>
+              <div className="table-wrapper">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>العيار</th>
+                      <th>شراء جديد (ر.س)</th>
+                      <th>بيع مستعمل (ر.س)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { name: 'ذهب عيار 24', k: 24, markup: 45 },
+                      { name: 'ذهب عيار 22', k: 22, markup: 40 },
+                      { name: 'ذهب عيار 21', k: 21, markup: 35 },
+                      { name: 'ذهب عيار 18', k: 18, markup: 30 },
+                    ].map((row, i) => {
+                      const rawPrice = prices[row.k]?.gram || 0;
+                      const buyPrice = rawPrice + row.markup;
+                      const sellPrice = rawPrice * 0.97;
+                      return (
+                        <tr key={i}>
+                          <td>{row.name}</td>
+                          <td>{fmt(buyPrice)}</td>
+                          <td>{fmt(sellPrice)}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <p style={{ color: 'var(--txt3)', fontSize: '0.8rem', marginTop: '8px', textAlign: 'center' }}>
+                أسعار استرشادية — المصنعية الفعلية تختلف بين المحلات. <Link href="/buy-sell" className="text-gold">تفاصيل البيع والشراء</Link>
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* ═══ SEO Content Block 2: عوامل التسعير ═══ */}
         <section className="section">
           <div className="container">
