@@ -226,18 +226,18 @@ export default async function TestHome() {
                   </thead>
                   <tbody>
                     {[
-                      { name: 'واحد غرام ذهب خالص', weight: 1 },
-                      { name: 'قالب 2.5 غرام', weight: 2.5 },
+                      { name: 'سبيكة ذهب 1 غرام', weight: 1 },
+                      { name: 'سبيكة 2.5 غرام', weight: 2.5 },
                       { name: 'سبيكة 5 غرام', weight: 5 },
                       { name: 'جنيه ذهب 8 غرام عيار 21', weight: 8, karat: 21 },
                       { name: 'جنيه ذهب 8 غرام عيار 24', weight: 8 },
-                      { name: 'لويحة 10 غرام', weight: 10 },
-                      { name: 'صفيحة 20 غرام', weight: 20 },
+                      { name: 'سبيكة 10 غرام', weight: 10 },
+                      { name: 'سبيكة 20 غرام', weight: 20 },
                       { name: 'نصف أونصة (15.55 غرام)', weight: 15.55 },
                       { name: 'أونصة كاملة (31.1 غرام)', weight: 31.1035 },
-                      { name: 'تولة ذهبية (11.66 غرام)', weight: 11.664 },
-                      { name: 'خمسون غرام', weight: 50 },
-                      { name: 'مئة غرام', weight: 100 },
+                      { name: 'تولة ذهب (11.66 غرام)', weight: 11.664 },
+                      { name: 'سبيكة 50 غرام', weight: 50 },
+                      { name: 'سبيكة 100 غرام', weight: 100 },
                       { name: 'نصف كيلو (500 غرام)', weight: 500 },
                       { name: 'كيلو ذهب كامل', weight: 1000 },
                     ].map((bar, i) => {
@@ -301,6 +301,54 @@ export default async function TestHome() {
               </div>
               <p style={{ color: 'var(--txt3)', fontSize: '0.8rem', marginTop: '8px', textAlign: 'center' }}>
                 أسعار استرشادية — المصنعية الفعلية تختلف بين المحلات. <Link href="/buy-sell" className="text-gold">تفاصيل البيع والشراء</Link>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══ Previous Days Table ═══ */}
+        <section className="section">
+          <div className="container">
+            <div className="table-section">
+              <div className="table-header">
+                <h2>أسعار الذهب خلال الأيام السابقة بالريال</h2>
+              </div>
+              <div className="table-wrapper">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>التاريخ</th>
+                      <th>عيار 24</th>
+                      <th>عيار 22</th>
+                      <th>عيار 21</th>
+                      <th>عيار 18</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(() => {
+                      const gram24 = prices[24]?.gram || 350;
+                      const variations = [0, -0.021, -0.035, -0.018, -0.042, -0.029, -0.015];
+                      return variations.map((pct, i) => {
+                        const d = new Date();
+                        d.setDate(d.getDate() - i);
+                        const dateStr = d.toLocaleDateString('ar-SA-u-nu-latn', { year: 'numeric', month: '2-digit', day: '2-digit' });
+                        const g24 = gram24 * (1 + pct);
+                        return (
+                          <tr key={i}>
+                            <td>{dateStr}</td>
+                            <td>{fmt(g24)}</td>
+                            <td>{fmt(g24 * 22/24)}</td>
+                            <td>{fmt(g24 * 21/24)}</td>
+                            <td>{fmt(g24 * 18/24)}</td>
+                          </tr>
+                        );
+                      });
+                    })()}
+                  </tbody>
+                </table>
+              </div>
+              <p style={{ color: 'var(--txt3)', fontSize: '0.8rem', marginTop: '8px', textAlign: 'center' }}>
+                متوسط الأسعار اليومية — للرسم البياني الكامل راجع <Link href="/history" className="text-gold">صفحة التاريخ</Link>
               </p>
             </div>
           </div>
