@@ -83,18 +83,18 @@ const homeFAQ = [
 
 /* ─── Internal Links ─── */
 const homeLinks = [
-  { href: '/karat-21', label: 'سعر الذهب عيار 21', icon: '🥇' },
-  { href: '/karat-24', label: 'سعر الذهب عيار 24', icon: '💎' },
-  { href: '/karat-22', label: 'سعر الذهب عيار 22', icon: '✨' },
-  { href: '/karat-18', label: 'سعر الذهب عيار 18', icon: '🔶' },
-  { href: '/gold-bars', label: 'أسعار سبائك الذهب', icon: '🧱' },
-  { href: '/silver', label: 'سعر الفضة اليوم', icon: '🥈' },
-  { href: '/workmanship', label: 'أسعار المصنعية', icon: '🔧' },
-  { href: '/buy-sell', label: 'بيع وشراء الذهب', icon: '💰' },
-  { href: '/markets', label: 'أسواق الذهب', icon: '🏪' },
-  { href: '/gold-price-riyadh', label: 'الذهب في الرياض', icon: '🏙️' },
-  { href: '/gold-price-jeddah', label: 'الذهب في جدة', icon: '🌊' },
-  { href: '/calculator', label: 'حاسبة الذهب', icon: '🧮' },
+  { href: '/karat-21', label: 'عيار 21 اليوم', icon: '🥇' },
+  { href: '/karat-24', label: 'عيار 24 الآن', icon: '💎' },
+  { href: '/karat-22', label: 'عيار 22', icon: '✨' },
+  { href: '/karat-18', label: 'عيار 18', icon: '🔶' },
+  { href: '/gold-bars', label: 'أسعار السبائك', icon: '🧱' },
+  { href: '/silver', label: 'الفضة اليوم', icon: '🥈' },
+  { href: '/workmanship', label: 'رسوم المصنعية', icon: '🔧' },
+  { href: '/buy-sell', label: 'بيع وشراء', icon: '💰' },
+  { href: '/markets', label: 'الأسواق والمحلات', icon: '🏪' },
+  { href: '/gold-price-riyadh', label: 'الرياض', icon: '🏙️' },
+  { href: '/gold-price-jeddah', label: 'جدة', icon: '🌊' },
+  { href: '/calculator', label: 'الحاسبة', icon: '🧮' },
 ];
 
 /* ─── Schemas ─── */
@@ -203,7 +203,7 @@ export default async function TestHome() {
         {/* ═══ Price Table ═══ */}
         <section className="section" id="table">
           <div className="container">
-            <h2 className="section-title">سعر جرام الذهب في السعودية لجميع العيارات</h2>
+            <h2 className="section-title">تسعيرة الغرام حسب العيار في المملكة</h2>
             <PriceTable prices={prices} />
           </div>
         </section>
@@ -226,7 +226,7 @@ export default async function TestHome() {
         {/* ═══ Calculators ═══ */}
         <section className="section" id="calc">
           <div className="container">
-            <h2 className="section-title">حاسبة الذهب وحاسبة <span className="text-gold">زكاة الذهب</span></h2>
+            <h2 className="section-title">أدوات الحساب والزكاة الشرعية</h2>
             <div className="calc-grid">
               <GoldCalculator prices={prices} />
               <ZakatCalculator prices={prices} />
@@ -281,7 +281,7 @@ export default async function TestHome() {
             </div>
             <div className="text-center mt-8">
               <Link href="/markets" className="btn btn-outline">
-                عرض جميع أسواق الذهب في السعودية ←
+                عرض جميع الأسواق والمحلات ←
               </Link>
             </div>
           </div>
@@ -290,9 +290,9 @@ export default async function TestHome() {
         {/* ═══ City Prices ═══ */}
         <section className="section">
           <div className="container">
-            <h2 className="section-title">أسعار الذهب اليوم حسب المدينة في السعودية</h2>
+            <h2 className="section-title">التسعيرة حسب المدينة في المملكة</h2>
             <p style={{ textAlign: 'center', color: 'var(--txt2)', marginBottom: '24px', maxWidth: '700px', margin: '0 auto 24px' }}>
-              سعر جرام الذهب الخام واحد في كل المدن السعودية، لكن المصنعية وتوفر المحلات تختلف. اختر مدينتك لمعرفة أقرب أسواق الذهب وأفضل المحلات
+              ثمن الغرام الخام موحّد في كل المدن، لكن رسوم التشكيل وتوفر المحلات تختلف. اختر مدينتك لمعرفة أقرب الأسواق
             </p>
             <div className="price-cards">
               <Link href="/gold-price-riyadh" className="price-card">
@@ -360,12 +360,9 @@ export default async function TestHome() {
         <section className="section">
           <div className="container">
             <div className="info-section">
-              <h2>لماذا تتابع أسعار الذهب في السعودية معنا؟</h2>
+              <h2>لماذا تتابع الأسعار معنا؟</h2>
               <p>
-                احصل على أحدث اسعار الذهب في المملكة العربية السعودية لحظياً — يتم تحديثها كل دقيقة بشكل مباشر من البورصة العالمية بدون أي تأخير يُذكر. نوفر لك اسعار غرام الذهب بجميع العيارات (عيار 24 قيراط وعيار 22 وعيار 21 وعيار 18) بالريال السعودي والدولار، مع التحديثات المباشرة لسعر اونصة الذهب (الأوقية) وأسعار سبائك الذهب لجميع الأحجام.
-              </p>
-              <p>
-                ما يميّز سعودي قولد: حاسبة ذهب تفاعلية تحسب لك القيمة مع المصنعية، حاسبة زكاة الذهب الشرعية، أسعار الذهب حسب المدينة (الرياض، جدة، مكة، الدمام وغيرها)، وسعر بيع الذهب المستعمل يومياً. كل هذا مجاناً وبدون تسجيل.
+                احصل على أحدث التسعيرات لحظياً — يتم تحديثها كل دقيقة بشكل مباشر من البورصة بدون تأخير. نوفر قيمة الغرام بجميع العيارات (24 قيراط و22 و21 و18) بالريال والدولار، مع التحديثات المباشرة للأوقية (اونصة) وأسعار السبائك لجميع الأحجام. ما يميّزنا: حاسبة تفاعلية بالمصنعية، أداة الزكاة الشرعية، تغطية حسب المدينة (الرياض، جدة، مكة، الدمام وغيرها)، وتسعيرة المستعمل يومياً — مجاناً بدون تسجيل.
               </p>
             </div>
           </div>
@@ -410,7 +407,7 @@ export default async function TestHome() {
         {/* ═══ Blog CTA ═══ */}
         <section className="section">
           <div className="container">
-            <h2 className="section-title">مقالات ونصائح عن الذهب في السعودية</h2>
+            <h2 className="section-title">مقالات ودليل المشتري</h2>
             <div className="price-cards">
               <Link href="/blog/gold-buying-guide-saudi" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>📖</div>
