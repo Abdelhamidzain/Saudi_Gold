@@ -127,18 +127,6 @@ function getPriceListSchema(prices) {
   };
 }
 
-/* ─── FAQ Schema ─── */
-function getFAQSchema() {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: homeFAQ.map(item => ({
-      '@type': 'Question',
-      name: item.question,
-      acceptedAnswer: { '@type': 'Answer', text: item.answer },
-    })),
-  };
-}
 
 /* ─── Page Component ─── */
 export default async function Home() {
@@ -149,7 +137,7 @@ export default async function Home() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(getPageSchema(updatedAt)) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(getPriceListSchema(prices)) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(getFAQSchema()) }} />
+
 
       <Header />
 
