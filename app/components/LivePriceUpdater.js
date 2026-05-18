@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 
-const REFRESH_INTERVAL = 10 * 60 * 1000; // 10 دقائق
+// 15 min interval (was 10 min). Combined with /api/live-gold s-maxage=60,
+// effective server load is dominated by edge cache hits, not fresh fetches.
+const REFRESH_INTERVAL = 15 * 60 * 1000;
 const KARATS = { 24: 1, 22: 0.9167, 21: 0.875, 18: 0.75, 14: 0.5833 };
 
 function formatPrice(n) {
@@ -23,13 +25,26 @@ function formatTime() {
 export default function LivePriceUpdater() {
   const [change, setChange] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
+  const lastFetchAt = useRef(0);
 
   const updatePrices = useCallback(async () => {
+    // Don't fetch if tab is hidden (saves both client and server work).
+    if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
+      return;
+    }
+
+    // Defensive: never fetch more than once every 60s, regardless of trigger.
+    // Matches the API's edge cache window so we don't pay for nothing.
+    const now = Date.now();
+    if (now - lastFetchAt.current < 60_000) return;
+    lastFetchAt.current = now;
+
     try {
       setIsUpdating(true);
 
-      // جلب من API خاصتنا (بدون طلبات third-party في المتصفح)
-      const res = await fetch('/api/live-gold', { cache: 'no-store' });
+      // No `cache: 'no-store'` — let the browser + Vercel CDN cache for ~60s.
+      // Multiple tabs / quick navigations reuse the same response.
+      const res = await fetch('/api/live-gold');
       if (!res.ok) return;
       const data = await res.json();
       if (!data?.success || !data?.prices) return;
@@ -42,11 +57,11 @@ export default function LivePriceUpdater() {
         }
       }
 
-      // تحديث السعر الرئيسي (عيار 21)
+      // Update primary price (karat 21)
       const mainPrice = document.querySelector('.main-price-value span:first-child');
       if (mainPrice) mainPrice.textContent = formatPrice(prices[21].gram);
 
-      // تحديث كروت الأسعار
+      // Update price cards
       const priceValues = document.querySelectorAll('.price-card-value');
       const karatOrder = [24, 22, 21, 18];
       priceValues.forEach((el, i) => {
@@ -55,13 +70,13 @@ export default function LivePriceUpdater() {
         }
       });
 
-      // تحديث وقت آخر تحديث
+      // Update last-update timestamps
       const timeStr = formatTime();
       document.querySelectorAll('.last-update').forEach((el) => {
         el.textContent = '\u0622\u062E\u0631 \u062A\u062D\u062F\u064A\u062B: ' + timeStr;
       });
 
-      // تحديث جدول الأسعار
+      // Update price table
       document.querySelectorAll('.price-table tbody tr, .price-table tr:not(:first-child)').forEach((row) => {
         const cells = row.querySelectorAll('td');
         if (cells.length >= 4) {
@@ -83,21 +98,32 @@ export default function LivePriceUpdater() {
 
       setChange({ amount: data.change?.amount || 0, percent: data.change?.percent || 0 });
 
-      // بث الأسعار لبقية الكومبوننتات
+      // Broadcast to other components
       window.__goldPrices = prices;
       window.dispatchEvent(new CustomEvent('goldPriceUpdate', { detail: { prices } }));
-
     } catch {
-      // Silent fail — no console.error (fixes PageSpeed Best Practices)
+      // Silent fail — no console.error (PageSpeed Best Practices)
     } finally {
       setIsUpdating(false);
     }
   }, []);
 
   useEffect(() => {
+    // Initial fetch 2s after mount (gives the page time to settle).
     const t1 = setTimeout(updatePrices, 2000);
     const interval = setInterval(updatePrices, REFRESH_INTERVAL);
-    return () => { clearTimeout(t1); clearInterval(interval); };
+
+    // When tab becomes visible again, refresh once (but throttled by lastFetchAt).
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') updatePrices();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    return () => {
+      clearTimeout(t1);
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
   }, [updatePrices]);
 
   return (

@@ -45,23 +45,9 @@ export async function GET(request) {
   try {
     const prices = await fetchGoldPrice();
 
-    // محاولة حفظ في DB (اختياري - لو DB شغالة)
-    let dbSaved = false;
-    try {
-      if (process.env.DATABASE_URL) {
-        const { neon } = await import('@neondatabase/serverless');
-        const sql = neon(process.env.DATABASE_URL);
-        await sql`INSERT INTO gold_prices (rates, updated_at) VALUES (${JSON.stringify({ SAR: prices.xauSAR })}, NOW())`;
-        dbSaved = true;
-      }
-    } catch (dbErr) {
-      console.warn('DB save skipped:', dbErr.message);
-    }
-
     return Response.json({
       success: true,
       prices,
-      dbSaved,
       timestamp: new Date().toISOString(),
       source: 'goldprice.org (free)',
     });

@@ -12,7 +12,7 @@ import InternalLinks from './components/InternalLinks';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
-export const revalidate = 60;
+export const revalidate = 1800;
 
 /* ─── SEO Metadata (Optimized) ─── */
 const days = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];

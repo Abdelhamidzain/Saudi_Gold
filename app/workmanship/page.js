@@ -7,7 +7,7 @@ import FAQ from '../components/FAQ';
 import Disclaimer from '../components/Disclaimer';
 import InternalLinks from '../components/InternalLinks';
 
-export const revalidate = 60;
+export const revalidate = 86400;
 
 export const metadata = {
   title: 'مصنعية الذهب في السعودية | كم تكلفة المصنعية؟',

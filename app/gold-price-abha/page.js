@@ -1,6 +1,6 @@
 import CityPage from '../components/CityPage';
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export const metadata = {
   title: 'سعر الذهب اليوم في أبها | أسعار جميع العيارات محدثة',

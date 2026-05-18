@@ -8,7 +8,7 @@ import FAQ from '../components/FAQ';
 import Disclaimer from '../components/Disclaimer';
 import InternalLinks from '../components/InternalLinks';
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export const metadata = {
   title: 'سعر الذهب عيار 18 اليوم في السعودية | للمجوهرات الفاخرة',

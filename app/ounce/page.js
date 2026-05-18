@@ -7,7 +7,7 @@ import FAQ from '../components/FAQ';
 import Disclaimer from '../components/Disclaimer';
 import InternalLinks from '../components/InternalLinks';
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export const metadata = {
   title: 'سعر أونصة الذهب اليوم في السعودية | سعر الأونصة بالريال',

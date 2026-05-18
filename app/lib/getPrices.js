@@ -14,7 +14,9 @@ export async function getPrices() {
         'Origin': 'https://goldprice.org',
         'Referer': 'https://goldprice.org/',
       },
-      next: { revalidate: 300 },
+      // Aligned with the most frequent page revalidate window (1800s).
+      // Pages with longer revalidate (3600/86400) hit the data cache anyway.
+      next: { revalidate: 1800 },
     });
 
     if (res.ok) {
@@ -40,7 +42,7 @@ export async function getPrices() {
     if (apiKey) {
       const res = await fetch(
         `https://api.metalpriceapi.com/v1/latest?api_key=${apiKey}&base=XAU&currencies=SAR`,
-        { next: { revalidate: 600 } }
+        { next: { revalidate: 1800 } }
       );
       if (res.ok) {
         const data = await res.json();

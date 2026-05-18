@@ -7,7 +7,7 @@ import FAQ from '../components/FAQ';
 import Disclaimer from '../components/Disclaimer';
 import InternalLinks from '../components/InternalLinks';
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export const metadata = {
   title: 'أسعار سبائك الذهب في السعودية اليوم | من 1 جرام إلى 1 كيلو',

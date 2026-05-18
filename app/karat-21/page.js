@@ -9,7 +9,7 @@ import Disclaimer from '../components/Disclaimer';
 import InternalLinks from '../components/InternalLinks';
 import Link from 'next/link';
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export const metadata = {
   title: 'سعر الذهب عيار 21 اليوم في السعودية | سعر الجرام والأونصة',
