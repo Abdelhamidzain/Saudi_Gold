@@ -138,6 +138,13 @@ export default function PageClient() {
             <span>سعر محدث لحظياً</span>
           </div>
 
+          <p className="hero-subtitle">
+            تابع سعر الذهب في السعودية اليوم بالريال السعودي، مع تحديثات واضحة لأسعار الذهب
+            حسب العيار، مثل عيار 24 وعيار 22 وعيار 21 وعيار 18. تساعدك هذه الصفحة على معرفة
+            سعر جرام الذهب، مقارنة الفروقات بين العيارات، وفهم العوامل التي تؤثر على حركة
+            الذهب في السوق السعودي قبل الشراء أو البيع.
+          </p>
+
           <div className="main-price-box">
             <div className="main-price-label">سعر جرام الذهب عيار ٢١</div>
             <div className="main-price-value">

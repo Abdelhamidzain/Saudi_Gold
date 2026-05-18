@@ -68,19 +68,14 @@ export default function GoldPriceSaudiArabiaPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
-      {/* ── Server-rendered visible content (the only two items) ── */}
+      {/* ── Server-rendered visible content (H1 only) ── */}
       <h1>سعر الذهب في السعودية اليوم</h1>
-      <p>
-        تابع سعر الذهب في السعودية اليوم بالريال السعودي، مع تحديثات واضحة لأسعار الذهب
-        حسب العيار، مثل عيار 24 وعيار 22 وعيار 21 وعيار 18. تساعدك هذه الصفحة على معرفة
-        سعر جرام الذهب، مقارنة الفروقات بين العيارات، وفهم العوامل التي تؤثر على حركة
-        الذهب في السوق السعودي قبل الشراء أو البيع.
-      </p>
 
-      {/* Everything else — header, footer, navigation, price UI, calculator,
-          educational content, FAQ, internal links — lives in PageClient and
-          renders only AFTER React hydrates on the client. Initial HTML from
-          this component is empty (mounted gate). */}
+      {/* Everything else — including the intro paragraph, header, footer,
+          navigation, price UI, calculator, educational content, FAQ, and
+          internal links — lives in PageClient and renders only AFTER
+          React hydrates on the client (mounted gate). Initial HTML from
+          this component is empty. */}
       <PageClient />
     </>
   );
