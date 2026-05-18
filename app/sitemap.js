@@ -4,6 +4,7 @@ const SITE_URL = 'https://saudi-gold.com';
 const pages = [
   // Main pages
   { path: '/', changeFrequency: 'hourly', priority: 1.0 },
+  { path: '/gold-price-saudi-arabia', changeFrequency: 'daily', priority: 0.9 },
   { path: '/karat-21', changeFrequency: 'hourly', priority: 0.9 },
   { path: '/karat-24', changeFrequency: 'hourly', priority: 0.9 },
   { path: '/karat-22', changeFrequency: 'hourly', priority: 0.8 },
