@@ -133,6 +133,8 @@ export default function PageClient() {
 
       <section className="hero">
         <div className="container">
+          <h1>سعر الذهب في السعودية اليوم</h1>
+
           <div className="badge">
             <span className="live-dot"></span>
             <span>سعر محدث لحظياً</span>

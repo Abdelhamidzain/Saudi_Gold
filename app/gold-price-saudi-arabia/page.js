@@ -68,14 +68,10 @@ export default function GoldPriceSaudiArabiaPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
-      {/* ── Server-rendered visible content (H1 only) ── */}
-      <h1>سعر الذهب في السعودية اليوم</h1>
-
-      {/* Everything else — including the intro paragraph, header, footer,
-          navigation, price UI, calculator, educational content, FAQ, and
-          internal links — lives in PageClient and renders only AFTER
-          React hydrates on the client (mounted gate). Initial HTML from
-          this component is empty. */}
+      {/* All visible content — H1, intro, header, footer, navigation, price
+          UI, calculator, educational content, FAQ, internal links — lives
+          in PageClient and renders only AFTER React hydrates on the client
+          (mounted gate). Initial HTML body from this page is empty. */}
       <PageClient />
     </>
   );
