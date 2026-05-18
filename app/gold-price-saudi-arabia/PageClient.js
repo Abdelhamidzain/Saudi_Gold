@@ -2,13 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { toAr, fmt, KARATS } from '../lib/gold';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import Breadcrumb from '../components/Breadcrumb';
+import { toAr, fmt } from '../lib/gold';
 import { GoldCalculator } from '../components/Calculators';
 import FAQ from '../components/FAQ';
 import Disclaimer from '../components/Disclaimer';
+import Footer from '../components/Footer';
 import InternalLinks from '../components/InternalLinks';
 
 const pageFAQ = [
@@ -64,36 +62,10 @@ const tableRows = [
   { k: 14, note: 'للمجوهرات اليومية الأكثر متانة' },
 ];
 
-const FALLBACK_PRICES = {
-  14: { gram: 0, ounce: 0, kilo: 0 },
-  18: { gram: 0, ounce: 0, kilo: 0 },
-  21: { gram: 0, ounce: 0, kilo: 0 },
-  22: { gram: 0, ounce: 0, kilo: 0 },
-  24: { gram: 0, ounce: 0, kilo: 0 },
-};
-
-function formatRiyadh(iso) {
-  if (!iso) return 'جاري التحديث...';
-  try {
-    return new Date(iso).toLocaleString('ar-SA', {
-      timeZone: 'Asia/Riyadh',
-      hour: '2-digit',
-      minute: '2-digit',
-      day: 'numeric',
-      month: 'long',
-    });
-  } catch {
-    return 'جاري التحديث...';
-  }
-}
-
-export default function PageClient() {
-  // Gate: render NOTHING in the SSR/initial HTML pass — only render
-  // after React mounts on the client. This keeps View Source limited to
-  // the H1 + intro paragraph from the parent server component.
+export default function PageClient({ prices: initialPrices }) {
+  // Mounted gate — below-hero sections do not contribute to initial HTML.
   const [mounted, setMounted] = useState(false);
-  const [prices, setPrices] = useState(FALLBACK_PRICES);
-  const [updatedAt, setUpdatedAt] = useState(null);
+  const [prices, setPrices] = useState(initialPrices);
 
   useEffect(() => {
     setMounted(true);
@@ -106,7 +78,6 @@ export default function PageClient() {
         const data = await res.json();
         if (cancelled || !data?.success || !data?.prices) return;
         setPrices(data.prices);
-        setUpdatedAt(data.updatedAt || null);
       } catch {
         /* silent */
       }
@@ -117,56 +88,8 @@ export default function PageClient() {
 
   if (!mounted) return null;
 
-  const price21 = prices[21];
-  const formattedTime = formatRiyadh(updatedAt);
-
   return (
     <>
-      <Header />
-
-      <div className="container">
-        <Breadcrumb items={[
-          { name: 'الرئيسية', href: '/' },
-          { name: 'سعر الذهب في السعودية اليوم' },
-        ]} />
-      </div>
-
-      <section className="hero">
-        <div className="container">
-          <h1>سعر الذهب في السعودية اليوم</h1>
-
-          <div className="badge">
-            <span className="live-dot"></span>
-            <span>سعر محدث لحظياً</span>
-          </div>
-
-          <p className="hero-subtitle">
-            تابع سعر الذهب في السعودية اليوم بالريال السعودي، مع تحديثات واضحة لأسعار الذهب
-            حسب العيار، مثل عيار 24 وعيار 22 وعيار 21 وعيار 18. تساعدك هذه الصفحة على معرفة
-            سعر جرام الذهب، مقارنة الفروقات بين العيارات، وفهم العوامل التي تؤثر على حركة
-            الذهب في السوق السعودي قبل الشراء أو البيع.
-          </p>
-
-          <div className="main-price-box">
-            <div className="main-price-label">سعر جرام الذهب عيار ٢١</div>
-            <div className="main-price-value">
-              <span>{fmt(price21?.gram)}</span>
-              <span className="main-price-currency">ر.س</span>
-            </div>
-            <div className="last-update">آخر تحديث: {formattedTime}</div>
-          </div>
-
-          <div style={{ marginTop: '24px', display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="#price-table" className="price-card" style={{ padding: '10px 18px', textDecoration: 'none' }}>
-              📊 جدول الأسعار
-            </Link>
-            <Link href="#calculator" className="price-card" style={{ padding: '10px 18px', textDecoration: 'none' }}>
-              🧮 حاسبة الذهب
-            </Link>
-          </div>
-        </div>
-      </section>
-
       <section className="section">
         <div className="container">
           <h2 className="section-title">أسعار الذهب في السعودية حسب العيار</h2>
