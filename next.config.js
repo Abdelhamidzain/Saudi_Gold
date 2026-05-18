@@ -22,45 +22,50 @@ const nextConfig = {
   
   swcMinify: true,
   
-  // Rewrites: Arabic URLs → English routes (single source of truth)
-  async rewrites() {
+  // Redirects: Arabic URLs → English canonical (301 permanent).
+  // Using redirects instead of rewrites because:
+  //   1) Rewrites with non-ASCII source paths were silently failing in production.
+  //   2) Redirects expose the English canonical URL in the browser — better
+  //      for SEO consolidation (Google sees one URL per page, not two).
+  //   3) Browser handles the percent-encoded Arabic input and follows Location.
+  async redirects() {
     return [
       // Karat pages
-      { source: '/عيار-21', destination: '/karat-21' },
-      { source: '/عيار-22', destination: '/karat-22' },
-      { source: '/عيار-24', destination: '/karat-24' },
-      { source: '/عيار-18', destination: '/karat-18' },
-      
+      { source: '/عيار-21', destination: '/karat-21', permanent: true },
+      { source: '/عيار-22', destination: '/karat-22', permanent: true },
+      { source: '/عيار-24', destination: '/karat-24', permanent: true },
+      { source: '/عيار-18', destination: '/karat-18', permanent: true },
+
       // Tool & info pages
-      { source: '/سبائك-الذهب', destination: '/gold-bars' },
-      { source: '/حاسبة-الذهب', destination: '/calculator' },
-      { source: '/زكاة-الذهب', destination: '/zakat' },
-      { source: '/مصنعية-الذهب', destination: '/workmanship' },
-      { source: '/اسواق-الذهب', destination: '/markets' },
-      { source: '/اونصة-الذهب', destination: '/ounce' },
-      { source: '/سعر-الفضة', destination: '/silver' },
-      { source: '/بيع-وشراء-الذهب', destination: '/buy-sell' },
-      { source: '/تاريخ-اسعار-الذهب', destination: '/history' },
-      
+      { source: '/سبائك-الذهب', destination: '/gold-bars', permanent: true },
+      { source: '/حاسبة-الذهب', destination: '/calculator', permanent: true },
+      { source: '/زكاة-الذهب', destination: '/zakat', permanent: true },
+      { source: '/مصنعية-الذهب', destination: '/workmanship', permanent: true },
+      { source: '/اسواق-الذهب', destination: '/markets', permanent: true },
+      { source: '/اونصة-الذهب', destination: '/ounce', permanent: true },
+      { source: '/سعر-الفضة', destination: '/silver', permanent: true },
+      { source: '/بيع-وشراء-الذهب', destination: '/buy-sell', permanent: true },
+      { source: '/تاريخ-اسعار-الذهب', destination: '/history', permanent: true },
+
       // City pages - Arabic URLs
-      { source: '/سعر-الذهب-في-الرياض', destination: '/gold-price-riyadh' },
-      { source: '/سعر-الذهب-في-جدة', destination: '/gold-price-jeddah' },
-      { source: '/سعر-الذهب-في-مكة', destination: '/gold-price-makkah' },
-      { source: '/سعر-الذهب-في-المدينة', destination: '/gold-price-madinah' },
-      { source: '/سعر-الذهب-في-الدمام', destination: '/gold-price-dammam' },
-      { source: '/سعر-الذهب-في-الخبر', destination: '/gold-price-khobar' },
-      { source: '/سعر-الذهب-في-تبوك', destination: '/gold-price-tabuk' },
-      { source: '/سعر-الذهب-في-أبها', destination: '/gold-price-abha' },
-      { source: '/سعر-الذهب-في-الطائف', destination: '/gold-price-taif' },
-      { source: '/سعر-الذهب-في-حائل', destination: '/gold-price-hail' },
-      { source: '/سعر-الذهب-في-بريدة', destination: '/gold-price-buraidah' },
-      { source: '/سعر-الذهب-في-خميس-مشيط', destination: '/gold-price-khamis-mushait' },
-      { source: '/سعر-الذهب-في-نجران', destination: '/gold-price-najran' },
-      { source: '/سعر-الذهب-في-الجبيل', destination: '/gold-price-jubail' },
-      { source: '/سعر-الذهب-في-ينبع', destination: '/gold-price-yanbu' },
-      
+      { source: '/سعر-الذهب-في-الرياض', destination: '/gold-price-riyadh', permanent: true },
+      { source: '/سعر-الذهب-في-جدة', destination: '/gold-price-jeddah', permanent: true },
+      { source: '/سعر-الذهب-في-مكة', destination: '/gold-price-makkah', permanent: true },
+      { source: '/سعر-الذهب-في-المدينة', destination: '/gold-price-madinah', permanent: true },
+      { source: '/سعر-الذهب-في-الدمام', destination: '/gold-price-dammam', permanent: true },
+      { source: '/سعر-الذهب-في-الخبر', destination: '/gold-price-khobar', permanent: true },
+      { source: '/سعر-الذهب-في-تبوك', destination: '/gold-price-tabuk', permanent: true },
+      { source: '/سعر-الذهب-في-أبها', destination: '/gold-price-abha', permanent: true },
+      { source: '/سعر-الذهب-في-الطائف', destination: '/gold-price-taif', permanent: true },
+      { source: '/سعر-الذهب-في-حائل', destination: '/gold-price-hail', permanent: true },
+      { source: '/سعر-الذهب-في-بريدة', destination: '/gold-price-buraidah', permanent: true },
+      { source: '/سعر-الذهب-في-خميس-مشيط', destination: '/gold-price-khamis-mushait', permanent: true },
+      { source: '/سعر-الذهب-في-نجران', destination: '/gold-price-najran', permanent: true },
+      { source: '/سعر-الذهب-في-الجبيل', destination: '/gold-price-jubail', permanent: true },
+      { source: '/سعر-الذهب-في-ينبع', destination: '/gold-price-yanbu', permanent: true },
+
       // Blog Arabic
-      { source: '/مدونة', destination: '/blog' },
+      { source: '/مدونة', destination: '/blog', permanent: true },
     ];
   },
   
