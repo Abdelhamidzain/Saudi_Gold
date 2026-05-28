@@ -9,6 +9,7 @@ import { GoldCalculator, ZakatCalculator } from './components/Calculators';
 import FAQ from './components/FAQ';
 import Disclaimer from './components/Disclaimer';
 import InternalLinks from './components/InternalLinks';
+import HomeSeoContent, { homeFaqExpansion } from './components/HomeSeoContent';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
@@ -150,7 +151,7 @@ export default async function Home() {
               <span>تحديث مباشر من البورصة العالمية</span>
             </div>
 
-            <h1>سعر <span className="text-gold">الذهب</span> اليوم في السعودية</h1>
+            <h1>سعر <span className="text-gold">الذهب</span> اليوم في السعودية مباشر بالريال السعودي</h1>
             <p className="hero-subtitle">
               تسعيرة الغرام محدثة لحظياً بالريال والدولار لكل العيارات — مع أدوات الحساب والزكاة وتغطية أسواق المملكة
             </p>
@@ -187,6 +188,9 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        {/* ═══ Server-rendered SEO topical content ═══ */}
+        <HomeSeoContent prices={prices} />
 
         {/* ═══ Price Table ═══ */}
         <section className="section" id="table">
@@ -522,7 +526,7 @@ export default async function Home() {
         <section className="section">
           <div className="container">
             <h2 className="section-title">الأسئلة الشائعة</h2>
-            <FAQ items={homeFAQ} />
+            <FAQ items={[...homeFAQ, ...homeFaqExpansion]} />
           </div>
         </section>
 

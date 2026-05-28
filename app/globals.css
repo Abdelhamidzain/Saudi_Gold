@@ -698,6 +698,14 @@ h1 {
   margin-bottom: 0;
 }
 
+/* Inline price value inside SEO prose (HomeSeoContent). Not updated by
+   LivePriceUpdater — intentionally a static, on-brand highlight. */
+.seo-price {
+  color: var(--g);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 /* Content Section */
 .content-section {
   max-width: 800px;
