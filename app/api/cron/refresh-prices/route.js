@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic';
 
-const CRON_SECRET = process.env.CRON_SECRET || '0161348527';
+const CRON_SECRET = process.env.CRON_SECRET;
 const OUNCE = 31.1035;
 const MARKUP = 1.02;
 

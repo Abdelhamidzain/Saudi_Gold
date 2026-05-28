@@ -27,8 +27,8 @@ cron-job.org (كل ساعة)
 ## Environment Variables
 
 ```
-METAL_API_KEY=484e10b2ec808863d1c692d2ea2eb921
-CRON_SECRET=my-secret-123
+METAL_API_KEY=your_metalpriceapi_key_here
+CRON_SECRET=change_me_to_a_random_secret
 DATABASE_URL=postgresql://...neon.tech/neondb?sslmode=require
 ```
 

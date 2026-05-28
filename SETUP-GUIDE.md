@@ -73,8 +73,8 @@ postgresql://user:pass@ep-xxx.aws.neon.tech/neondb?sslmode=require
 أضف هذه المتغيرات:
 
 ┌─────────────────┬──────────────────────────────────────────┐
-│ METAL_API_KEY   │ 484e10b2ec808863d1c692d2ea2eb921         │
-│ CRON_SECRET     │ my-secret-123                            │
+│ METAL_API_KEY   │ your_metalpriceapi_key_here              │
+│ CRON_SECRET     │ change_me_to_a_random_secret             │
 │ DATABASE_URL    │ postgresql://... (من Neon)               │
 └─────────────────┴──────────────────────────────────────────┘
 ```
@@ -95,7 +95,7 @@ postgresql://user:pass@ep-xxx.aws.neon.tech/neondb?sslmode=require
 2. CREATE CRONJOB
 3. أدخل:
    - Title: Saudi Gold
-   - URL: https://موقعك.vercel.app/api/cron/refresh-prices?secret=my-secret-123
+   - URL: https://موقعك.vercel.app/api/cron/refresh-prices?secret=YOUR_CRON_SECRET
    - Schedule: Every hour
 4. CREATE
 5. Test run
@@ -107,7 +107,7 @@ postgresql://user:pass@ep-xxx.aws.neon.tech/neondb?sslmode=require
 
 ```
 افتح في المتصفح:
-https://موقعك.vercel.app/api/cron/refresh-prices?secret=my-secret-123
+https://موقعك.vercel.app/api/cron/refresh-prices?secret=YOUR_CRON_SECRET
 
 إذا ظهر {"success":true} = ✅ تم!
 ```
