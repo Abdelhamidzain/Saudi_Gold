@@ -14,7 +14,7 @@ export default function PriceTable({ prices, showDollar = true }) {
   return (
     <div className="table-section">
       <div className="table-header">
-        <h2>📊 جدول أسعار الذهب اليوم في السعودية</h2>
+        <h2>📊 جدول سعر الذهب اليوم في السعودية</h2>
       </div>
       <div className="table-wrapper">
         <table className="data-table">
