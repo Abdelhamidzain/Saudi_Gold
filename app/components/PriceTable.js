@@ -2,13 +2,13 @@ import { toAr, fmt } from '../lib/gold';
 
 export default function PriceTable({ prices, showDollar = true }) {
   const rows = [
-    { name: 'سعر جرام الذهب عيار 24', k: 24, type: 'gram' },
-    { name: 'سعر جرام الذهب عيار 22', k: 22, type: 'gram' },
-    { name: 'سعر جرام الذهب عيار 21', k: 21, type: 'gram' },
-    { name: 'سعر جرام الذهب عيار 18', k: 18, type: 'gram' },
-    { name: 'سعر جرام الذهب عيار 14', k: 14, type: 'gram' },
-    { name: 'سعر أونصة الذهب عيار 24', k: 24, type: 'ounce' },
-    { name: 'سعر كيلو الذهب عيار 24', k: 24, type: 'kilo' },
+    { name: 'جرام الذهب عيار 24', k: 24, type: 'gram' },
+    { name: 'جرام الذهب عيار 22', k: 22, type: 'gram' },
+    { name: 'جرام الذهب عيار 21', k: 21, type: 'gram' },
+    { name: 'جرام الذهب عيار 18', k: 18, type: 'gram' },
+    { name: 'جرام الذهب عيار 14', k: 14, type: 'gram' },
+    { name: 'أونصة الذهب عيار 24', k: 24, type: 'ounce' },
+    { name: 'كيلو الذهب عيار 24', k: 24, type: 'kilo' },
   ];
 
   return (
