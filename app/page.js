@@ -121,7 +121,7 @@ export default async function Home() {
         {/* ═══ SSR: main karat price table ═══ */}
         <section className="section" id="table">
           <div className="container">
-            <h2 className="section-title">سعر الذهب اليوم حسب العيار</h2>
+            <h2 className="section-title">سعر الذهب اليوم في السعودية حسب العيار</h2>
             <PriceTable prices={prices} />
           </div>
         </section>
