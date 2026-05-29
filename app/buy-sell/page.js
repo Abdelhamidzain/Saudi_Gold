@@ -1,5 +1,5 @@
 import { getPrices, formatRiyadhTime } from '../lib/getPrices';
-import { fmt } from '../lib/gold';
+import { fmt, calcSellPrice } from '../lib/gold';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
@@ -64,12 +64,12 @@ export default async function BuySellPage() {
   const { prices, updatedAt } = await getPrices();
   const formattedTime = formatRiyadhTime(updatedAt);
 
-  // أسعار البيع (تقديرية - أقل بـ 5-10%)
+  // سعر البيع/المستعمل الموحّد: جرام العيار × 0.97 (خصم 3%)
   const sellPrices = {
-    24: prices[24]?.gram * 0.95,
-    22: prices[22]?.gram * 0.95,
-    21: prices[21]?.gram * 0.95,
-    18: prices[18]?.gram * 0.95,
+    24: calcSellPrice(prices[24]?.gram),
+    22: calcSellPrice(prices[22]?.gram),
+    21: calcSellPrice(prices[21]?.gram),
+    18: calcSellPrice(prices[18]?.gram),
   };
 
   const pageSchema = {

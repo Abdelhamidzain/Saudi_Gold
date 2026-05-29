@@ -100,7 +100,7 @@ export default function HomeClientContent({ prices }) {
                     { name: 'كيلو كامل', weight: 1000 },
                   ].map((bar, i) => {
                     const gramPrice = bar.karat === 21 ? prices[21]?.gram : prices[24]?.gram;
-                    const priceRiyal = gramPrice * bar.weight * (bar.karat === 21 ? 1 : 1.02);
+                    const priceRiyal = gramPrice * bar.weight; // بدون هامش — موحّد مع /gold-bars وصفحات العيار
                     const priceDollar = priceRiyal / 3.75;
                     return (
                       <tr key={i}>
