@@ -3,12 +3,10 @@
 import Link from 'next/link';
 
 /*
- * FooterClient — client-only footer used ONLY on the homepage, loaded via
- * dynamic(import, { ssr:false }). Other pages keep the server-rendered Footer.
- *
- * NOTE (SEO): because this is client-only on the homepage, its internal links
- * are NOT in the homepage's raw HTML. This is an intentional, reversible
- * experiment choice. Other routes still expose these links server-side.
+ * FooterClient — client-only footer (loaded via dynamic ssr:false on the
+ * homepage). Holds the brand + non-city footer links. The 5 city links are
+ * rendered separately and server-side by FooterCityLinksSSR, so they are NOT
+ * duplicated here. Other routes keep the full server-rendered Footer.
  */
 export default function FooterClient() {
   return (
@@ -55,17 +53,6 @@ export default function FooterClient() {
               <li><Link href="/markets">أسواق الذهب</Link></li>
               <li><Link href="/silver">سعر الفضة</Link></li>
               <li><Link href="/blog">المدونة</Link></li>
-            </ul>
-          </nav>
-
-          <nav aria-label="أسعار الذهب حسب المدينة">
-            <span className="footer-title" role="heading" aria-level="2">أسعار حسب المدينة</span>
-            <ul className="footer-links">
-              <li><Link href="/gold-price-riyadh">سعر الذهب في الرياض</Link></li>
-              <li><Link href="/gold-price-jeddah">سعر الذهب في جدة</Link></li>
-              <li><Link href="/gold-price-makkah">سعر الذهب في مكة</Link></li>
-              <li><Link href="/gold-price-madinah">سعر الذهب في المدينة</Link></li>
-              <li><Link href="/gold-price-dammam">سعر الذهب في الدمام</Link></li>
             </ul>
           </nav>
         </div>
