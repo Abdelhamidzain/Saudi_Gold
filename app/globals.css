@@ -698,22 +698,6 @@ h1 {
   margin-bottom: 0;
 }
 
-/* Server-rendered footer city links block (the only SSR footer part). */
-.footer-city-ssr {
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  padding: 28px 0 8px;
-}
-.footer-city-ssr .footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  margin-top: 10px;
-  list-style: none;
-  padding: 0;
-}
-/* .CSR is a layout-neutral marker class only (no styles needed). */
-
 /* Content Section */
 .content-section {
   max-width: 800px;
