@@ -749,6 +749,15 @@ h1 {
   border-color: var(--g);
   background: rgba(245, 158, 11, 0.08);
 }
+/* Plain (non-link) keyword chips — visible, useful, but clearly not clickable. */
+.kw-group-links .kw-chip {
+  font-size: 0.85rem;
+  color: var(--txt2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.02);
+}
 
 /* Content Section */
 .content-section {
