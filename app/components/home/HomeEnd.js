@@ -18,6 +18,48 @@ const homeFAQ = [
 export default function HomeEnd() {
   return (
     <>
+      {/* ═══ City links (now CSR) ═══ */}
+      <section className="section">
+        <div className="container">
+          <h2 className="section-title">سعر الذهب اليوم في السعودية حسب المدينة</h2>
+          <p style={{ textAlign: 'center', color: 'var(--txt2)', maxWidth: '700px', margin: '0 auto 24px' }}>
+            ثمن الغرام الخام موحّد في كل المدن، لكن رسوم التشكيل تختلف. اطّلع على اسعار الذهب اليوم الرياض واسعار الذهب اليوم جدة وباقي المناطق
+          </p>
+          <div className="price-cards">
+            <Link href="/gold-price-riyadh" className="price-card">
+              <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🏙️</div>
+              <h3 className="price-card-label">سعر الذهب في الرياض</h3>
+              <div className="price-card-unit">الثميري · البطحاء · طيبة</div>
+            </Link>
+            <Link href="/gold-price-jeddah" className="price-card">
+              <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🌊</div>
+              <h3 className="price-card-label">سعر الذهب في جدة</h3>
+              <div className="price-card-unit">حراء الدولي · اليمامة</div>
+            </Link>
+            <Link href="/gold-price-makkah" className="price-card">
+              <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🕋</div>
+              <h3 className="price-card-label">سعر الذهب في مكة المكرمة</h3>
+              <div className="price-card-unit">العتيبية · الستين</div>
+            </Link>
+            <Link href="/gold-price-dammam" className="price-card">
+              <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🛢️</div>
+              <h3 className="price-card-label">سعر الذهب في الدمام</h3>
+              <div className="price-card-unit">سوق المجوهرات · الحياة بلازا</div>
+            </Link>
+            <Link href="/gold-price-madinah" className="price-card">
+              <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🌴</div>
+              <h3 className="price-card-label">سعر الذهب في المدينة المنورة</h3>
+              <div className="price-card-unit">المدينة الدولي · طيبة</div>
+            </Link>
+            <Link href="/gold-price-taif" className="price-card">
+              <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🌹</div>
+              <h3 className="price-card-label">سعر الذهب في الطائف</h3>
+              <div className="price-card-unit">محدث لحظياً</div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ═══ SEO Content Block 4 ═══ */}
       <section className="section">
         <div className="container">
