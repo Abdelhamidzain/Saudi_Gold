@@ -698,13 +698,19 @@ h1 {
   margin-bottom: 0;
 }
 
-/* SSR keyword phrase emphasis — subtle, inline, readable. NOT a chip/pill,
-   no background, no border, no button look. Visible to users (no hidden text). */
-.SSR {
-  color: var(--g2);
-  text-decoration: underline;
-  text-decoration-color: rgba(212, 175, 55, 0.45);
-  text-underline-offset: 3px;
+/* Server-rendered footer city links block (the only SSR footer part). */
+.footer-city-ssr {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 28px 0 8px;
+}
+.footer-city-ssr .footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 10px;
+  list-style: none;
+  padding: 0;
 }
 /* .CSR is a layout-neutral marker class only (no styles needed). */
 
