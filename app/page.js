@@ -2,7 +2,7 @@ import { getPrices, formatRiyadhTime } from './lib/getPrices';
 import { SITE_URL } from './lib/schema';
 import Header from './components/Header';
 import PriceTable from './components/PriceTable';
-import HomeRest from './components/HomeRest';
+import { HomeHeroCSR, HomeMiddleCSR, HomeEndCSR } from './components/home/HomeCSR';
 import Link from 'next/link';
 
 export const revalidate = 1800;
@@ -101,12 +101,22 @@ export default async function Home() {
       <Header />
 
       <main>
-        {/* ═══ SSR: H1 only ═══ */}
+        {/* ═══ SSR: Hero (badge + H1 + keyword-rich subtitle) ═══ */}
         <section className="hero" id="prices">
           <div className="container">
+            <div className="badge">
+              <span className="live-dot" aria-hidden="true"></span>
+              <span>تحديث مباشر من البورصة العالمية</span>
+            </div>
             <h1>سعر <span className="text-gold">الذهب</span> اليوم في السعودية</h1>
+            <p className="hero-subtitle">
+              تابع سعر الذهب اليوم في السعودية بالريال السعودي محدّثاً لحظياً لكل العيارات، واعرف سعر الذهب في السعودية اليوم بيعاً وشراءً مع الأونصة والسبائك وأدوات الحساب والزكاة.
+            </p>
           </div>
         </section>
+
+        {/* ═══ CSR (slot A): price box + cards + internal links + intro ═══ */}
+        <HomeHeroCSR prices={prices} formattedTime={formattedTime} />
 
         {/* ═══ SSR: main karat price table ═══ */}
         <section className="section" id="table">
@@ -115,6 +125,9 @@ export default async function Home() {
             <PriceTable prices={prices} />
           </div>
         </section>
+
+        {/* ═══ CSR (slot B): bullion + buy/sell + history + calculators + markets ═══ */}
+        <HomeMiddleCSR prices={prices} />
 
         {/* ═══ SSR: city links (crawlable) ═══ */}
         <section className="section">
@@ -158,8 +171,8 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ═══ CSR: everything else (loaded client-side) ═══ */}
-        <HomeRest prices={prices} formattedTime={formattedTime} />
+        {/* ═══ CSR (slot C): comparison + chart + blog + FAQ + disclaimer + footer ═══ */}
+        <HomeEndCSR />
       </main>
     </>
   );
