@@ -9,9 +9,19 @@ import { GoldCalculator, ZakatCalculator } from './components/Calculators';
 import FAQ from './components/FAQ';
 import Disclaimer from './components/Disclaimer';
 import InternalLinks from './components/InternalLinks';
-import HomeSeoContent, { homeFaqExpansion } from './components/HomeSeoContent';
+import HomeKeywordIntentLayer from './components/HomeKeywordIntentLayer';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
+
+// Long explanatory / educational prose is deferred to a client-only chunk.
+// ssr:false keeps it out of the initial HTML (smaller raw HTML) while the
+// server-rendered HomeKeywordIntentLayer preserves all primary keyword
+// clusters for crawlers. Loaded after hydration, below the fold.
+const HomeSeoDetailsClient = dynamic(
+  () => import('./components/HomeSeoDetailsClient'),
+  { ssr: false }
+);
 
 export const revalidate = 1800;
 
@@ -79,6 +89,45 @@ const homeFAQ = [
   {
     question: 'هل يختلف الثمن بين المناطق والمحافظات؟',
     answer: 'القيمة الأساسية موحّدة لارتباطها ببورصات المعادن الدولية. الاختلاف ينحصر في أتعاب الصانع وهامش ربحه. تصفّح صفحات المحافظات لمعرفة أقرب الوجهات.',
+  },
+];
+
+/* ─── FAQ expansion (server-rendered with the FAQ above; single FAQPage schema) ─── */
+const homeFaqExpansion = [
+  {
+    question: 'كم سعر جرام الذهب عيار 21 اليوم؟',
+    answer:
+      'يتغيّر سعر جرام عيار 21 على مدار اليوم تبعاً لحركة الأونصة العالمية وسعر صرف الريال. القيمة الظاهرة في صندوق السعر أعلى الصفحة وفي الجدول هي الأحدث لحظياً، وهي قيمة خام قبل إضافة المصنعية والضريبة.',
+  },
+  {
+    question: 'هل سعر الذهب الآن مباشر ومحدّث؟',
+    answer:
+      'نعم، تُحتسب الأسعار من تسعيرة البورصة العالمية وتُحدَّث في متصفحك خلال ثوانٍ من فتح الصفحة ثم بشكل دوري، فترى قيمة الذهب الآن دون الحاجة لإعادة تحميل الصفحة يدوياً.',
+  },
+  {
+    question: 'ما الفرق بين سعر البيع وسعر الشراء؟',
+    answer:
+      'سعر الشراء هو ما تدفعه عند اقتناء قطعة جديدة ويشمل أجور الصياغة والضريبة، أما سعر البيع فهو ما تستردّه عند تصفية قطعتك ويُحتسب على القيمة الخام للعيار مع خصم هامش بسيط دون أتعاب المصنعية.',
+  },
+  {
+    question: 'هل السعر المعروض شامل المصنعية والضريبة؟',
+    answer:
+      'لا، الأرقام هنا تمثّل قيمة الذهب الخام المرتبطة بالسوق العالمي. السعر النهائي في المحل يضيف رسوم الصياغة وهامش الربح وضريبة القيمة المضافة بنسبة 15%، باستثناء السبائك الاستثمارية التي تُباع بهامش ضئيل.',
+  },
+  {
+    question: 'كيف يتم حساب سعر جرام الذهب؟',
+    answer:
+      'يُقسَّم سعر الأونصة العالمية على 31.1 غراماً للحصول على ثمن غرام العيار الخالص، ثم يُضرب الناتج في نقاوة العيار المطلوب (مثل 0.875 لعيار 21). يمكنك تجربة ذلك بنفسك عبر حاسبة الذهب في الصفحة.',
+  },
+  {
+    question: 'كم سعر سبائك الذهب اليوم في السعودية؟',
+    answer:
+      'تُسعَّر السبائك على أساس عيار 24 مضروباً في وزن السبيكة مع هامش تجاري بسيط. تتوفر أوزان من غرام واحد حتى كيلو، وتجد التفاصيل الكاملة في صفحة أسعار سبائك الذهب.',
+  },
+  {
+    question: 'كم سعر الفضة اليوم في السعودية؟',
+    answer:
+      'تُحتسب قيمة الفضة من سعرها العالمي وتُعرض بالريال السعودي للغرام والأونصة والكيلو في صفحة سعر الفضة، وتُحدَّث من المصدر نفسه الذي نعتمده لأسعار الذهب.',
   },
 ];
 
@@ -174,23 +223,8 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ═══ SEO Content Block 1: أسعار الذهب في السعودية ═══ */}
-        <section className="section">
-          <div className="container">
-            <div className="info-section">
-              <h2>سعر الذهب في السعودية — كيف يُحسب وكيف تتابعه؟</h2>
-              <p>
-                سعر الذهب اليوم في السعودية يتحدد وفقاً لقيمة الأوقية عالمياً في بورصتَي لندن ونيويورك بالدولار، ثم يُحوَّل للريال بالصرف الثابت 3.75. يهتم الزائر بمعرفة سعر جرام الذهب في السعودية اليوم لاتخاذ قرار الشراء أو البيع — لذلك نحدّث الأرقام كل دقيقة لتعكس أحدث تحركات البورصة.
-              </p>
-              <p>
-                ما تراه هنا هو ثمن الجرام النقي (سبوت) قبل إضافات الصائغ. ورش الحُلي تحمّل <Link href="/workmanship" className="text-gold">أجور الصنعة</Link> وضريبة 15%. كما نوفر سعر سبائك الذهب في السعودية اليوم عبر صفحة <Link href="/gold-bars" className="text-gold">أسعار سبائك الذهب في السعودية</Link>، و<Link href="/silver" className="text-gold">سعر الفضة اليوم في السعودية</Link>، و<Link href="/zakat" className="text-gold">حاسبة زكاة الذهب</Link> الشرعية.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ Server-rendered SEO topical content ═══ */}
-        <HomeSeoContent prices={prices} />
+        {/* ═══ Server-rendered Keyword Intent Layer (compact, crawlable) ═══ */}
+        <HomeKeywordIntentLayer prices={prices} />
 
         {/* ═══ Price Table ═══ */}
         <section className="section" id="table">
@@ -343,24 +377,6 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ═══ SEO Content Block 2: عوامل التسعير ═══ */}
-        <section className="section">
-          <div className="container">
-            <div className="info-section">
-              <h2>لماذا تتصاعد أسعار المعدن الأصفر عالمياً؟</h2>
-              <p>
-                تاريخياً، عرفت الحضارات القديمة — من الفراعنة إلى ممالك بلاد الرافدين — قيمة هذا العنصر النادر واستخدمته عملةً ورمزاً للثروة. خلال القرن العشرين ربطت اتفاقية بريتون وودز الدولار بالمعيار الذهبي، حتى فصلهما الرئيس نيكسون عام 1971. منذ ذلك الحين أصبحت الأونصة أداة تحوّط مستقلة يلجأ إليها المدّخرون أثناء الأزمات المالية — كانهيار ليمان براذرز 2008 وجائحة كورونا 2020 — حين بلغت مستويات قياسية غير مسبوقة.
-              </p>
-              <p>
-                حالياً، ثلاث قوى تدفع الأونصة للصعود: أولاً المشتريات الضخمة للبنوك المركزية الآسيوية (الصيني والهندي تحديداً) ضمن استراتيجية تنويع الاحتياطيات السيادية بعيداً عن هيمنة الدولار. ثانياً ارتفاع مؤشرات التضخّم العالمي الذي يُضعف القوة الشرائية للعملات الورقية ويُحفّز الصناديق المؤسسية لتخصيص حصص أكبر للمعدن كملاذ. ثالثاً التوترات الجيوسياسية المتصاعدة التي تزيد حالة عدم اليقين في أسواق الأسهم والسندات، فيتحوّل المستثمرون للأصول الملموسة. خبراء المحللون يتوقعون استمرار هذا المنحى الصاعد على المنظور المتوسط والطويل الأجل.
-              </p>
-              <p>
-                نصيحة تطبيقية: لشراء <Link href="/karat-21" className="text-gold">مجوهرات عيار 21</Link> تابع المتوسط الأسبوعي واشترِ عند انخفاض 2-3%. أما <Link href="/gold-bars" className="text-gold">سبائك 24 قيراط للادّخار</Link>، فأسلوب التحوّط بالشراء الدوري الشهري يخفّض مخاطر التوقيت.
-              </p>
-            </div>
-          </div>
-        </section>
-
         {/* ═══ Calculators ═══ */}
         <section className="section" id="calc">
           <div className="container">
@@ -368,18 +384,6 @@ export default async function Home() {
             <div className="calc-grid">
               <GoldCalculator prices={prices} />
               <ZakatCalculator prices={prices} />
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ SEO Content Block 3: بيع وشراء ═══ */}
-        <section className="section">
-          <div className="container">
-            <div className="info-section">
-              <h2>سعر بيع الذهب المستعمل — كم تسترد فعلاً؟</h2>
-              <p>
-                مَن يتابع سعر الذهب اليوم عيار 21 في السعودية يسأل: كم آخذ لو بعت قطعتي القديمة؟ التاجر يشتري بالقيمة الأساسية ناقص 1-5% ولا يحتسب أتعاب الصنعة. لذلك المستثمرون المحنّكون يفضّلون <Link href="/gold-bars" className="text-gold">القوالب الاستثمارية</Link> — عند التصفية تسترد ثمناً قريباً جداً من البورصة. قارن عروض 3 تجّار واحسب القيمة العادلة عبر <Link href="/calculator" className="text-gold">أداة الحساب</Link> قبل المفاوضة. تفاصيل أوفى في <Link href="/buy-sell" className="text-gold">صفحة البيع والشراء</Link>.
-              </p>
             </div>
           </div>
         </section>
@@ -464,30 +468,6 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ═══ SEO Content Block 4: العيارات ═══ */}
-        <section className="section">
-          <div className="container">
-            <div className="info-section">
-              <h2>مقارنة العيارات — أيهم يلائم احتياجك؟</h2>
-              <p>
-                <Link href="/karat-24" className="text-gold">عيار 24</Link> (99.9% نقاوة) للسبائك والجنيهات حصراً — ليّن لا يصلح للحُلي. <Link href="/karat-21" className="text-gold">عيار 21</Link> (87.5% نقاء) الأكثر رواجاً محلياً للشبكات والأطقم. <Link href="/karat-22" className="text-gold">عيار 22</Link> (91.6%) شائع في المشغولات التراثية. <Link href="/karat-18" className="text-gold">عيار 18</Link> (75%) المفضّل لدى كارتييه وبولغاري لترصيع الألماس. قارن الثمن باستخدام <Link href="/calculator" className="text-gold">أداة الحساب</Link>.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ Chart + Why Us (merged) ═══ */}
-        <section className="section">
-          <div className="container">
-            <div className="info-section">
-              <h2>الرسم البياني والتحليل الفني</h2>
-              <p>
-                لمتابعة سعر الذهب اليوم السعودية عبر الرسوم البيانية — تتبّع حركة المعدن الثمين يكشف أنماط السوق المحلي. والبيانات والتحليلات تشير لاستمرار الاتجاه الصاعد مع تزايد الطلب المركزي الآسيوي. احصل على الشارت التفصيلي من صفحة <Link href="/history" className="text-gold">التاريخ والتحليل الفني</Link>. نوفر أيضاً: حاسبة تفاعلية بالمصنعية، أداة الزكاة الشرعية، تغطية حسب المدينة، وتسعيرة المستعمل يومياً — مجاناً بدون تسجيل.
-              </p>
-            </div>
-          </div>
-        </section>
-
         {/* ═══ Blog CTA ═══ */}
         <section className="section">
           <div className="container">
@@ -521,6 +501,9 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        {/* ═══ Deferred long-form prose (client-only, ssr:false, below fold) ═══ */}
+        <HomeSeoDetailsClient />
 
         {/* ═══ FAQ ═══ */}
         <section className="section">
