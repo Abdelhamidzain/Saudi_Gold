@@ -70,10 +70,14 @@ export default function HomeSsrKeywordTextLayer() {
             و<K>سعر الفضة اليوم في السعودية</K> و<K>اسعار الذهب والفضة اليوم</K>.
           </p>
           <p>
-            وحسب مدينتك نعرض <K>سعر الذهب اليوم في الرياض</K> و<K>اسعار الذهب اليوم الرياض</K>{' '}
-            و<K>سعر الذهب اليوم في جدة</K> و<K>اسعار الذهب اليوم جدة</K> و
-            <K>سعر الذهب اليوم في مكة</K> و<K>سعر الذهب اليوم في المدينة</K> و
-            <K>سعر الذهب اليوم في الدمام</K>.
+            وحسب مدينتك نعرض{' '}
+            <Link href="/gold-price-riyadh" className="SSR">سعر الذهب اليوم في الرياض</Link>{' '}
+            و<K>اسعار الذهب اليوم الرياض</K> و
+            <Link href="/gold-price-jeddah" className="SSR">سعر الذهب اليوم في جدة</Link>{' '}
+            و<K>اسعار الذهب اليوم جدة</K> و
+            <Link href="/gold-price-makkah" className="SSR">سعر الذهب اليوم في مكة</Link> و
+            <Link href="/gold-price-madinah" className="SSR">سعر الذهب اليوم في المدينة</Link> و
+            <Link href="/gold-price-dammam" className="SSR">سعر الذهب اليوم في الدمام</Link>.
           </p>
           <p dir="ltr" style={{ textAlign: 'left' }}>
             For visitors searching in English: <K>saudi gold price today</K>,{' '}
