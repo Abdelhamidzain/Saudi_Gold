@@ -121,7 +121,7 @@ export default async function Home() {
         {/* ═══ SSR: main karat price table ═══ */}
         <section className="section" id="table">
           <div className="container">
-            <h2 className="section-title">سعر جرام الذهب اليوم حسب العيار</h2>
+            <h2 className="section-title">سعر الذهب اليوم حسب العيار</h2>
             <PriceTable prices={prices} />
           </div>
         </section>
@@ -132,7 +132,7 @@ export default async function Home() {
         {/* ═══ SSR: city links (crawlable) ═══ */}
         <section className="section">
           <div className="container">
-            <h2 className="section-title">اسعار الذهب حسب المدينة</h2>
+            <h2 className="section-title">سعر الذهب اليوم في السعودية حسب المدينة</h2>
             <p style={{ textAlign: 'center', color: 'var(--txt2)', maxWidth: '700px', margin: '0 auto 24px' }}>
               ثمن الغرام الخام موحّد في كل المدن، لكن رسوم التشكيل تختلف. اطّلع على اسعار الذهب اليوم الرياض واسعار الذهب اليوم جدة وباقي المناطق
             </p>
