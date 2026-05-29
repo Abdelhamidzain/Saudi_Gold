@@ -698,66 +698,15 @@ h1 {
   margin-bottom: 0;
 }
 
-/* Inline price value inside SEO prose. Not updated by LivePriceUpdater —
-   intentionally a static, on-brand highlight (inert class). */
-.seo-price {
-  color: var(--g);
-  font-weight: 700;
-  white-space: nowrap;
+/* SSR keyword phrase emphasis — subtle, inline, readable. NOT a chip/pill,
+   no background, no border, no button look. Visible to users (no hidden text). */
+.SSR {
+  color: var(--g2);
+  text-decoration: underline;
+  text-decoration-color: rgba(212, 175, 55, 0.45);
+  text-underline-offset: 3px;
 }
-
-/* Keyword Intent Layer — compact, visible, useful grouped intent cards.
-   Reuses existing tokens; no hidden/manipulative patterns. */
-.kw-intent {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-top: 24px;
-}
-.kw-group {
-  background: var(--card2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 18px;
-}
-.kw-group h3 {
-  font-size: 1.05rem;
-  margin-bottom: 8px;
-  color: var(--txt);
-}
-.kw-group p {
-  color: var(--txt3);
-  font-size: 0.9rem;
-  line-height: 1.7;
-  margin-bottom: 14px;
-}
-.kw-group-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.kw-group-links a {
-  font-size: 0.85rem;
-  color: var(--g);
-  text-decoration: none;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 5px 12px;
-  transition: border-color 0.2s, background 0.2s;
-}
-.kw-group-links a:hover {
-  border-color: var(--g);
-  background: rgba(245, 158, 11, 0.08);
-}
-/* Plain (non-link) keyword chips — visible, useful, but clearly not clickable. */
-.kw-group-links .kw-chip {
-  font-size: 0.85rem;
-  color: var(--txt2);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 5px 12px;
-  background: rgba(255, 255, 255, 0.02);
-}
+/* .CSR is a layout-neutral marker class only (no styles needed). */
 
 /* Content Section */
 .content-section {
