@@ -49,6 +49,17 @@ export function calcBarPrices(gram24Price) {
   }));
 }
 
+// ─── مصدر موحّد لأسعار السبيكة والبيع (لضمان تطابق الأرقام في كل الصفحات) ───
+// السبيكة بدون هامش: سعر جرام العيار × الوزن.
+export function calcBarPrice(gramPrice, weight) {
+  return (gramPrice || 0) * weight;
+}
+// خصم سعر البيع/المستعمل الموحّد: 3%.
+export const SELL_FACTOR = 0.97;
+export function calcSellPrice(gramPrice) {
+  return (gramPrice || 0) * SELL_FACTOR;
+}
+
 // حساب الزكاة
 export function calcZakat(weightGrams, karat, gram24Price) {
   const purity = KARATS[karat]?.purity || 0.875;

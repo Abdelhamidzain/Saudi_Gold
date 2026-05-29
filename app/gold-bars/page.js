@@ -1,5 +1,5 @@
 import { getPrices, formatRiyadhTime } from '../lib/getPrices';
-import { toAr, fmt, BAR_WEIGHTS } from '../lib/gold';
+import { toAr, fmt, BAR_WEIGHTS, calcBarPrice } from '../lib/gold';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
@@ -65,16 +65,12 @@ export default async function BarsPage() {
   const formattedTime = formatRiyadhTime(updatedAt);
   const gram24 = prices[24]?.gram || 0;
 
-  // حساب أسعار السبائك مع هامش الربح (يجب أن يكون قبل الـ Schema)
+  // أسعار السبائك بدون هامش — السبيكة = سعر جرام عيار 24 × الوزن (موحّد عبر الموقع)
   const barPrices = BAR_WEIGHTS.map(weight => {
-    let premium = 0.05; // 5% للسبائك الصغيرة
-    if (weight >= 100) premium = 0.015;
-    else if (weight >= 50) premium = 0.02;
-    else if (weight >= 10) premium = 0.03;
-    
-    const basePrice = gram24 * weight;
-    const finalPrice = basePrice * (1 + premium);
-    
+    const premium = 0;
+    const basePrice = calcBarPrice(gram24, weight);
+    const finalPrice = basePrice;
+
     return { weight, basePrice, premium, finalPrice };
   });
 
@@ -114,7 +110,7 @@ export default async function BarsPage() {
     offers: {
       '@type': 'Offer',
       priceCurrency: 'SAR',
-      price: (gram24 * 100 * 1.015).toFixed(2),
+      price: (gram24 * 100).toFixed(2),
       availability: 'https://schema.org/InStock',
     },
   };
