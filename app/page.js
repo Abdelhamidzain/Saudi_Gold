@@ -126,32 +126,32 @@ export default async function Home() {
             <div className="price-cards">
               <Link href="/gold-price-riyadh" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🏙️</div>
-                <h3 className="price-card-label">تسعيرة الرياض</h3>
+                <h3 className="price-card-label">سعر الذهب في الرياض</h3>
                 <div className="price-card-unit">الثميري · البطحاء · طيبة</div>
               </Link>
               <Link href="/gold-price-jeddah" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🌊</div>
-                <h3 className="price-card-label">تسعيرة جدة</h3>
+                <h3 className="price-card-label">سعر الذهب في جدة</h3>
                 <div className="price-card-unit">حراء الدولي · اليمامة</div>
               </Link>
               <Link href="/gold-price-makkah" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🕋</div>
-                <h3 className="price-card-label">تسعيرة مكة المكرمة</h3>
+                <h3 className="price-card-label">سعر الذهب في مكة المكرمة</h3>
                 <div className="price-card-unit">العتيبية · الستين</div>
               </Link>
               <Link href="/gold-price-dammam" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🛢️</div>
-                <h3 className="price-card-label">تسعيرة الدمام</h3>
+                <h3 className="price-card-label">سعر الذهب في الدمام</h3>
                 <div className="price-card-unit">سوق المجوهرات · الحياة بلازا</div>
               </Link>
               <Link href="/gold-price-madinah" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🌴</div>
-                <h3 className="price-card-label">تسعيرة المدينة المنورة</h3>
+                <h3 className="price-card-label">سعر الذهب في المدينة المنورة</h3>
                 <div className="price-card-unit">المدينة الدولي · طيبة</div>
               </Link>
               <Link href="/gold-price-taif" className="price-card">
                 <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🌹</div>
-                <h3 className="price-card-label">تسعيرة الطائف</h3>
+                <h3 className="price-card-label">سعر الذهب في الطائف</h3>
                 <div className="price-card-unit">محدث لحظياً</div>
               </Link>
             </div>
