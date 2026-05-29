@@ -3,7 +3,6 @@ import { SITE_URL } from './lib/schema';
 import Header from './components/Header';
 import PriceTable from './components/PriceTable';
 import { HomeHeroCSR, HomeMiddleCSR, HomeEndCSR } from './components/home/HomeCSR';
-import Link from 'next/link';
 
 export const revalidate = 1800;
 
@@ -101,17 +100,10 @@ export default async function Home() {
       <Header />
 
       <main>
-        {/* ═══ SSR: Hero (badge + H1 + keyword-rich subtitle) ═══ */}
+        {/* ═══ SSR: H1 only ═══ */}
         <section className="hero" id="prices">
           <div className="container">
-            <div className="badge">
-              <span className="live-dot" aria-hidden="true"></span>
-              <span>تحديث مباشر من البورصة العالمية</span>
-            </div>
             <h1>سعر <span className="text-gold">الذهب</span> اليوم في السعودية</h1>
-            <p className="hero-subtitle">
-              تابع سعر الذهب اليوم في السعودية بالريال السعودي محدّثاً لحظياً لكل العيارات، واعرف سعر الذهب في السعودية اليوم بيعاً وشراءً مع الأونصة والسبائك وأدوات الحساب والزكاة.
-            </p>
           </div>
         </section>
 
@@ -129,49 +121,7 @@ export default async function Home() {
         {/* ═══ CSR (slot B): bullion + buy/sell + history + calculators + markets ═══ */}
         <HomeMiddleCSR prices={prices} />
 
-        {/* ═══ SSR: city links (crawlable) ═══ */}
-        <section className="section">
-          <div className="container">
-            <h2 className="section-title">سعر الذهب اليوم في السعودية حسب المدينة</h2>
-            <p style={{ textAlign: 'center', color: 'var(--txt2)', maxWidth: '700px', margin: '0 auto 24px' }}>
-              ثمن الغرام الخام موحّد في كل المدن، لكن رسوم التشكيل تختلف. اطّلع على اسعار الذهب اليوم الرياض واسعار الذهب اليوم جدة وباقي المناطق
-            </p>
-            <div className="price-cards">
-              <Link href="/gold-price-riyadh" className="price-card">
-                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🏙️</div>
-                <h3 className="price-card-label">سعر الذهب في الرياض</h3>
-                <div className="price-card-unit">الثميري · البطحاء · طيبة</div>
-              </Link>
-              <Link href="/gold-price-jeddah" className="price-card">
-                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🌊</div>
-                <h3 className="price-card-label">سعر الذهب في جدة</h3>
-                <div className="price-card-unit">حراء الدولي · اليمامة</div>
-              </Link>
-              <Link href="/gold-price-makkah" className="price-card">
-                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🕋</div>
-                <h3 className="price-card-label">سعر الذهب في مكة المكرمة</h3>
-                <div className="price-card-unit">العتيبية · الستين</div>
-              </Link>
-              <Link href="/gold-price-dammam" className="price-card">
-                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🛢️</div>
-                <h3 className="price-card-label">سعر الذهب في الدمام</h3>
-                <div className="price-card-unit">سوق المجوهرات · الحياة بلازا</div>
-              </Link>
-              <Link href="/gold-price-madinah" className="price-card">
-                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🌴</div>
-                <h3 className="price-card-label">سعر الذهب في المدينة المنورة</h3>
-                <div className="price-card-unit">المدينة الدولي · طيبة</div>
-              </Link>
-              <Link href="/gold-price-taif" className="price-card">
-                <div className="price-card-karat" style={{ fontSize: '1.5rem' }}>🌹</div>
-                <h3 className="price-card-label">سعر الذهب في الطائف</h3>
-                <div className="price-card-unit">محدث لحظياً</div>
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ CSR (slot C): comparison + chart + blog + FAQ + disclaimer + footer ═══ */}
+        {/* ═══ CSR (slot C): city links + comparison + chart + blog + FAQ + disclaimer + footer ═══ */}
         <HomeEndCSR />
       </main>
     </>

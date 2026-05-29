@@ -23,9 +23,17 @@ const homeLinks = [
 export default function HomeHero({ prices, formattedTime }) {
   return (
     <>
-      {/* Hero rest: price box + cards + internal links */}
+      {/* Hero rest: badge + subtitle + price box + cards + internal links */}
       <section className="hero" style={{ paddingTop: 0 }}>
         <div className="container">
+          <div className="badge">
+            <span className="live-dot" aria-hidden="true"></span>
+            <span>تحديث مباشر من البورصة العالمية</span>
+          </div>
+          <p className="hero-subtitle">
+            تابع سعر الذهب اليوم في السعودية بالريال السعودي محدّثاً لحظياً لكل العيارات، واعرف سعر الذهب في السعودية اليوم بيعاً وشراءً مع الأونصة والسبائك وأدوات الحساب والزكاة.
+          </p>
+
           <div className="main-price-box">
             <div className="main-price-label">تسعيرة الغرام عيار ٢١ الآن بالريال</div>
             <div className="main-price-value">
